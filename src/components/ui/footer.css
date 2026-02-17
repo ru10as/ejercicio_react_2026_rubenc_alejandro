@@ -1,0 +1,17 @@
+.footer{
+    background-color: black;
+    color: white;
+    text-align: center;
+    height: 140px;
+}
+.titulo_footer{
+    color: white;
+    padding: 10px;
+}
+.enlaces_footer{
+    text-decoration: none;
+    color: rgb(225, 217, 217);
+}
+.donde_estamos{
+    margin: 0px;
+}
