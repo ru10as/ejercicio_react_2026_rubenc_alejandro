@@ -1,40 +1,31 @@
 import './header.css'
-import { Nav } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarToggle } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 function Header(){
     return (
         <>
-            <h1 className='formato_titulo'>R&A Movies</h1>
-            <Nav activeKey="/" style={{padding:"10px", height:"60px", backgroundColor:"rgba(31, 108, 108, 1)"}}>
-                <Nav.Item className="color_opciones">
-                    <Nav.Link href="/home">
-                        <i className='bi bi-film text-warning'></i>
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link href="/home" className='color_opciones'>
-                        Home
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="link-1" className='color_opciones'>
-                        Home
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="Contacto" className='color_opciones'>
-                        Contacto
-                    </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="aviso_legal" className='color_opciones'>
-                        Aviso legal
-                    </Nav.Link>
-                </Nav.Item>
-            </Nav>
-        </>
+            <Navbar style={{ background: "#2d9d9d", padding: "12px 0"}}>
+                <Container>
+                    <NavbarBrand href='#home'>
+                        <i className='bi bi-film text-warning me-2'></i>
+                        R&A Movies</NavbarBrand>
+                    <NavbarToggle />
+                    <NavbarCollapse>
+                        <Nav className='ms-auto'>
+                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/contacto">Contacto</Nav.Link>
+                            <Nav.Link as={Link} to="/favoritos">Favoritos</Nav.Link>
 
+                            <Nav className=''>
+                                <Button as={Link} to="/login" className='formato_login_registro'>Login</Button>
+                                <Button as={Link} to="/registrarse" className='formato_login_registro'>Registrarse</Button>
+                            </Nav>
+                        </Nav>
+                    </NavbarCollapse>
+                </Container>
+            </Navbar>
+        </>
     )
 }
 export default Header;
