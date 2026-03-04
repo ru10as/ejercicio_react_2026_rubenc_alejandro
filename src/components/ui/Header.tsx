@@ -7,7 +7,7 @@ function Header(){
         <>
             <Navbar style={{ background: "#2d9d9d", padding: "12px 0", border:"2px solid black"}}>
                 <Container>
-                    <NavbarBrand href='#home'>
+                    <NavbarBrand as={Link} to="/">
                         <i className='bi bi-film text-warning me-2'></i>
                         R&A Movies</NavbarBrand>
                     <NavbarToggle />

@@ -1,0 +1,72 @@
+import React, { useState } from "react";
+import CarouselPrincipal from "../components/ui/CarouselPrincipal";
+import './home.css';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import '../data/peliculas'
+import { CATALOGO_PELICULAS } from "../data/peliculas";
+import { Link } from "react-router-dom";
+
+function Home(){
+    const [paistaquillero, setPaistaquillero] = useState('Global');
+    const [categoriaActual, setCategoriaActual] = useState('Todas');
+
+    const categorias = ['Todas', 'Accion', 'Drama', 'Terror', 'Animacion', 'Fantasia'];
+
+    const pelisFiltradas = CATALOGO_PELICULAS.filter((peli) => {
+        if (categoriaActual === 'Todas'){
+            return true;
+        }
+        return peli.categoria === categoriaActual;
+    });
+
+
+    return(
+        <div>
+            <main style={{backgroundColor:"#f0f0f0", minHeight:"100vh"}}>
+                <div className="py-4 bg-dark text-white text-center">
+                    <h1 className='text-center my-5 fw-bold text-uppercase' style={{ color: '#409f9f' }}>
+                        Principales Carteleras
+                    </h1>
+                    <CarouselPrincipal />
+                </div>
+
+                <Container className="my-5" style={{backgroundColor:"#3e6e65", color:"white"}}>
+                    <section className="mb-5 text-center">
+                        <h3 style={{margin:"20px"}}>Explorar por categorias</h3>
+                        <div className="d-flex flex-wrap gap-2 justify-content-center">
+                            {categorias.map(cat => (
+                                <Button className="rounded-fill shadow-sm" style={{backgroundColor:"#86ca9bff",border: "2px solid #86ca9b"}} key={cat} onClick={()=>setCategoriaActual(cat)}>{cat}</Button>
+                            )
+                            )}
+                        </div>
+                    
+                    </section>
+
+                    <section className="pb-5">
+                        <h3 style={{margin:"20px"}} className="text-center">Peliculas de {categoriaActual}</h3>
+                        <Row>
+                            {pelisFiltradas.map((peli) => (
+                                <Col xs={12} sm={6} md={4} lg={3} className="mb-4">
+                                    <div className="card h-100 bg-secundary border-0 shadow">
+                                        <img src={peli.imagen_portada} alt={peli.titulo} style={{ height: '350px', objectFit: 'cover' }}>
+                                        </img>
+                                        <div className="card-body d-flex flex-column">
+                                            <h5 className="">{peli.titulo}</h5>
+                                            <p className="small mb-2 text-info">{peli.categoria}</p>
+                                            <Link to={`/pelicula/${peli.id}`}>
+                                                <Button>
+                                                    Ver detalles
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </Col>
+                            ))}
+                        </Row>
+                    </section>
+                </Container>
+            </main>
+        </div>
+    )
+}
+export default Home;

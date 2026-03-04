@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { Carousel, Row, Col, Card, Button } from 'react-bootstrap';
 
 function CarouselPrincipal(){
-    const Peliculas_destacadas = [
+
+    interface Pelicula_destacada {
+        id:number,
+        titulo:string,
+        imagen:string,
+        descripcion:string
+    }
+
+    const Peliculas_destacadas: Pelicula_destacada[] = [
         {
             id:1,
             titulo:"Cumbres borrascosas",
@@ -35,14 +43,14 @@ function CarouselPrincipal(){
         }
     ]
 
-    const [index,setIndex] = useState(0);
-    const handleSelect = (selectedIndex) => {
+    const [index,setIndex] = useState<number>(0);
+    const handleSelect = (selectedIndex: number) => {
         setIndex(selectedIndex);
     }
 
     return(
 
-    <Carousel activeIndex={index} onSelect={handleSelect}>
+    <Carousel activeIndex={index} onSelect={handleSelect} variant='dark'>
         <Carousel.Item>
             <Row>
                 {Peliculas_destacadas.slice(0,3).map((pelicula) => (
@@ -71,7 +79,7 @@ function CarouselPrincipal(){
             <Row>
                 {Peliculas_destacadas.slice(3,6).map((pelicula) => (
                     <Col key={pelicula.id}>
-                        <Card className='shadow-sm' style={{height:"400px"}}>
+                        <Card className='shadow-sm' style={{height:"350px"}}>
                             <Row>
                                 <Col>
                                     <Card.Img className='img-fluid' src={pelicula.imagen} alt={pelicula.titulo} style={{height:"350px", width:"230px"}}/>
