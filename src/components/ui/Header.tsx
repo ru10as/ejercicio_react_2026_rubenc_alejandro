@@ -1,8 +1,41 @@
 import './header.css'
 import { Button, Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarToggle } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import AuthContext from '../../store/AuthContext';
+import { useContext } from 'react';
 
 function Header(){
+    const authCtx = useContext(AuthContext);
+    const navigate = useNavigate();
+    let contenidoDerecha;
+
+
+    if (!authCtx.login){
+        contenidoDerecha = (
+            <>
+                <Link to="/login">
+                    <Button className='formato_login_registro'>Login</Button>
+                </Link>
+                <Link to="/registro">
+                    <Button className='formato_login_registro'>Registrarse</Button>
+                </Link> 
+            </>
+        )
+    }
+    else{
+        contenidoDerecha = (
+            <Button
+                variant='danger' 
+                className='fw-bold' 
+                onClick={() => {
+                    authCtx.logoutAction();
+                    navigate('/');
+                }}>
+                Cerrar sesion
+            </Button>
+        )
+    }
+
     return (
         <>
             <Navbar style={{ background: "#2d9d9d", padding: "12px 0", border:"2px solid black"}}>
@@ -15,11 +48,13 @@ function Header(){
                         <Nav className='ms-auto'>
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/contacto">Contacto</Nav.Link>
-                            <Nav.Link as={Link} to="/favoritos">Favoritos</Nav.Link>
+                            
+                            {authCtx.login && (
+                                <Nav.Link as={Link} to="/favoritos">Favoritos</Nav.Link>
+                            )}
 
                             <Nav className=''>
-                                <Button as={Link} to="/login" className='formato_login_registro'>Login</Button>
-                                <Button as={Link} to="/registro" className='formato_login_registro'>Registrarse</Button>
+                                {contenidoDerecha}
                             </Nav>
                         </Nav>
                     </NavbarCollapse>

@@ -1,17 +1,17 @@
-import { Route, Routes } from 'react-router-dom'
-import { useEffect, useState } from 'react' 
+import { Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react'; 
 
-import './App.css'
-import Contacto from './pages/Contacto'
-import ErrorPage from './pages/ErrorPage'
-import Home from './pages/Home'
-import Login from '../../web-peliculas-upna/src/components/login/Login'
-import Registro from '../../web-peliculas-upna/src/components/login/Registro'
-import DetallePelicula from './components/peliculas/DetallePelicula'
-import Footer from './components/ui/Footer'
-import Header from './components/ui/Header'
-import AuthContext from './store/AuthContext'
-import Favoritos from './pages/Favoritos'
+import './App.css';
+import Contacto from './pages/Contacto';
+import ErrorPage from './pages/ErrorPage';
+import Home from './pages/Home';
+import DetallePelicula from './components/peliculas/DetallePelicula';
+import Footer from './components/ui/Footer';
+import Header from './components/ui/Header';
+import AuthContext from './store/AuthContext';
+import Favoritos from './pages/Favoritos';
+import Login from './components/login/Login';
+import Registro from './components/login/Registro';
 
 function App() {
 

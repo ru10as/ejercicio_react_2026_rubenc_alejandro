@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Button, Badge, Form } from 'react-bootstrap';
 import axios from "axios";
 import AuthContext from '../../store/AuthContext';
+import './detallepelicula.css';
 
 // --- INTERFACES ---
 interface Pelicula {
@@ -73,6 +74,49 @@ function DetallePelicula() {
 
     const [peli, setPeli] = useState<Pelicula | null>(null);
     const [comentarioTexto, setComentarioTexto] = useState("");
+    const [listaComentarios, setListaComentarios] = useState<any[]>([]);
+
+    const yaHasComentado = listaComentarios.find((comentario) => { // Todo esto, suponiendo que listaComentarios ya venga filtrada para esta pelicula en especifico
+        const esMismoUsuario = comentario.usuario_id === authCtx.userID;
+        return esMismoUsuario;
+    });
+
+    const enviarComentario = () => {
+        const nuevoComentario = {
+            pelicula_id:peli?.id, // Revisar esto que no se si va a funcionar
+            texto:comentarioTexto,
+            usuario_id:authCtx.userID,
+            fecha:new Date().toLocaleString()
+        }
+        axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json', nuevoComentario)
+        .then(() => {
+            setComentarioTexto("");
+            alert("Comentario guardado correctamente");
+            cargarComentarios();
+        })
+        .catch(err => console.log("Error al guardar comentario",err));
+    };
+
+    const cargarComentarios = () => {
+        axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json')
+        .then((resultado) => {
+            const data = resultado.data;
+            const comentarios_filtrados = [];
+
+            for (const key in data){
+                if(String(data[key].pelicula_id) === id){
+                    comentarios_filtrados.push({id_firebase:key,...data[key]});
+                }
+            }
+            setListaComentarios(comentarios_filtrados);
+
+        })
+        .catch(error => console.log("Error al cargar comentarios", error));
+    }
+
+    useEffect(() => {
+        cargarComentarios();
+    },[id]); // Cuando cambiemos de id, es decir, de pelicula, se vuelva a ejecutar el cargado
 
     useEffect(() => {
         axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
@@ -90,7 +134,7 @@ function DetallePelicula() {
                 }
             })
             .catch((error) => {
-                console.error("Error cargando película:", error);
+                console.error("Error al cargar pelicula:", error);
                 setPeli(null);
             });
     }, [id]);
@@ -98,7 +142,7 @@ function DetallePelicula() {
     if (!peli) {
         return (
             <div className="bg-dark text-white min-vh-100 d-flex align-items-center justify-content-center">
-                <p>Cargando detalles de la película...</p>
+                <p>Cargando detalles de la pelicula...</p>
             </div>
         );
     }
@@ -126,6 +170,43 @@ function DetallePelicula() {
         )
     }
 
+
+    let seccionComentarios;
+    if(!authCtx.login){
+        seccionComentarios = (
+            <Badge bg="warning" text="dark" className="p-3">
+                Inicia sesion para reproducir el contenido
+            </Badge>
+        )
+    }
+    else if(yaHasComentado){
+        seccionComentarios = (
+        <div>
+            <h5>
+                <i></i> Gracias por tu reseña
+            </h5>
+            <p>Ya has participado en la comunidad de esta pelicula</p>
+        </div>
+        )
+        
+    }
+    else{
+        seccionComentarios = (
+            <div className="bg-secondary bg-opacity-10 p-4 rounded shadow-sm">
+                <h5 className="mb-3">¿Qué te ha parecido?</h5>
+                <Form.Control 
+                    as="textarea" 
+                    rows={3} 
+                    className="bg-dark text-white border-secondary mb-3"
+                    placeholder="Escribe tu reseña..."
+                    value={comentarioTexto}
+                    onChange={(e) => setComentarioTexto(e.target.value)}
+                />
+                <Button variant="primary" onClick={enviarComentario}>Enviar comentario</Button>
+            </div>
+        )
+    }
+
     return (
         <div className="bg-dark text-white min-vh-100"> 
             <div style={{ 
@@ -150,8 +231,8 @@ function DetallePelicula() {
 
                             <div className="d-flex gap-3">
                             
-                            
-                            
+
+
                             {authCtx.login ? (
                                 <>
                                     <Button variant='light' className="px-4 py-2 fw-bold">
@@ -166,11 +247,6 @@ function DetallePelicula() {
                                     Inicia sesión para reproducir el contenido
                                 </Badge>
                             )}
-
-
-
-
-
                             </div>
                         </Col>
                     </Row>
@@ -190,29 +266,12 @@ function DetallePelicula() {
                         <hr className="border-secondary mb-5" />
 
                         {/* Caja de Comentarios condicional */}
-                        {authCtx.login ? (
-                            <div className="bg-secondary bg-opacity-10 p-4 rounded shadow-sm">
-                                <h5 className="mb-3">¿Qué te ha parecido?</h5>
-                                <Form.Control 
-                                    as="textarea" 
-                                    rows={3} 
-                                    className="bg-dark text-white border-secondary mb-3"
-                                    placeholder="Escribe tu reseña..."
-                                    value={comentarioTexto}
-                                    onChange={(e) => setComentarioTexto(e.target.value)}
-                                />
-                                <Button variant="primary">Enviar comentario</Button>
-                            </div>
-                        ) : (
-                            <p className="text-muted italic">Inicia sesión para dejar un comentario sobre esta película.</p>
-                        )}
+                        {seccionComentarios}
                     </Col>
 
-                    {/* Columna Derecha: Reproductor de Video */}
                     <Col lg={5}>
                         <div className='ms-lg-4'>
                             <h5 className='text-uppercase text-secondary mb-3 small fw-bold'>Trailer Oficial</h5>
-                            {/* Ajuste de tamaño: maxWidth para que no sea "muy grande" */}
                             <div className='ratio ratio-16x9 rounded overflow-hidden shadow-lg border border-secondary' 
                                  style={{ maxWidth: '480px', margin: '0 auto' }}>
                                 <video 
@@ -225,6 +284,39 @@ function DetallePelicula() {
                                 </video>
                             </div>
                         </div>
+                    </Col>
+                </Row>
+                <Row className='mt-4'>
+                    <Col>
+                        <h4 className='mb-4'>Comentarios de la comunidad</h4>
+                        {(()=> {
+                            if(listaComentarios && listaComentarios.length > 0){
+                                return (
+                                    <div className="bg-secondary bg-opacity-10 p-3 rounded shadow-sm">
+                                        {listaComentarios.map((c, i) => (
+                                            <div key={i} className="mb-3 p-2 border-bottom border-secondary">
+                                                <div className='d-flex align-items'>
+                                                    <div>
+                                                        <i className='bi bi-person-fill text-white'></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    
+                                                </div>
+                                                
+                                                <strong>{c.usuario}</strong>
+                                                <p className="mb-0">{c.texto}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            }
+                            else{
+                                return (
+                                    <p>Todavia no hay comentarios sobre esta pelicula</p>
+                                )
+                            }
+                        })()}
                     </Col>
                 </Row>
             </Container>
