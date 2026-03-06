@@ -1,23 +1,70 @@
-import React, { useState } from "react";
 import CarouselPrincipal from "../components/ui/CarouselPrincipal";
 import './home.css';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import '../data/peliculas'
-import { CATALOGO_PELICULAS } from "../data/peliculas";
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+interface Pelicula {
+    id: number;   
+    titulo:string,
+    categoria:string,
+    taquilla:number,
+    video_local:string,
+    pais_origen:string,
+    mercados?: any[],
+    imagen_portada:string,
+    imagen_en_pelicula:string,
+    calificacion_media:number,
+    descripcion:string,
+    comentarios?: any[],
+    proximamente: boolean;
+    fecha_estreno:string
+}
+
+interface FirebasePelicula {
+  [key: string]: Omit<Pelicula, "id">;
+}
+
+interface FirebaseResponse {
+  peliculas: FirebasePelicula;
+}
 
 function Home(){
-    const [paistaquillero, setPaistaquillero] = useState('Global');
-    const [categoriaActual, setCategoriaActual] = useState('Todas');
+    const [categoriaActual, setCategoriaActual] = useState<string>('Todas');
 
-    const categorias = ['Todas', 'Accion', 'Drama', 'Terror', 'Animacion', 'Fantasia'];
+    const categorias: string[] = ['Todas', 'Accion', 'Drama', 'Terror', 'Animacion', 'Fantasia'];
 
-    const pelisFiltradas = CATALOGO_PELICULAS.filter((peli) => {
+    // Probando
+    const [peliculas, setPeliculas] = useState<Pelicula[]>([])
+
+    useEffect(() => {
+        axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
+        .then((response) => {
+            const data = response.data;
+            if (data && data.peliculas) {
+                const peliculasArray: Pelicula[] = Object.entries(data.peliculas).map(
+                ([key, value]) => ({
+                id: Number(key),
+                ...value
+                })
+                );
+                setPeliculas(peliculasArray);
+            }else{
+                setPeliculas([]);
+            }
+        })
+        .catch((error) => 
+        console.log("Error al obtener los datos",error))
+    }, [])
+
+
+    const pelisFiltradas = peliculas.filter((peli: Pelicula) => {
         if (categoriaActual === 'Todas'){
             return true;
         }
         return peli.categoria === categoriaActual;
-    });
+    })
 
 
     return(
