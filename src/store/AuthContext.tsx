@@ -8,7 +8,6 @@ interface AuthContextType {
     loginAction: (idToken:string, localId:string) => void;
     logoutAction: () => void;
 }
-
 const AuthContext = React.createContext<AuthContextType>({
     login: false, // Al inicio por defecto nadie esta logueado (Habra que iniciar sesion)
     language: 'es-ES',
@@ -17,5 +16,6 @@ const AuthContext = React.createContext<AuthContextType>({
     loginAction: (_idToken:string, _localId:string) => {},
     logoutAction: () => {}
 });
+ 
 
 export default AuthContext;

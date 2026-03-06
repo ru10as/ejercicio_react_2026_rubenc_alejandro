@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { useCol } from 'react-bootstrap/esm/Col';
-import AuthContext from '../../../../web-peliculas-upna-v2/src/store/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Row, Col, Card, Form, Button, Alert, CardBody, FormGroup } from 'react-bootstrap';
+import AuthContext from '../../store/AuthContext';
 
 function Login(){
     const [email,setEmail] = useState('');
