@@ -34,17 +34,17 @@ interface FirebaseResponse {
 
 // --- FUNCIONES AUXILIARES ---
 function calcularMedia(comentarios: { nota: number }[] | undefined): number {
-    if (!comentarios || comentarios.length === 0) {
-        return 0;
-    }
-    const suma = comentarios.reduce((acc,curr) => {
-        return acc + curr.nota;
-    },0);
+if (!comentarios || comentarios.length === 0) {
+    return 0;
+}
+const suma = comentarios.reduce((acc,curr) => {
+    return acc + curr.nota;
+},0);
 
-    const promedio = suma / comentarios.length;
-    const resultadoFormateado = promedio.toFixed(1);
+const promedio = suma / comentarios.length;
+const resultadoFormateado = promedio.toFixed(1);
 
-    return Number(resultadoFormateado);
+return Number(resultadoFormateado);
 }
 
 function renderEstrellas(nota: number) {
@@ -75,12 +75,19 @@ function DetallePelicula() {
     const [peli, setPeli] = useState<Pelicula | null>(null);
     const [comentarioTexto, setComentarioTexto] = useState("");
     const [listaComentarios, setListaComentarios] = useState<any[]>([]);
-
+    const [notaSeleccionada, setNotaSeleccionada] = useState(5);
+    const [mediaPeli, setMediaPeli] = useState<number>(0);
     const yaHasComentado = listaComentarios.find((comentario) => { // Todo esto, suponiendo que listaComentarios ya venga filtrada para esta pelicula en especifico
         const esMismoUsuario = comentario.usuario_id === authCtx.userID;
         return esMismoUsuario;
     });
 
+    const [yaHasPuntuado, setYaHasPuntuado] = useState(false);
+    // --------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------
     const enviarComentario = () => {
         const nuevoComentario = {
             pelicula_id:peli?.id, // Revisar esto que no se si va a funcionar
@@ -96,7 +103,57 @@ function DetallePelicula() {
         })
         .catch(err => console.log("Error al guardar comentario",err));
     };
+    // --------------------------------------------------------------------------------
 
+
+
+    // --------------------------------------------------------------------------------
+    const cargarMedia = () => {
+        axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json')
+        .then((res) => {
+            const data = res.data;
+            let suma = 0;
+            let contador = 0;
+            let promedio;
+            for (const key in data){
+                if(String(data[key].pelicula_id) === id){
+                    suma = suma + Number(data[key].nota);
+                    contador++;
+                }
+            }
+
+            if (contador > 0){
+                const calculo = suma / contador;
+                promedio = calculo.toFixed(1);
+            }else{
+                promedio = 0;
+            }
+            setMediaPeli(Number(promedio));
+        })
+    }
+    // --------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------
+    const enviarNota = () => {
+        const nuevaPuntuacion = {
+            pelicula_id:peli?.id,
+            nota:notaSeleccionada,
+            usuario_id:authCtx.userID,
+        }
+        axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json',nuevaPuntuacion)
+        .then((res) => {
+            alert('Puntuacion guardada correctamente');
+            cargarMedia();
+        })
+    }
+    // --------------------------------------------------------------------------------
+
+
+
+
+    // --------------------------------------------------------------------------------
     const cargarComentarios = () => {
         axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json')
         .then((resultado) => {
@@ -113,11 +170,20 @@ function DetallePelicula() {
         })
         .catch(error => console.log("Error al cargar comentarios", error));
     }
+    // --------------------------------------------------------------------------------
 
+
+
+    // --------------------------------------------------------------------------------
     useEffect(() => {
         cargarComentarios();
-    },[id]); // Cuando cambiemos de id, es decir, de pelicula, se vuelva a ejecutar el cargado
+        cargarMedia();
+    },[id]);
+    // --------------------------------------------------------------------------------
 
+
+
+    // --------------------------------------------------------------------------------
     useEffect(() => {
         axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
             .then((response) => {
@@ -138,7 +204,11 @@ function DetallePelicula() {
                 setPeli(null);
             });
     }, [id]);
+    // --------------------------------------------------------------------------------
 
+
+
+    // --------------------------------------------------------------------------------
     if (!peli) {
         return (
             <div className="bg-dark text-white min-vh-100 d-flex align-items-center justify-content-center">
@@ -146,9 +216,12 @@ function DetallePelicula() {
             </div>
         );
     }
+    // --------------------------------------------------------------------------------
 
+
+
+    // --------------------------------------------------------------------------------
     let botonesAccion;
-
     if (authCtx.login){
         botonesAccion = (
             <>
@@ -169,8 +242,11 @@ function DetallePelicula() {
             </Badge>
         )
     }
+    // --------------------------------------------------------------------------------
 
 
+
+    // --------------------------------------------------------------------------------
     let seccionComentarios;
     if(!authCtx.login){
         seccionComentarios = (
@@ -188,12 +264,11 @@ function DetallePelicula() {
             <p>Ya has participado en la comunidad de esta pelicula</p>
         </div>
         )
-        
     }
     else{
         seccionComentarios = (
             <div className="bg-secondary bg-opacity-10 p-4 rounded shadow-sm">
-                <h5 className="mb-3">¿Qué te ha parecido?</h5>
+                <h5 className="mb-3">Comentanos que te ha parecido</h5>
                 <Form.Control 
                     as="textarea" 
                     rows={3} 
@@ -206,6 +281,8 @@ function DetallePelicula() {
             </div>
         )
     }
+    // --------------------------------------------------------------------------------
+
 
     return (
         <div className="bg-dark text-white min-vh-100"> 
@@ -224,7 +301,7 @@ function DetallePelicula() {
                         <Col>
                             <h1 className="display-4 fw-bold">{peli.titulo}</h1>
                             <div className='mb-4 d-flex align-items-center flex-wrap'>
-                                <span className="me-3">{renderEstrellas(calcularMedia(peli.comentarios))}</span>
+                                <span className="me-3">{renderEstrellas(mediaPeli)}</span>
                                 <Badge bg='primary' className='me-3 px-3 py-2'>{peli.categoria}</Badge>
                                 <span className='text-secondary fw-bold'>{peli.fecha_estreno}</span>
                             </div>
@@ -265,7 +342,29 @@ function DetallePelicula() {
 
                         <hr className="border-secondary mb-5" />
 
-                        {/* Caja de Comentarios condicional */}
+                        <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
+                            <h5>Opina sobre esta pelicula</h5>
+
+                            <Form className='row align-items-end'>
+                                <Col xs="auto">
+                                    <Form.Label>Nota (1-10)</Form.Label>
+                                    <Form.Select
+                                        value={notaSeleccionada}
+                                        onChange={(e) => setNotaSeleccionada(Number(e.target.value))}
+                                    >
+                                        {[1,2,3,4,5,6,7,8,9,10].map(n=> (
+                                            <option key={n} value={n}>{n}</option>
+                                        ))}
+                                    </Form.Select>
+                                </Col>
+                                <Col>
+                                    <Button variant='warning' onClick={enviarNota} className='fw-bold'>
+                                        Puntuar
+                                    </Button>
+                                </Col>
+                            </Form>
+                        </div>
+                        
                         {seccionComentarios}
                     </Col>
 
@@ -301,7 +400,7 @@ function DetallePelicula() {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    
+                                                    <h6 className='mb-0'>{c.nombre_usuario}</h6>
                                                 </div>
                                                 
                                                 <strong>{c.usuario}</strong>
