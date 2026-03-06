@@ -5,6 +5,7 @@ interface AuthContextType {
     language: string,
     idToken: string,
     userID: string,
+    userName: string,
     loginAction: (idToken:string, localId:string) => void;
     logoutAction: () => void;
 }
@@ -13,6 +14,7 @@ const AuthContext = React.createContext<AuthContextType>({
     language: 'es-ES',
     idToken: '',
     userID: '',
+    userName:'',
     loginAction: (_idToken:string, _localId:string) => {},
     logoutAction: () => {}
 });
