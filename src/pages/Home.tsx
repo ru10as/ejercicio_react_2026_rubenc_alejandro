@@ -6,7 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface Pelicula {
-    id: number;   
+    id: number; // Vamos a cambiar este id de number a string   
     titulo:string,
     categoria:string,
     taquilla:number,
@@ -38,18 +38,22 @@ function Home(){
     // Probando
     const [peliculas, setPeliculas] = useState<Pelicula[]>([])
 
+    // ---------------------------------------------------------------------------------------------------------
     useEffect(() => {
         axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
         .then((response) => {
             const data = response.data;
             if (data && data.peliculas) {
                 const peliculasArray: Pelicula[] = Object.entries(data.peliculas).map(
-                ([key, value]) => ({
+                ([key, value]) => ({ // Key con el nombre del nodo en firebase (1,2, etc) y value con toda la info de la peli
                 id: Number(key),
                 ...value
                 })
                 );
-                setPeliculas(peliculasArray);
+                // setPeliculas(peliculasArray);
+
+                const peliculasValidas = peliculasArray.filter(peli => peli.titulo !== undefined); // Vamos a hacer esto para evitar problemas de indices
+                setPeliculas(peliculasValidas);
             }else{
                 setPeliculas([]);
             }
@@ -57,14 +61,17 @@ function Home(){
         .catch((error) => 
         console.log("Error al obtener los datos",error))
     }, [])
+    // ----------------------------------------------------------------------------------------------------------
 
 
+    // ------------------------------------------------------------------
     const pelisFiltradas = peliculas.filter((peli: Pelicula) => {
         if (categoriaActual === 'Todas'){
             return true;
         }
         return peli.categoria === categoriaActual;
     })
+    // ------------------------------------------------------------------
 
 
     return(

@@ -30,7 +30,7 @@ function Registro(){
             const idToken = response.data.idToken;
 
             const datosDeUsuarioParaBD = {
-                user:email.split('@')[0],
+                user:username,
                 email:email,
                 fecha_registro: new Date().toLocaleDateString('es-ES'), 
                 favoritos:{init: true}
@@ -99,7 +99,7 @@ function Registro(){
                             <Card style={{backgroundColor:"#2d9d9d"}} className='text-center'>
                                 <Card.Body>
                                     <h2 className='text-center fw-bold'>REGISTRARSE</h2>
-                                    <Form>
+                                    <Form onSubmit={submitHandler}>
                                         <Form.Group>
                                             <Form.Label className="fw-bold">Email:</Form.Label>
                                             <Form.Control onChange={(event) => setEmail(event.target.value)}

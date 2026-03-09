@@ -6,7 +6,7 @@ interface AuthContextType {
     idToken: string,
     userID: string,
     userName: string,
-    loginAction: (idToken:string, localId:string) => void;
+    loginAction: (idToken:string, localId:string, name:string) => void;
     logoutAction: () => void;
 }
 const AuthContext = React.createContext<AuthContextType>({
@@ -15,7 +15,7 @@ const AuthContext = React.createContext<AuthContextType>({
     idToken: '',
     userID: '',
     userName:'',
-    loginAction: (_idToken:string, _localId:string) => {},
+    loginAction: (_idToken:string, _localId:string, _name:string) => {},
     logoutAction: () => {}
 });
  

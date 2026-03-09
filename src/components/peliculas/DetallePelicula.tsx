@@ -7,7 +7,8 @@ import AuthContext from '../../store/AuthContext';
 import './detallepelicula.css';
 
 // --- INTERFACES ---
-interface Pelicula {
+// --------------------------------------------------------------------
+interface Pelicula { 
     id: number;   
     titulo: string;
     categoria: string;
@@ -23,83 +24,97 @@ interface Pelicula {
     proximamente: boolean;
     fecha_estreno: string;
 }
+// --------------------------------------------------------------------
 
+
+// --------------------------------------------------------------------
 interface FirebasePelicula { 
     [key: string]: Omit<Pelicula, "id">;
 }
+// --------------------------------------------------------------------
 
+
+// --------------------------------------------------------------------
 interface FirebaseResponse {
     peliculas: FirebasePelicula;
 }
+// --------------------------------------------------------------------
 
 // --- FUNCIONES AUXILIARES ---
+// --------------------------------------------------------------------
 function calcularMedia(comentarios: { nota: number }[] | undefined): number {
-if (!comentarios || comentarios.length === 0) {
-    return 0;
+    if (!comentarios || comentarios.length === 0) {
+        return 0;
+    }
+    const suma = comentarios.reduce((acc,curr) => {
+        return acc + curr.nota;
+    },0);
+
+    const promedio = suma / comentarios.length;
+    const resultadoFormateado = promedio.toFixed(1);
+
+    return Number(resultadoFormateado);
 }
-const suma = comentarios.reduce((acc,curr) => {
-    return acc + curr.nota;
-},0);
+// --------------------------------------------------------------------
 
-const promedio = suma / comentarios.length;
-const resultadoFormateado = promedio.toFixed(1);
 
-return Number(resultadoFormateado);
-}
-
+// --------------------------------------------------------------------
 function renderEstrellas(nota: number) {
-    const estrellasMax = 5;
-    const valor_sobre_5 = nota / 2;
-    const iconos = [];
+    const estrellasMax = 5;             // Vamos a tratar sobre 5 estrellas en vez de sobre 10
+    const valor_sobre_5 = nota / 2;     // Por ello, aqui hacemos el ajuste
+    const iconos = [];                  // aqui vamos a almacenar los iconos (el numero de estrellas)
 
-    for (let i = 1; i <= estrellasMax; i++) {
-        if (i <= valor_sobre_5) {
+    for (let i = 1; i <= estrellasMax; i++) {                               // Recorremos hasta un maximo de 5 estrellas
+        if (i <= valor_sobre_5) {                                           // Damos estrella completa
             iconos.push(<i key={i} className="bi bi-star-fill text-warning me-1"></i>);
-        } else if (i - 0.5 === valor_sobre_5) {
+        } else if (i - 0.5 === valor_sobre_5) {                             // Damos media estrella
             iconos.push(<i key={i} className="bi bi-star-half text-warning me-1"></i>);
-        } else {
+        } else {                                                            // Damos estrella vacia
             iconos.push(<i key={i} className="bi bi-star text-muted me-1"></i>);
         }
     }
     return <span style={{ fontSize: '1.1rem' }}>{iconos}</span>;
 }
+// -------------------------------------------------------------
 
 
     
 
 // --- COMPONENTE PRINCIPAL ---
 function DetallePelicula() {
-    const { id } = useParams<{ id: string }>();
-    const authCtx = useContext(AuthContext);
-
-    const [peli, setPeli] = useState<Pelicula | null>(null);
-    const [comentarioTexto, setComentarioTexto] = useState("");
-    const [listaComentarios, setListaComentarios] = useState<any[]>([]);
-    const [notaSeleccionada, setNotaSeleccionada] = useState(5);
-    const [mediaPeli, setMediaPeli] = useState<number>(0);
-    const yaHasComentado = listaComentarios.find((comentario) => { // Todo esto, suponiendo que listaComentarios ya venga filtrada para esta pelicula en especifico
+    // ------------------------------------------------------------------
+    const { id } = useParams<{ id: string }>();                         // Aqui extraemos el id de la url que estmamos poniendo
+    const authCtx = useContext(AuthContext);                            // Tomamos el contexto del usuario que se encuentra dentro en este momento
+    const [peli, setPeli] = useState<Pelicula | null>(null);            // Aqui vamos a guardar el objeto completo de la pelicula
+    const [comentarioTexto, setComentarioTexto] = useState("");         // Aqui guardamos el comentario de texto que puede escribir el usuario
+    const [listaComentarios, setListaComentarios] = useState<any[]>([]);// Aqui guardamos todos los comentarios sobre esta peli que han hecho los usuarios
+    const [notaSeleccionada, setNotaSeleccionada] = useState(5);        // Vamos a guardar la nota a la pelicula que le da el usuario
+    const [mediaPeli, setMediaPeli] = useState<number>(0);              // Media final que vamos a calcular con el conjunto de notas
+    const yaHasComentado = listaComentarios.find((comentario) => {      // Todo esto, suponiendo que listaComentarios ya venga filtrada para esta pelicula en especifico
         const esMismoUsuario = comentario.usuario_id === authCtx.userID;
         return esMismoUsuario;
     });
 
-    const [yaHasPuntuado, setYaHasPuntuado] = useState(false);
-    // --------------------------------------------------------------------------------
+    const [esFavorita, setEsFavorita] = useState(false);
+
+    const [yaHasPuntuado, setYaHasPuntuado] = useState(false);      // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
+    // --------------------------------------------------------------
 
 
 
     // --------------------------------------------------------------------------------
     const enviarComentario = () => {
-        const nuevoComentario = {
-            pelicula_id:peli?.id, // Revisar esto que no se si va a funcionar
-            texto:comentarioTexto,
-            usuario_id:authCtx.userID,
-            fecha:new Date().toLocaleString()
+        const nuevoComentario = {               // Definimos el nuevo comentario que va a introducir este usuario
+            pelicula_id:peli?.id,               // 
+            texto:comentarioTexto,              // Almacenamos el comentario de texto
+            usuario_id:authCtx.userID,          // Almacenamos con el comentario el usuario id que esta ahora dentro
+            fecha:new Date().toLocaleString()   //
         }
         axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json', nuevoComentario)
         .then(() => {
-            setComentarioTexto("");
-            alert("Comentario guardado correctamente");
-            cargarComentarios();
+            setComentarioTexto("");                     // Aqui lo que hacemos es limpiar el cuadro de texto para que no se quede lo escrito ahi
+            alert("Comentario guardado correctamente"); // Para que el usuario sepa que ya ha enviado el comentario y se ha registrado correctamente
+            cargarComentarios();                        // Y cargamos el conjunto de comentarios
         })
         .catch(err => console.log("Error al guardar comentario",err));
     };
@@ -111,12 +126,12 @@ function DetallePelicula() {
     const cargarMedia = () => {
         axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json')
         .then((res) => {
-            const data = res.data;
-            let suma = 0;
-            let contador = 0;
-            let promedio;
+            const data = res.data;      // Cargamos la info que nos devuelve
+            let suma = 0;               // Aqui es donde vamos a ir almacenando la suma de todas las notas de esta peli
+            let contador = 0;           // Para saber sobre que numero dividir (para hacer la media)
+            let promedio;               // Donde almacenaremos el promedio
             for (const key in data){
-                if(String(data[key].pelicula_id) === id){
+                if(String(data[key].pelicula_id) === id){ // Comprobamos si es una puntuacion de esta peli mediante su id
                     suma = suma + Number(data[key].nota);
                     contador++;
                 }
@@ -136,15 +151,21 @@ function DetallePelicula() {
 
 
     // --------------------------------------------------------------------------------
-    const enviarNota = () => {
+    const enviarNota = () => { // Proceso en la que este usuario va a enviar la nota
+        
+        if (!peli || yaHasPuntuado){
+            return
+        }
+        
         const nuevaPuntuacion = {
             pelicula_id:peli?.id,
             nota:notaSeleccionada,
-            usuario_id:authCtx.userID,
+            usuario_id:authCtx.userID, // Asociado a esa nota le introducimos un indicativo del usuario = el usuario_id
         }
         axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json',nuevaPuntuacion)
-        .then((res) => {
+        .then(() => {
             alert('Puntuacion guardada correctamente');
+            setYaHasPuntuado(true);
             cargarMedia();
         })
     }
@@ -152,20 +173,41 @@ function DetallePelicula() {
 
 
 
+    // --------------------------------------------------------------------------------
+    const añadirAfavoritos = () => {
+        const nuevoFavorito = {
+            pelicula_id: peli?.id,
+            usuario_id:authCtx.userID,
+            titulo: peli?.titulo,
+            imagen_portada:peli?.imagen_portada,
+            categoria:peli?.categoria
+
+        }
+        axios.post(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${authCtx.userID}/favoritos.json`,nuevoFavorito)
+        .then(() => {
+            alert("Pelicula añadida a favoritos");
+        })
+        .catch(err => console.log("Error al guardar favorito",err))
+
+    }
+    // --------------------------------------------------------------------------------
+    
+
+
 
     // --------------------------------------------------------------------------------
     const cargarComentarios = () => {
-        axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json')
+        axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json') // Cargamos la parte de la base de datos de comentarios.json
         .then((resultado) => {
             const data = resultado.data;
             const comentarios_filtrados = [];
 
-            for (const key in data){
-                if(String(data[key].pelicula_id) === id){
-                    comentarios_filtrados.push({id_firebase:key,...data[key]});
-                }
+            for (const key in data){                                            // Vamos a recorrer cada uno de los comentarios que tomamos
+                if(String(data[key].pelicula_id) === id){                       // Nos vamos a quedar con los comentarios de esta pelicula
+                    comentarios_filtrados.push({id_firebase:key,...data[key]}); // Lo de dentro del push lo hacemos por si en un futuro queremos eliminar algun comentario
+                }                                                               // 
             }
-            setListaComentarios(comentarios_filtrados);
+            setListaComentarios(comentarios_filtrados); // En la lista que estamoos almacenando solo habra comentarios de esta pelicula
 
         })
         .catch(error => console.log("Error al cargar comentarios", error));
@@ -175,10 +217,10 @@ function DetallePelicula() {
 
 
     // --------------------------------------------------------------------------------
-    useEffect(() => {
-        cargarComentarios();
-        cargarMedia();
-    },[id]);
+    useEffect(() => { 
+        cargarComentarios();    // Una vez cargamos, va a aparecer tanto los comentarios de esta pelicula como..
+        cargarMedia();          // La media que se ha calculado de la misma
+    },[id]);                    // Si el id cambia, si pasamos de una pelicula a otra, entonces volvemos a cargar
     // --------------------------------------------------------------------------------
 
 
@@ -190,7 +232,7 @@ function DetallePelicula() {
                 const data = response.data;
                 if (data && data.peliculas) {
                     const peliculasArray: Pelicula[] = Object.entries(data.peliculas).map(
-                        ([key, value]) => ({
+                        ([key, value]) => ({ // De nuevo vamos a hacer lo mismo, almacenar el id dentro por asi decir
                             id: Number(key),
                             ...value
                         })
@@ -209,7 +251,7 @@ function DetallePelicula() {
 
 
     // --------------------------------------------------------------------------------
-    if (!peli) {
+    if (!peli) { // Para el caso de que la peli no exista (haya puesto algo mal en la url, dejaremos en Cargando..) => ESTO SE PUEDE MODIFICAR
         return (
             <div className="bg-dark text-white min-vh-100 d-flex align-items-center justify-content-center">
                 <p>Cargando detalles de la pelicula...</p>
@@ -228,8 +270,8 @@ function DetallePelicula() {
                 <Button>
                     <i className='bi bi-play-fill me-2'></i>VER AHORA
                 </Button>
-                <Button>
-                    <i className='bi bi-plus-lg me-2'></i>MI LISTA
+                <Button onClick={añadirAfavoritos}>
+                    <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS
                 </Button>
             </>
         )
@@ -248,14 +290,14 @@ function DetallePelicula() {
 
     // --------------------------------------------------------------------------------
     let seccionComentarios;
-    if(!authCtx.login){
+    if(!authCtx.login){ // Para el caso que no este registrado, habra que indicarle que se registre para que pueda reproducir la peli
         seccionComentarios = (
             <Badge bg="warning" text="dark" className="p-3">
                 Inicia sesion para reproducir el contenido
             </Badge>
         )
     }
-    else if(yaHasComentado){
+    else if(yaHasComentado){ // Si el usuario ya ha comentado, habra que indicarle que como ya ha comentado, no puede volver a comentar 
         seccionComentarios = (
         <div>
             <h5>
@@ -265,7 +307,7 @@ function DetallePelicula() {
         </div>
         )
     }
-    else{
+    else{ // Aqui tratamos el caso en que no se haya comentado
         seccionComentarios = (
             <div className="bg-secondary bg-opacity-10 p-4 rounded shadow-sm">
                 <h5 className="mb-3">Comentanos que te ha parecido</h5>
@@ -275,7 +317,7 @@ function DetallePelicula() {
                     className="bg-dark text-white border-secondary mb-3"
                     placeholder="Escribe tu reseña..."
                     value={comentarioTexto}
-                    onChange={(e) => setComentarioTexto(e.target.value)}
+                    onChange={(e) => setComentarioTexto(e.target.value)} // Establecemos el comentario actual
                 />
                 <Button variant="primary" onClick={enviarComentario}>Enviar comentario</Button>
             </div>
@@ -286,7 +328,7 @@ function DetallePelicula() {
 
     return (
         <div className="bg-dark text-white min-vh-100"> 
-            <div style={{ 
+            <div style={{ // Este es uno de los estilos mas importantes que vamos a implementar
                 position: "relative",
                 width: "100%",
                 height: "65vh",
@@ -308,22 +350,8 @@ function DetallePelicula() {
 
                             <div className="d-flex gap-3">
                             
+                            {botonesAccion}
 
-
-                            {authCtx.login ? (
-                                <>
-                                    <Button variant='light' className="px-4 py-2 fw-bold">
-                                        <i className='bi bi-play-fill me-2'></i>VER AHORA
-                                    </Button>
-                                    <Button variant='outline-light' className="px-4 py-2">
-                                        <i className='bi bi-plus-lg me-2'></i>MI LISTA
-                                    </Button>
-                                </>
-                            ) : (
-                                <Badge bg="warning" text="dark" className="p-3">
-                                    Inicia sesión para reproducir el contenido
-                                </Badge>
-                            )}
                             </div>
                         </Col>
                     </Row>
