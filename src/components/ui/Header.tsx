@@ -3,6 +3,7 @@ import { Button, Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarTogg
 import { Link,useNavigate } from "react-router-dom";
 import AuthContext from '../../store/AuthContext';
 import { useContext } from 'react';
+import Desplegable_user from './Desplegable_user';
 
 function Header(){
     const authCtx = useContext(AuthContext);
@@ -24,15 +25,21 @@ function Header(){
     }
     else{
         contenidoDerecha = (
-            <Button
-                variant='danger' 
-                className='fw-bold' 
-                onClick={() => {
-                    authCtx.logoutAction();
-                    navigate('/');
-                }}>
-                Cerrar sesion
-            </Button>
+            <>
+                
+                    
+                <Desplegable_user></Desplegable_user>
+                
+                {/* <Button
+                    variant='danger' 
+                    className='fw-bold' 
+                    onClick={() => {
+                        authCtx.logoutAction();
+                        navigate('/');
+                    }}>
+                    Cerrar sesion
+                </Button> */}
+            </>
         )
     }
 

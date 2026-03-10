@@ -96,7 +96,7 @@ function Home(){
                     <section className="text-center">
                         <h3 className="pt-3 pb-3">Conjunto de peliculas</h3>
                         <Container>
-                            <Nav variant="tabs" activeKey={seccionActiva} onSelect={(k) => setSeccionActiva(k)}>
+                            <Nav variant="tabs" activeKey={seccionActiva} onSelect={(k: string | null) => setSeccionActiva(k ?? 'cartelera')}>
                             <Nav.Item>
                                 <Nav.Link eventKey="cartelera">Cartelera</Nav.Link>
                             </Nav.Item>

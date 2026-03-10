@@ -32,6 +32,7 @@ function App() {
     setUId(localId);                                                        // Guardamos dato para que este disponible
     localStorage.setItem('token',idToken);                                  // Guardamos el token en el localStorage para que no haya problema al refrescar
     localStorage.setItem('userId',localId);                                 // Guardamos el token en el localStorage para que no haya problema al refrescar
+    localStorage.setItem('nombreUsuario',name);
     setUserName(name);                                                      // Guardamos tambien el nombre del usuario
   }
   // ------------------------------------------------------------------------
@@ -50,11 +51,15 @@ function App() {
   useEffect(() => {                                         // De esta forma evitamos que el usario tenga que escribir el email y contraseña cada vez
     const tokenGuardado = localStorage.getItem('token');    // Buscamos si en el localStorage tenemos el token guardado
     const idGuardado = localStorage.getItem('userId');      // Buscamos si en el localStorage tenemos el userId guardado
+    const nombreGuardado = localStorage.getItem('userName');
 
     if (tokenGuardado && idGuardado){   // Si ambos se dan, esta logueado
       setEstaLogueado(true);            // Indicamos que esta logueado
       setToken(tokenGuardado);          // Almacenamos el token
       setUId(idGuardado);               // Almacenamos el UId
+      if (nombreGuardado){
+        setUserName(nombreGuardado); // Esto nos faltaba, para guardar el userName
+      }
     }
   }, []);
 

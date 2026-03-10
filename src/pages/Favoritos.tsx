@@ -67,8 +67,8 @@ function Favoritos(){
         })
     }
     return (
-        <Container>
-            <h1 className="text-white mb-4">Mis Favoritos</h1>
+        <Container className="text-center">
+            <h1 className="text-white mb-4 mt-4">Mis Favoritos</h1>
             <Row>
                 {misFavs.map((peli) => (
                     <Col xs={12} sm={6} md={4} lg={3} className="mb-4">

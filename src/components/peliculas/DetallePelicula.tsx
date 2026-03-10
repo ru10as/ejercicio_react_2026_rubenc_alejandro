@@ -5,6 +5,7 @@ import { Container, Row, Col, Button, Badge, Form } from 'react-bootstrap';
 import axios from "axios";
 import AuthContext from '../../store/AuthContext';
 import './detallepelicula.css';
+import MensajeModal from '../ui/MensajeModal';
 
 // --- INTERFACES ---
 // --------------------------------------------------------------------
@@ -95,10 +96,83 @@ function DetallePelicula() {
         return esMismoUsuario;
     });
 
-    const [esFavorita, setEsFavorita] = useState(false);
+    // -------------- Todo lo relacionado al Modal ----------------------------
+    const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
+    const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
+    const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
 
+
+    // ---------------------------------------------------------------------------
+    const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
+        setTituloModal(titulo);
+        setMensajeModal(mensaje);
+        setTipoModal(tipo);
+        setMostrarModal(true);
+    }
+    // ---------------------------------------------------------------------------
+
+
+    const [esFavorita, setEsFavorita] = useState(false);            // 
     const [yaHasPuntuado, setYaHasPuntuado] = useState(false);      // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
     // --------------------------------------------------------------
+
+
+    // --------------------------------------------------------------
+    const [idFirebaseFavorito, setIdFirebaseFavorito] = useState<string | null>(null); // Para almacenar el indicativo con el que se va a guardar la peli favorita
+    const [esPeliFavorita, setEsPeliFavorita] = useState(false);    // 
+    // --------------------------------------------------------------
+
+
+    // --------------------------------------------------------------
+    const comprobarSiEsFavorito = () => {
+        if(!authCtx.login || !authCtx.userID){
+            return
+        }
+
+        axios.get(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${authCtx.userID}/favoritos.json`)
+        .then((result) => {
+            const data = result.data; // Tomamos los resultados
+            let encontradoKeyEsFavorito = null; 
+
+            for (const key in data){
+                if(String(data[key].pelicula_id) === id){
+                    encontradoKeyEsFavorito = key;
+                    break;
+                }
+            }
+
+            if (encontradoKeyEsFavorito){
+                setEsPeliFavorita(true);
+                setIdFirebaseFavorito(encontradoKeyEsFavorito);
+            } else{
+                setEsPeliFavorita(false);
+                setIdFirebaseFavorito(null);
+            }  
+        })
+        .catch(err => console.error("Error al comprobar el favorito",err));
+    }
+    // --------------------------------------------------------------
+
+
+    // --------------------------------------------------------------
+    const eliminarDeFavoritos = () => {
+        if (idFirebaseFavorito === null)return;
+
+        axios.delete(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${authCtx.userID}/favoritos/${idFirebaseFavorito}.json`)
+        .then(() => {
+            setEsPeliFavorita(false);
+            setIdFirebaseFavorito(null);
+            lanzamientoAviso("Eliminado","Se ha quitado de tus favoritos","success");
+        })
+        .catch(err => console.log("Error al eliminar",err));
+    }
+    // --------------------------------------------------------------
+
+
+
+    
+
 
 
 
@@ -108,13 +182,15 @@ function DetallePelicula() {
             pelicula_id:peli?.id,               // 
             texto:comentarioTexto,              // Almacenamos el comentario de texto
             usuario_id:authCtx.userID,          // Almacenamos con el comentario el usuario id que esta ahora dentro
+            nombre_usuario:authCtx.userName,    // Vamos a enviar tambien este indicativo de forma que podamos poner el nombre junto al comentario
             fecha:new Date().toLocaleString()   //
         }
         axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json', nuevoComentario)
         .then(() => {
             setComentarioTexto("");                     // Aqui lo que hacemos es limpiar el cuadro de texto para que no se quede lo escrito ahi
-            alert("Comentario guardado correctamente"); // Para que el usuario sepa que ya ha enviado el comentario y se ha registrado correctamente
+            //alert("Comentario guardado correctamente"); // Solo para pruebas
             cargarComentarios();                        // Y cargamos el conjunto de comentarios
+            lanzamientoAviso("Comentario guardado","¡Gracias por darnos tu opinion!","success")
         })
         .catch(err => console.log("Error al guardar comentario",err));
     };
@@ -137,13 +213,13 @@ function DetallePelicula() {
                 }
             }
 
-            if (contador > 0){
-                const calculo = suma / contador;
-                promedio = calculo.toFixed(1);
-            }else{
-                promedio = 0;
-            }
-            setMediaPeli(Number(promedio));
+            if (contador > 0){                      // Comprobamos que el contador sea mayor que cero (posteriormente haremos la division)
+                const calculo = suma / contador;    // Hacemos la operacion
+                promedio = calculo.toFixed(1);      // 
+            }else{                                  // 
+                promedio = 0;                       // 
+            }                                       // 
+            setMediaPeli(Number(promedio));         // 
         })
     }
     // --------------------------------------------------------------------------------
@@ -164,9 +240,10 @@ function DetallePelicula() {
         }
         axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json',nuevaPuntuacion)
         .then(() => {
-            alert('Puntuacion guardada correctamente');
+            // alert('Puntuacion guardada correctamente'); // Esto solo para pruebas
             setYaHasPuntuado(true);
             cargarMedia();
+            lanzamientoAviso("Puntuacion guardada","¡Gracias por valorar la pelicula!","success")
         })
     }
     // --------------------------------------------------------------------------------
@@ -175,17 +252,21 @@ function DetallePelicula() {
 
     // --------------------------------------------------------------------------------
     const añadirAfavoritos = () => {
-        const nuevoFavorito = {
-            pelicula_id: peli?.id,
-            usuario_id:authCtx.userID,
-            titulo: peli?.titulo,
-            imagen_portada:peli?.imagen_portada,
-            categoria:peli?.categoria
-
+        const nuevoFavorito = {                 // 
+            pelicula_id: peli?.id,              //
+            usuario_id:authCtx.userID,          //
+            titulo: peli?.titulo,               //
+            imagen_portada:peli?.imagen_portada,//
+            categoria:peli?.categoria           //
         }
         axios.post(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${authCtx.userID}/favoritos.json`,nuevoFavorito)
-        .then(() => {
-            alert("Pelicula añadida a favoritos");
+        .then((result) => {
+            // alert("Pelicula añadida a favoritos"); // Solo para pruebas
+            const firebaseId = result.data.name;    // 
+            setEsPeliFavorita(true);                // 
+            setIdFirebaseFavorito(firebaseId);      // 
+            
+            lanzamientoAviso("Añadida a favoritos", "Pelicula añadida a tus favoritos", "success");
         })
         .catch(err => console.log("Error al guardar favorito",err))
 
@@ -215,18 +296,12 @@ function DetallePelicula() {
     // --------------------------------------------------------------------------------
 
 
-
-    // --------------------------------------------------------------------------------
-    useEffect(() => { 
-        cargarComentarios();    // Una vez cargamos, va a aparecer tanto los comentarios de esta pelicula como..
-        cargarMedia();          // La media que se ha calculado de la misma
-    },[id]);                    // Si el id cambia, si pasamos de una pelicula a otra, entonces volvemos a cargar
-    // --------------------------------------------------------------------------------
-
-
-
     // --------------------------------------------------------------------------------
     useEffect(() => {
+        // 1) Primero lo que vamos a hacer es limpiar las peliculas que existen
+        setPeli(null); // Pa que salga lo de Cargando...
+
+        // 2) Cargamos los detalles de la pelicula
         axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
             .then((response) => {
                 const data = response.data;
@@ -245,7 +320,14 @@ function DetallePelicula() {
                 console.error("Error al cargar pelicula:", error);
                 setPeli(null);
             });
-    }, [id]);
+
+        // 3) Cargamos comentarios y la media
+        cargarComentarios();    // Una vez cargamos, va a aparecer tanto los comentarios de esta pelicula como..
+        cargarMedia();          // La media que se ha calculado de la misma
+
+        // 4) Comprobamos si la peli esta entre los favoritos (Para dar la posibilidad de quitar de favoritos)
+        comprobarSiEsFavorito();
+    }, [id, authCtx.login]);
     // --------------------------------------------------------------------------------
 
 
@@ -261,6 +343,25 @@ function DetallePelicula() {
     // --------------------------------------------------------------------------------
 
 
+    // --------------------------------------------------------------
+    let botonFavorito;
+
+    if(esPeliFavorita){
+        botonFavorito = (
+            <Button variant='danger' onClick={eliminarDeFavoritos}>
+                <i className='bi bi-heartbreak-fill me-2'></i>QUITAR DE FAVORITOS
+            </Button>
+        )
+    }
+    else {
+        botonFavorito = (
+            <Button onClick={añadirAfavoritos}>
+                <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS
+            </Button>
+        )
+    }
+    // --------------------------------------------------------------
+
 
     // --------------------------------------------------------------------------------
     let botonesAccion;
@@ -270,9 +371,7 @@ function DetallePelicula() {
                 <Button>
                     <i className='bi bi-play-fill me-2'></i>VER AHORA
                 </Button>
-                <Button onClick={añadirAfavoritos}>
-                    <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS
-                </Button>
+                {botonFavorito}
             </>
         )
     }
@@ -287,6 +386,7 @@ function DetallePelicula() {
     // --------------------------------------------------------------------------------
 
 
+    
 
     // --------------------------------------------------------------------------------
     let seccionComentarios;
@@ -403,9 +503,8 @@ function DetallePelicula() {
                                  style={{ maxWidth: '480px', margin: '0 auto' }}>
                                 <video 
                                     controls 
-                                    poster={`/${peli.imagen_en_pelicula}`} 
-                                    style={{ backgroundColor: '#000', objectFit: 'cover' }}
-                                >
+                                    poster={`/${peli.imagen_portada}`} 
+                                    style={{ backgroundColor: '#000', objectFit: 'cover' }}>
                                     <source src={`/${peli.video_local}`} type="video/mp4" />
                                     Tu navegador no soporta el video.
                                 </video>
@@ -422,14 +521,15 @@ function DetallePelicula() {
                                     <div className="bg-secondary bg-opacity-10 p-3 rounded shadow-sm">
                                         {listaComentarios.map((c, i) => (
                                             <div key={i} className="mb-3 p-2 border-bottom border-secondary">
-                                                <div className='d-flex align-items'>
-                                                    <div>
+                                                <div className='d-flex align-items-center'>
+                                                    <div className='me-2'>
                                                         <i className='bi bi-person-fill text-white'></i>
                                                     </div>
+                                                    <div>
+                                                    <h6 className='mb-0'>{c.nombre_usuario || "Usuario anonimo"}</h6>
                                                 </div>
-                                                <div>
-                                                    <h6 className='mb-0'>{c.nombre_usuario}</h6>
                                                 </div>
+                                                
                                                 
                                                 <strong>{c.usuario}</strong>
                                                 <p className="mb-0">{c.texto}</p>
@@ -447,6 +547,14 @@ function DetallePelicula() {
                     </Col>
                 </Row>
             </Container>
+            <MensajeModal 
+            show={mostrarModal} 
+            onHide={() => setMostrarModal(false)}
+            titulo={tituloModal}
+            mensaje={mensajeModal}
+            tipo={tipoModal}>
+
+            </MensajeModal>
         </div>
     );
 }

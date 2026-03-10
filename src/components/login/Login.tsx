@@ -26,8 +26,29 @@ function Login(){
 
         axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData)
             .then((res) => {
-                authCtx.loginAction(res.data.idToken,res.data.localId);
-                navigate('/');
+
+                const idToken = res.data.idToken;
+                const localId = res.data.localId;
+
+                axios.get(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${localId}.json?auth=${idToken}`)
+                .then((resultado_BD) => {
+                    let nombreUsuario = "";
+
+                    if (resultado_BD.data){
+                        nombreUsuario = resultado_BD.data.nombre;
+                    } else{
+                        nombreUsuario = "Usuario";
+                    }
+
+                    authCtx.loginAction(idToken,localId,nombreUsuario);
+                    navigate('/');
+                })
+                .catch((err) => { // Revisar esta idea 
+                    console.log("Error recuperando nombre, entrando como genérico");
+                    authCtx.loginAction(idToken, localId, "Usuario");
+                    navigate("/");
+                })
+
             })
             .catch((err) => {
                 let codigoError = "";
