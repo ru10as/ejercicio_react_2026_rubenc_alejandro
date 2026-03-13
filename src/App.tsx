@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Contacto from './pages/Contacto';
 import ErrorPage from './pages/ErrorPage';
-import Home from './pages/Home';
-import DetallePelicula from './components/peliculas/DetallePelicula';
+import Home from './components/peliculas/view/Home';
+import DetallePelicula from './components/peliculas/view/DetallePelicula';
 import Footer from './components/ui/Footer';
 import Header from './components/ui/Header';
 import AuthContext from './store/AuthContext';
-import Favoritos from './pages/Favoritos';
-import Login from './components/login/Login';
-import Registro from './components/login/Registro';
+import Favoritos from './components/peliculas/view/Favoritos';
+import Login from './components/access/view/Login';
+import Registro from './components/access/view/Registro';
 import AvisoLegal from './pages/AvisoLegal';
-
+ 
 
 function App() {
 
