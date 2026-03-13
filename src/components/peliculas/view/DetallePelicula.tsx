@@ -2,86 +2,19 @@ import React from 'react';
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Button, Badge, Form } from 'react-bootstrap';
-import axios from "axios";
-import AuthContext from '../../store/AuthContext';
+
+import AuthContext from '../../../store/AuthContext';
 import './detallepelicula.css';
+import { renderEstrellas } from './utils/RenderHelpers';
+import { Pelicula } from '../domain/Pelicula';
+import { PeliculaRepository } from '../infrastructure/PeliculaRepository';
+import MensajeModal from '../../ui/MensajeModal';
 
-// --- INTERFACES ---
-// --------------------------------------------------------------------
-interface Pelicula { 
-    id: number;   
-    titulo: string;
-    categoria: string;
-    taquilla: number;
-    video_local: string;
-    pais_origen: string;
-    mercados?: any[];
-    imagen_portada: string;
-    imagen_en_pelicula: string;
-    calificacion_media: number;
-    descripcion: string;
-    comentarios?: { usuario: string; texto: string; nota: number }[];
-    proximamente: boolean;
-    fecha_estreno: string;
-}
-// --------------------------------------------------------------------
-
-
-// --------------------------------------------------------------------
-interface FirebasePelicula { 
-    [key: string]: Omit<Pelicula, "id">;
-}
-// --------------------------------------------------------------------
-
-
-// --------------------------------------------------------------------
-interface FirebaseResponse {
-    peliculas: FirebasePelicula;
-}
-// --------------------------------------------------------------------
-
-// --- FUNCIONES AUXILIARES ---
-// --------------------------------------------------------------------
-function calcularMedia(comentarios: { nota: number }[] | undefined): number {
-    if (!comentarios || comentarios.length === 0) {
-        return 0;
-    }
-    const suma = comentarios.reduce((acc,curr) => {
-        return acc + curr.nota;
-    },0);
-
-    const promedio = suma / comentarios.length;
-    const resultadoFormateado = promedio.toFixed(1);
-
-    return Number(resultadoFormateado);
-}
-// --------------------------------------------------------------------
-
-
-// --------------------------------------------------------------------
-function renderEstrellas(nota: number) {
-    const estrellasMax = 5;             // Vamos a tratar sobre 5 estrellas en vez de sobre 10
-    const valor_sobre_5 = nota / 2;     // Por ello, aqui hacemos el ajuste
-    const iconos = [];                  // aqui vamos a almacenar los iconos (el numero de estrellas)
-
-    for (let i = 1; i <= estrellasMax; i++) {                               // Recorremos hasta un maximo de 5 estrellas
-        if (i <= valor_sobre_5) {                                           // Damos estrella completa
-            iconos.push(<i key={i} className="bi bi-star-fill text-warning me-1"></i>);
-        } else if (i - 0.5 === valor_sobre_5) {                             // Damos media estrella
-            iconos.push(<i key={i} className="bi bi-star-half text-warning me-1"></i>);
-        } else {                                                            // Damos estrella vacia
-            iconos.push(<i key={i} className="bi bi-star text-muted me-1"></i>);
-        }
-    }
-    return <span style={{ fontSize: '1.1rem' }}>{iconos}</span>;
-}
-// -------------------------------------------------------------
-
-
-    
 
 // --- COMPONENTE PRINCIPAL ---
 function DetallePelicula() {
+    
+    // MODIFICADO
     // ------------------------------------------------------------------
     const { id } = useParams<{ id: string }>();                         // Aqui extraemos el id de la url que estmamos poniendo
     const authCtx = useContext(AuthContext);                            // Tomamos el contexto del usuario que se encuentra dentro en este momento
@@ -90,68 +23,98 @@ function DetallePelicula() {
     const [listaComentarios, setListaComentarios] = useState<any[]>([]);// Aqui guardamos todos los comentarios sobre esta peli que han hecho los usuarios
     const [notaSeleccionada, setNotaSeleccionada] = useState(5);        // Vamos a guardar la nota a la pelicula que le da el usuario
     const [mediaPeli, setMediaPeli] = useState<number>(0);              // Media final que vamos a calcular con el conjunto de notas
+    
     const yaHasComentado = listaComentarios.find((comentario) => {      // Todo esto, suponiendo que listaComentarios ya venga filtrada para esta pelicula en especifico
         const esMismoUsuario = comentario.usuario_id === authCtx.userID;
         return esMismoUsuario;
     });
 
     const [esFavorita, setEsFavorita] = useState(false);
-
     const [yaHasPuntuado, setYaHasPuntuado] = useState(false);      // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
+    
+
+    const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
+    const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
+    const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
+    const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
+        setTituloModal(titulo);
+        setMensajeModal(mensaje);
+        setTipoModal(tipo);
+        setMostrarModal(true);
+    }
     // --------------------------------------------------------------
 
 
+    // MODIFICADO
+    // --------------------------------------------------------------
+    const cargarDatosIniciales = async () => {
+        if (!id) return;
 
+        const [peliculaData, comentariosData, puntuacionesData] = await Promise.all([
+            PeliculaRepository.getById(id),
+            PeliculaRepository.getComentarios(id),
+            PeliculaRepository.getPuntuaciones(id)
+        ]);
+
+        setPeli(peliculaData);
+        setListaComentarios(comentariosData);
+        procesarPuntuaciones(puntuacionesData);
+    }
+    // --------------------------------------------------------------
+
+
+    // MODIFICADO
+    // --------------------------------------------------------------
+    const procesarPuntuaciones = (data: any[]) => {
+        if (!data || data.length === 0) {
+            setMediaPeli(0);
+            return;
+        }
+
+        let suma = 0;
+        for (let i = 0; i < data.length; i++) {
+            suma = suma + Number(data[i].nota);
+        }
+        const promedio = (suma / data.length).toFixed(1);
+        setMediaPeli(Number(promedio));
+
+        if (authCtx.userID) {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].usuario_id === authCtx.userID) {
+                    setYaHasPuntuado(true);
+                    break;
+                }
+            }
+        }
+    };
+    // --------------------------------------------------------------
+
+
+    // MODIFICADO
     // --------------------------------------------------------------------------------
-    const enviarComentario = () => {
+    const enviarComentario = async () => { // ----- ESTO LO VAMOS A ENVIAR A X ----------
         const nuevoComentario = {               // Definimos el nuevo comentario que va a introducir este usuario
             pelicula_id:peli?.id,               // 
             texto:comentarioTexto,              // Almacenamos el comentario de texto
             usuario_id:authCtx.userID,          // Almacenamos con el comentario el usuario id que esta ahora dentro
             fecha:new Date().toLocaleString()   //
         }
-        axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json', nuevoComentario)
-        .then(() => {
-            setComentarioTexto("");                     // Aqui lo que hacemos es limpiar el cuadro de texto para que no se quede lo escrito ahi
-            alert("Comentario guardado correctamente"); // Para que el usuario sepa que ya ha enviado el comentario y se ha registrado correctamente
-            cargarComentarios();                        // Y cargamos el conjunto de comentarios
-        })
-        .catch(err => console.log("Error al guardar comentario",err));
+
+        await PeliculaRepository.saveComentario(nuevoComentario);
+        setComentarioTexto("");
+        // alert("Comentario guardado correctamente"); // Solo para pruebas
+        lanzamientoAviso("Comentario guardado","¡Gracias por darnos tu opinion!","success")
+        const nuevosComentarios = await PeliculaRepository.getComentarios(id!);
+        setListaComentarios(nuevosComentarios);
     };
     // --------------------------------------------------------------------------------
 
 
 
+    // MODIFICADO
     // --------------------------------------------------------------------------------
-    const cargarMedia = () => {
-        axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json')
-        .then((res) => {
-            const data = res.data;      // Cargamos la info que nos devuelve
-            let suma = 0;               // Aqui es donde vamos a ir almacenando la suma de todas las notas de esta peli
-            let contador = 0;           // Para saber sobre que numero dividir (para hacer la media)
-            let promedio;               // Donde almacenaremos el promedio
-            for (const key in data){
-                if(String(data[key].pelicula_id) === id){ // Comprobamos si es una puntuacion de esta peli mediante su id
-                    suma = suma + Number(data[key].nota);
-                    contador++;
-                }
-            }
-
-            if (contador > 0){
-                const calculo = suma / contador;
-                promedio = calculo.toFixed(1);
-            }else{
-                promedio = 0;
-            }
-            setMediaPeli(Number(promedio));
-        })
-    }
-    // --------------------------------------------------------------------------------
-
-
-
-    // --------------------------------------------------------------------------------
-    const enviarNota = () => { // Proceso en la que este usuario va a enviar la nota
+    const enviarNota = async () => { // Proceso en la que este usuario va a enviar la nota
         
         if (!peli || yaHasPuntuado){
             return
@@ -162,19 +125,20 @@ function DetallePelicula() {
             nota:notaSeleccionada,
             usuario_id:authCtx.userID, // Asociado a esa nota le introducimos un indicativo del usuario = el usuario_id
         }
-        axios.post('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/puntuaciones.json',nuevaPuntuacion)
-        .then(() => {
-            alert('Puntuacion guardada correctamente');
-            setYaHasPuntuado(true);
-            cargarMedia();
-        })
+
+        await PeliculaRepository.savePuntuacion(nuevaPuntuacion);
+        // alert('Puntuacion guardada'); // Solo para pruebas
+        lanzamientoAviso("Puntuacion guardada","¡Gracias por valorar la pelicula!","success")
+        setYaHasPuntuado(true);
+        cargarDatosIniciales();
     }
     // --------------------------------------------------------------------------------
 
 
 
+    // MODIFICADO
     // --------------------------------------------------------------------------------
-    const añadirAfavoritos = () => {
+    const añadirAfavoritos = async () => {
         const nuevoFavorito = {
             pelicula_id: peli?.id,
             usuario_id:authCtx.userID,
@@ -183,71 +147,24 @@ function DetallePelicula() {
             categoria:peli?.categoria
 
         }
-        axios.post(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${authCtx.userID}/favoritos.json`,nuevoFavorito)
-        .then(() => {
-            alert("Pelicula añadida a favoritos");
-        })
-        .catch(err => console.log("Error al guardar favorito",err))
 
+        await PeliculaRepository.saveFavoritos(authCtx.userID!, nuevoFavorito);
+        //alert("Añadida a favoritos");
+        lanzamientoAviso("Añadida a favoritos", "Pelicula añadida a tus favoritos", "success");
     }
     // --------------------------------------------------------------------------------
     
 
-
-
-    // --------------------------------------------------------------------------------
-    const cargarComentarios = () => {
-        axios.get('https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/comentarios.json') // Cargamos la parte de la base de datos de comentarios.json
-        .then((resultado) => {
-            const data = resultado.data;
-            const comentarios_filtrados = [];
-
-            for (const key in data){                                            // Vamos a recorrer cada uno de los comentarios que tomamos
-                if(String(data[key].pelicula_id) === id){                       // Nos vamos a quedar con los comentarios de esta pelicula
-                    comentarios_filtrados.push({id_firebase:key,...data[key]}); // Lo de dentro del push lo hacemos por si en un futuro queremos eliminar algun comentario
-                }                                                               // 
-            }
-            setListaComentarios(comentarios_filtrados); // En la lista que estamoos almacenando solo habra comentarios de esta pelicula
-
-        })
-        .catch(error => console.log("Error al cargar comentarios", error));
-    }
-    // --------------------------------------------------------------------------------
-
-
-
-    // --------------------------------------------------------------------------------
-    useEffect(() => { 
-        cargarComentarios();    // Una vez cargamos, va a aparecer tanto los comentarios de esta pelicula como..
-        cargarMedia();          // La media que se ha calculado de la misma
-    },[id]);                    // Si el id cambia, si pasamos de una pelicula a otra, entonces volvemos a cargar
-    // --------------------------------------------------------------------------------
-
-
-
     // --------------------------------------------------------------------------------
     useEffect(() => {
-        axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
-            .then((response) => {
-                const data = response.data;
-                if (data && data.peliculas) {
-                    const peliculasArray: Pelicula[] = Object.entries(data.peliculas).map(
-                        ([key, value]) => ({ // De nuevo vamos a hacer lo mismo, almacenar el id dentro por asi decir
-                            id: Number(key),
-                            ...value
-                        })
-                    );
-                    const seleccionada = peliculasArray.find((p) => p.id === Number(id));
-                    setPeli(seleccionada || null);
-                }
-            })
-            .catch((error) => {
-                console.error("Error al cargar pelicula:", error);
-                setPeli(null);
-            });
-    }, [id]);
-    // --------------------------------------------------------------------------------
+        // 1) Hacemos la limpieza para que salga inicialmente lo de Cargando...
+        setPeli(null);
+        if(!id)return;
 
+        // 2) Cargamos los detalles
+        cargarDatosIniciales();
+    },[id, authCtx.login]);
+    // --------------------------------------------------------------------------------
 
 
     // --------------------------------------------------------------------------------
@@ -446,6 +363,13 @@ function DetallePelicula() {
                         })()}
                     </Col>
                 </Row>
+                <MensajeModal 
+                    show={mostrarModal}
+                    onHide={() => setMostrarModal(false)}
+                    titulo={tituloModal}
+                    mensaje={mensajeModal}
+                    tipo={tipoModal}
+                />
             </Container>
         </div>
     );

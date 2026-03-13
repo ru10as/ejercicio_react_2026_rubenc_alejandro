@@ -1,6 +1,6 @@
 import './header.css'
-import { Button, Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarToggle } from 'react-bootstrap';
-import { Link,useNavigate } from "react-router-dom";
+import { Container, Nav, Navbar, NavbarBrand, NavbarCollapse, NavbarToggle } from 'react-bootstrap';
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from '../../store/AuthContext';
 import { useContext } from 'react';
 
@@ -9,51 +9,44 @@ function Header(){
     const navigate = useNavigate();
     let contenidoDerecha;
 
-
     if (!authCtx.login){
         contenidoDerecha = (
             <>
-                <Link to="/login">
-                    <Button className='formato_login_registro'>Login</Button>
-                </Link>
-                <Link to="/registro">
-                    <Button className='formato_login_registro'>Registrarse</Button>
-                </Link> 
+                <Link to="/login" className='btn btn-sm btn-outline-info fw-semibold mx-1'>Login</Link>
+                <Link to="/registro" className='btn btn-sm btn-outline-info fw-semibold mx-1'>Registrarse</Link>
             </>
         )
     }
     else{
         contenidoDerecha = (
-            <Button
-                variant='danger' 
-                className='fw-bold' 
+            <button
+                className='btn btn-sm btn-outline-danger fw-semibold mx-1'
                 onClick={() => {
                     authCtx.logoutAction();
                     navigate('/');
                 }}>
-                Cerrar sesion
-            </Button>
+                Cerrar sesión
+            </button>
         )
     }
 
     return (
         <>
-            <Navbar style={{ background: "#2d9d9d", padding: "12px 0", border:"2px solid black"}}>
+            <Navbar className="header-nav" sticky="top" style={{ padding: "10px 0" }}>
                 <Container>
-                    <NavbarBrand as={Link} to="/">
-                        <i className='bi bi-film text-warning me-2'></i>
-                        R&A Movies</NavbarBrand>
-                    <NavbarToggle />
-                    <NavbarCollapse>
-                        <Nav className='ms-auto'>
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
-                            <Nav.Link as={Link} to="/contacto">Contacto</Nav.Link>
-                            
+                    <NavbarBrand as={Link} to="/" className="brand-name">
+                        <i className='bi bi-film me-2' style={{ color: '#2d9d9d' }}></i>
+                        R&A Movies
+                    </NavbarBrand>
+                    <NavbarToggle aria-controls="main-nav" style={{ borderColor: '#2d9d9d' }} />
+                    <NavbarCollapse id="main-nav">
+                        <Nav className='ms-auto align-items-center'>
+                            <Nav.Link as={Link} to="/" className="nav-link-custom">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/contacto" className="nav-link-custom">Contacto</Nav.Link>
                             {authCtx.login && (
-                                <Nav.Link as={Link} to="/favoritos">Favoritos</Nav.Link>
+                                <Nav.Link as={Link} to="/favoritos" className="nav-link-custom">Favoritos</Nav.Link>
                             )}
-
-                            <Nav className=''>
+                            <Nav className='ms-2'>
                                 {contenidoDerecha}
                             </Nav>
                         </Nav>
