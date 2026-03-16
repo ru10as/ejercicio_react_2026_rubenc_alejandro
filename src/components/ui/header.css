@@ -1,0 +1,30 @@
+.header-nav {
+    background: rgba(12, 18, 18, 0.97) !important;
+    border-bottom: 2px solid #2d9d9d;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
+}
+
+.brand-name {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #2d9d9d !important;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.brand-name:hover {
+    color: #5ec4c4 !important;
+}
+
+.nav-link-custom {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 500;
+    transition: color 0.2s;
+    padding: 0.4rem 0.85rem !important;
+}
+
+.nav-link-custom:hover,
+.nav-link-custom.active {
+    color: #2d9d9d !important;
+}
+
