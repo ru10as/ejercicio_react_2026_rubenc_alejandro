@@ -111,3 +111,29 @@
     cursor: default;
     pointer-events: none;
 }
+
+.movie-card-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.favorito-ribbon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 45px 45px 0; 
+    border-color: transparent #198754 transparent transparent;
+    z-index: 10;
+}
+
+.favorito-ribbon i {
+    position: absolute;
+    top: 5px;
+    right: -40px; 
+    color: white;
+    font-size: 0.9rem;
+    line-height: 1;
+}

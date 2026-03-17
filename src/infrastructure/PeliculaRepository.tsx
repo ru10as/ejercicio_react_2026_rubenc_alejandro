@@ -1,37 +1,44 @@
 import axios from "axios";
-import { Pelicula } from "../domain/Pelicula";
+import type { Pelicula } from "../domain/Pelicula";
 
-// Nuevo introducido
+// NUEVO METIDO
 
+// ------------------------------------------------------------------------
 const BASE_URL = 'https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app';
-
-interface FirebasePelicula {
-    [key: string]: Omit<Pelicula, "id">;
-}
+// ------------------------------------------------------------------------
 
 export const PeliculaRepository = {
-
     // ------------------------------------------------------------------------
     async getAll(): Promise<Pelicula[]> {
-        const res = await axios.get(`${BASE_URL}/peliculas.json`);
-        const data = res.data;
-        if(!res.data){
+        try {
+            const res = await axios.get(`${BASE_URL}/peliculas.json`);
+            const data = res.data;
+            const entradas = Object.entries(data);
+            
+            const listaFormateada = entradas.map((entrada) => {
+                const idFirebase = entrada[0];
+                const datosPelicula = entrada[1] as any;
+
+                if (!datosPelicula || typeof datosPelicula !== 'object') {
+                    return null;
+                }
+
+                return {
+                    // Forzamos el ID a número, pero si falla (NaN), usamos 0 o la key
+                    id: isNaN(Number(idFirebase)) ? 0 : Number(idFirebase),
+                    ...datosPelicula,
+                    // Aseguramos que los strings existan para que .includes() no falle en el Home
+                    fecha_estreno: datosPelicula.fecha_estreno || "",
+                    titulo: datosPelicula.titulo || "Sin título",
+                    categoria: datosPelicula.categoria || "General"
+                } as Pelicula;
+            }).filter(p => p !== null) as Pelicula[];
+
+            return listaFormateada;
+        } catch (error) {
+            console.error("Error crítico en getAll:", error);
             return [];
         }
-        const entradas = Object.entries(data);
-        
-        const listaFormateada = entradas.map((entrada) => {
-            const idFirebase = entrada[0];
-            const datosPelicula = entrada[1] as Record<string, any>;
- 
-            const objetoPeliculaFinal = {
-                id: Number(idFirebase),
-                ...datosPelicula
-            };
-
-            return objetoPeliculaFinal as Pelicula;
-        });
-        return listaFormateada;
     },
     // ------------------------------------------------------------------------
 
@@ -71,8 +78,8 @@ export const PeliculaRepository = {
 
             const comentarios_filtrados = [];
             for (const key in data){
-                if(String(data[key].pelicula_id) === pelicula_id){                      // Nos vamos a quedar con los comentarios de esta pelicula
-                    comentarios_filtrados.push({id_firebase:key,...data[key]});         // Lo de dentro del push lo hacemos por si en un futuro queremos eliminar algun comentario
+                if(String(data[key].pelicula_id) === pelicula_id){              // Nos vamos a quedar con los comentarios de esta pelicula
+                    comentarios_filtrados.push({id_firebase:key,...data[key]}); // Lo de dentro del push lo hacemos por si en un futuro queremos eliminar algun comentario
                 }
             }
 
@@ -158,8 +165,35 @@ export const PeliculaRepository = {
     async deleteFavorito(userId:string, peliId:string, token:string){
         const res = await axios.delete(`${BASE_URL}/usuarios/${userId}/favoritos/${peliId}.json?auth=${token}`);
         return res;
-    }
+    },
     // ------------------------------------------------------------------------
 
+
+    // ----------------------------------------------------------
+    async getFavoritoById (userId:string, token:string): Promise<number[]> {
+        try{
+            const res = await axios.get(`${BASE_URL}/usuarios/${userId}/favoritos.json?auth=${token}`);
+            const data = res.data;
+            if (!data) return [];
+
+            const listaObjetosConFavoritos = Object.values(data);
+            
+            const idFavoritos: number[] = listaObjetosConFavoritos.map((item: any) => {
+                const id_tomado = item.pelicula_id
+                const id_numerico_tomado = Number(id_tomado);
+
+                return (id_numerico_tomado);
+            })
+
+            return idFavoritos;
+
+            
+        }
+        catch(error){
+            console.error("Error cargando tus peliculas favoritas",error);
+            return [];
+        }
+    }
+    // ----------------------------------------------------------
 
 }

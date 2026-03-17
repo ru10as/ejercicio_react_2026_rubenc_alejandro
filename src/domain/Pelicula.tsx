@@ -1,3 +1,5 @@
+// NUEVO METIDO
+
 export interface Pelicula { // Nuevo introducido
     id: number;   
     titulo: string;
@@ -20,23 +22,25 @@ export interface PeliFav {
     id: string,
     titulo: string,
     imagen_portada: string, 
-    categoria?: string
+    categoria?: string,
+    pelicula_id:number
 }
 
-// Nuevo introducido
-export function calcularMedia(comentarios: { nota: number }[] | undefined): number { // ----- ESTO LO VAMOS A ENVIAR A domain/Pelicula.ts ----------
-    if (!comentarios || comentarios.length === 0) {
-        return 0;
-    }
-    const suma = comentarios.reduce((acc,curr) => {
-        return acc + curr.nota;
-    },0);
-
-    const promedio = suma / comentarios.length;
-    const resultadoFormateado = promedio.toFixed(1);
-
-    return Number(resultadoFormateado);
+// NO LO VAMOS A EMPLEAR
+/* export function calcularMedia(comentarios: { nota: number }[] | undefined): number { // ----- ESTO LO VAMOS A ENVIAR A domain/Pelicula.ts ----------
+if (!comentarios || comentarios.length === 0) {
+return 0;
 }
+const suma = comentarios.reduce((acc,curr) => {
+return acc + curr.nota;
+},0);
+
+const promedio = suma / comentarios.length;
+const resultadoFormateado = promedio.toFixed(1);
+
+return Number(resultadoFormateado);
+} */
+
 
 // Nuevo introducido
 export interface PeliculaFirebase {
@@ -55,4 +59,13 @@ export interface Pelicula_destacada {
     titulo: string;
     imagen: string;
     descripcion: string;
+}
+
+export interface FirebasePelicula {
+    [key: string]: Omit<Pelicula, "id">;
+}
+
+// Introducido para el Home 
+export interface FirebaseResponse {
+  peliculas: FirebasePelicula;
 }

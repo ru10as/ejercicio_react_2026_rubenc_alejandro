@@ -1,21 +1,19 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Row, Form, Alert } from "react-bootstrap";
+import { AccessRepository } from "../../infrastructure/AccessRepository";
+import { AccessService } from "../../services/AuthService";
+import AuthContext from "../../store/AuthContext";
+import MensajeModal from "../ui/MensajeModal";
 
-import { AccessRepository } from "../infrastructure/AccessRepository";
-import { AccessService } from "../service/AccessService";
-import AuthContext from "../../../../store/AuthContext";
-import MensajeModal from "../../../ui/MensajeModal";
+// NUEVO METIDO
 
 function Login(){
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
-
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-
     const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
     const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
     const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
