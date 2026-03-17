@@ -1,4 +1,4 @@
-export interface Pelicula {
+export interface Pelicula { // Nuevo introducido
     id: number;   
     titulo: string;
     categoria: string;
@@ -15,6 +15,7 @@ export interface Pelicula {
     fecha_estreno: string;
 }
 
+// Nuevo introducido
 export interface PeliFav {
     id: string,
     titulo: string,
@@ -22,6 +23,7 @@ export interface PeliFav {
     categoria?: string
 }
 
+// Nuevo introducido
 export function calcularMedia(comentarios: { nota: number }[] | undefined): number { // ----- ESTO LO VAMOS A ENVIAR A domain/Pelicula.ts ----------
     if (!comentarios || comentarios.length === 0) {
         return 0;
@@ -36,19 +38,19 @@ export function calcularMedia(comentarios: { nota: number }[] | undefined): numb
     return Number(resultadoFormateado);
 }
 
-// Añadido ahora
+// Nuevo introducido
 export interface PeliculaFirebase {
     id: number;
     titulo: string;
     [key: string]: any;
 }
 
-// Añadido ahora
+// Nuevo introducido
 export interface Props {
     peliculas: PeliculaFirebase[];
 }
 
-// Añadido ahora
+// Nuevo introducido
 export interface Pelicula_destacada {
     titulo: string;
     imagen: string;

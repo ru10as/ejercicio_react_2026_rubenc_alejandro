@@ -1,62 +1,63 @@
-/* import { useContext, useState } from 'react';
-import { useCol } from 'react-bootstrap/esm/Col';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Container, Row, Col, Card, Form, Button, Alert, CardBody, FormGroup } from 'react-bootstrap';
-import AuthContext from '../../store/AuthContext';
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Card, Col, Container, Row, Form, Alert } from "react-bootstrap";
+
+import { AccessRepository } from "../infrastructure/AccessRepository";
+import { AccessService } from "../service/AccessService";
+import AuthContext from "../../../../store/AuthContext";
+import MensajeModal from "../../../ui/MensajeModal";
 
 function Login(){
-    const [email,setEmail] = useState('');
-    const [passwd,setPasswd] = useState('');
-    const [error, setError] = useState<string | null>(null);
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const API_KEY = "AIzaSyBY5z4uU0OUlp9x_ZcaFRICSUe_42GwlOk";
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const submitHandler = (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
 
-        const authData = {
-            email:email,
-            password: passwd,
-            returnSecureToken:true
-        };
-
-        axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData)
-            .then((res) => {
-                authCtx.loginAction(res.data.idToken,res.data.localId);
-                navigate('/');
-            })
-            .catch((err) => {
-                let codigoError = "";
-                if (err.response){
-                    if (err.response.data){
-                        if (err.response.data.error){
-                            codigoError = err.response.data.error.message;
-                        }
-                    }
-                }
-
-                if (codigoError === "EMAIL_NOT_FOUND" || codigoError === "INVALID_LOGIN_CREDENTIALS") {
-                    setError("El correo o la contraseña no son correctos.");
-                }
-                else if (codigoError === "INVALID_PASSWORD"){
-                    setError("La contraseña es incorrecta. Vuelve a introducirla");
-                }
-                else if (codigoError === "USER_DISABLED"){
-                    setError("Esta cuenta ha sido desactivada por el administrador");
-                }
-                else{
-                    setError("Error de Firebase: " + codigoError);
-                }
-            })
+    const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
+    const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
+    const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
+    const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
+        setTituloModal(titulo);
+        setMensajeModal(mensaje);
+        setTipoModal(tipo);
+        setMostrarModal(true);
     }
 
-    
 
-    return (
+    const submitHandler = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try{
+            const resAuth = await AccessRepository.login(email, password);
+            const idToken = resAuth.data.idToken;
+            const localId = resAuth.data.localId;
+
+            // Ahora vamos a obtener el nombre real del usuario que se ha logueado
+            const nombreReal = await AccessRepository.obtenerNombreUsuario(localId,idToken);
+
+            authCtx.loginAction(idToken, localId, nombreReal || "Usuario");
+            lanzamientoAviso("¡Bienvenido!", `Hola de nuevo, ${nombreReal || 'Usuario'}`, "success");
+            setTimeout(() => {
+                navigate("/");
+            }, 1500);
+
+        } 
+        catch(error: any){
+            let codigo = "ERROR_DESCONOCIDO";
+            if (error.response && error.response.data && error.response.data.error){
+                codigo = error.response.data.error.message;
+            }
+
+            const mensajeParaUsuario = AccessService.obtenerMensajeError(codigo);
+            // alert(mensajeParaUsuario);
+            lanzamientoAviso("Error de acceso",mensajeParaUsuario,"error");
+
+        }
+    }
+    return(
         <div style={{backgroundColor: "#141414", minHeight: "100vh", display:"flex", alignItems:"center"}}>
             <Container>
                 <Row>
@@ -78,7 +79,6 @@ function Login(){
                             <Card style={{backgroundColor:"#2d9d9d"}} className='text-center'>
                             <Card.Body>
                                 <h2 className='text-center fw-bold'>LOGIN</h2>
-                                {error && <Alert variant="danger" className="mt-2 py-1 small">{error}</Alert>}
                                 <Form onSubmit={submitHandler}>
                                     <Form.Group className='mt-2 mb-2'>
                                         <Form.Label className='fw-bold'>Email:</Form.Label>
@@ -90,7 +90,7 @@ function Login(){
                                     <Form.Group className='mt-2 mb-2'>
                                         <Form.Label className='fw-bold'>Contraseña:</Form.Label>
                                         <Form.Control
-                                            type='password' placeholder='Introduce tu contraseña' value={passwd} onChange={e => setPasswd(e.target.value)}>   
+                                            type='password' placeholder='Introduce tu contraseña' value={password} onChange={e => setPassword(e.target.value)}>   
                                         </Form.Control>
                                     </Form.Group>
 
@@ -119,8 +119,14 @@ function Login(){
                     </Col>
                 </Row>
             </Container>
+            <MensajeModal 
+                show={mostrarModal}
+                onHide={() => setMostrarModal(false)}
+                titulo={tituloModal}
+                mensaje={mensajeModal}
+                tipo={tipoModal}
+            />
         </div>
     );
 }
-
-export default Login; */
+export default Login;

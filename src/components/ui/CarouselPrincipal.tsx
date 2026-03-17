@@ -1,22 +1,7 @@
 import { useState } from 'react';
 import { Carousel, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
-interface PeliculaFirebase {
-    id: number;
-    titulo: string;
-    [key: string]: any;
-}
-
-interface Props {
-    peliculas: PeliculaFirebase[];
-}
-
-interface Pelicula_destacada {
-    titulo: string;
-    imagen: string;
-    descripcion: string;
-}
+import { PeliculaFirebase, PeliculaDestacada } from '../../domain/Pelicula';
 
 const PELICULAS_DESTACADAS: Pelicula_destacada[] = [
     {

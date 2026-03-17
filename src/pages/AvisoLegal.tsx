@@ -1,5 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap';
 
+// Nuevo introducido
+
 function AvisoLegal() {
     return (
         <Container>

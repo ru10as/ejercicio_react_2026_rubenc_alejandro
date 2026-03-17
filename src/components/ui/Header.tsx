@@ -9,6 +9,8 @@ function Header(){
     const navigate = useNavigate();
     let contenidoDerecha;
 
+    
+
     if (!authCtx.login){
         contenidoDerecha = (
             <>

@@ -1,11 +1,11 @@
 import { AccessRepository } from "../infrastructure/AccessRepository";
 import { AccessService } from "../service/AccessService";
-import AuthContext from "../../../store/AuthContext";
+import AuthContext from "../../../../store/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button, Card, Col, Container, Row, Form } from "react-bootstrap";
-import MensajeModal from "../../ui/MensajeModal";
+import MensajeModal from "../../../ui/MensajeModal";
 
 
 function Registro() {

@@ -1,3 +1,4 @@
+// Nuevo introducido
 function ErrorPage(){
     return(
         <div>
