@@ -1,6 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import type { AvisoDeProps } from '../../domain/ui';
+
+interface AvisoDeProps {
+    show: boolean,
+    onHide: () => void,
+    titulo: string,
+    mensaje: string,
+    tipo?: 'success' | 'error'
+}
 
 function MensajeModal(props: AvisoDeProps){
     return (

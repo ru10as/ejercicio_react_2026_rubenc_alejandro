@@ -1,0 +1,676 @@
+{
+  "comentarios": {
+    "-On2FUYv5PTcgtV5N71Q": {
+      "fecha": "6/3/2026, 14:06:52",
+      "pelicula_id": 9,
+      "texto": "John wick, menuda pasada de peli, superemocionante",
+      "usuario_id": "Khm9YWVOcfXOj6qBDcZgGDHRf8h1"
+    },
+    "-On2N4ZDFyFoIrcBF4o4": {
+      "fecha": "6/3/2026, 14:40:03",
+      "pelicula_id": 3,
+      "texto": "Que pelicula mas buena, me ha encantado",
+      "usuario_id": "Khm9YWVOcfXOj6qBDcZgGDHRf8h1"
+    },
+    "-On2OkyuULAHG8iFgAX_": {
+      "fecha": "6/3/2026, 14:47:20",
+      "pelicula_id": 1,
+      "texto": "Pelicula muy buena para mi hijo\n",
+      "usuario_id": "Khm9YWVOcfXOj6qBDcZgGDHRf8h1"
+    },
+    "-On2P7f-RAXWdAMURj4u": {
+      "fecha": "6/3/2026, 14:49:00",
+      "pelicula_id": 10,
+      "texto": "Mi hijo se lo ha pasado genial, buenisima pelicula",
+      "usuario_id": "Khm9YWVOcfXOj6qBDcZgGDHRf8h1"
+    }
+  },
+  "peliculas": [
+    null,
+    {
+      "calificacion_media": 4.8,
+      "categoria": "Animacion",
+      "descripcion": "Tras la captura de su hijo en la Gran Barrera de Coral, un miedoso pez payaso emprende una peligrosa aventura hasta Sídney para rescatarlo con la ayuda de una olvidadiza pez cirujano.",
+      "fecha_estreno": "2003-05-30",
+      "id": 1,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_buscando_a_nemo.jpg",
+      "imagen_portada": "portadas_peliculas/buscando_a_nemo.jpg",
+      "mercados": [
+        "Global",
+        "USA",
+        "España"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 940,
+      "titulo": "Buscando a Nemo",
+      "video_local": "videos_trailer/IMG_8183.MOV"
+    },
+    {
+      "calificacion_media": 4.2,
+      "categoria": "Drama",
+      "descripcion": "Una apasionada y destructiva historia de amor y venganza que consume a dos familias a lo largo de los años en los desolados y tormentosos páramos de la Inglaterra del siglo XIX.",
+      "fecha_estreno": "2003-05-30",
+      "id": 2,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_cumbres_borroscosas.jpg",
+      "imagen_portada": "portadas_peliculas/cumbres_borroscosas.webp",
+      "mercados": [
+        "Global",
+        "España"
+      ],
+      "pais_origen": "Reino Unido",
+      "proximamente": false,
+      "taquilla": 120,
+      "titulo": "Cumbres Borrascosas",
+      "video_local": "videos_trailer/cumbres_borrascosas.mp4"
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Fantasia",
+      "descripcion": "El día de su undécimo cumpleaños, un niño huérfano descubre que posee poderes mágicos y es invitado a estudiar en el Colegio Hogwarts, donde descubrirá la verdad sobre su pasado.",
+      "fecha_estreno": "2001-11-16",
+      "id": 3,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_harry_potter.jpg",
+      "imagen_portada": "portadas_peliculas/harry_potter.jpg",
+      "mercados": [
+        "Global",
+        "USA",
+        "España",
+        "UK"
+      ],
+      "pais_origen": "Reino Unido",
+      "proximamente": false,
+      "taquilla": 974,
+      "titulo": "Harry Potter",
+      "video_local": "videos_trailer/harry_potter.mp4"
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Accion",
+      "descripcion": "Los Vengadores deben reunirse una vez más para enfrentar la amenaza multiversal del Doctor Doom, quien planea reescribir la realidad misma bajo su puño de hierro y tecnología avanzada.",
+      "fecha_estreno": "2023-05-05",
+      "id": 4,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_avengers.jpg",
+      "imagen_portada": "portadas_peliculas/imagen_avengers_doomsday.jpg",
+      "mercados": [
+        "Global",
+        "USA"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 2800,
+      "titulo": "Avengers: Doomsday",
+      "video_local": "videos_trailer/avengers.mp4"
+    },
+    {
+      "calificacion_media": 3.8,
+      "categoria": "Crimen",
+      "descripcion": "Un detective veterano persigue a un meticuloso ladrón de joyas que opera bajo un estricto código de reglas, desencadenando un juego del gato y el ratón por toda la costa de California.",
+      "fecha_estreno": "2022-09-10",
+      "id": 5,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_crime_101.webp",
+      "imagen_portada": "portadas_peliculas/imagen_crime_101.jpg",
+      "mercados": [
+        "USA"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 85,
+      "titulo": "Crime 101",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4,
+      "categoria": "Accion",
+      "descripcion": "Tras sobrevivir al impacto inicial del cometa, la familia Garrity debe abandonar la seguridad de su búnker para cruzar los restos congelados de Europa en busca de un nuevo hogar definitivo.",
+      "fecha_estreno": "2023-07-15",
+      "id": 6,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_greenland_2.webp",
+      "imagen_portada": "portadas_peliculas/imagen_greenland_2.jpg",
+      "mercados": [
+        "Global",
+        "USA"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 150,
+      "titulo": "Greenland 2",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 3.5,
+      "categoria": "Terror",
+      "descripcion": "Un grupo de desconocidos despierta en una isla remota tras un accidente. Pronto descubrirán que no están solos y que algo antiguo y hambriento los acecha desde la espesura de la selva.",
+      "fecha_estreno": "2023-10-01",
+      "id": 7,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_send_help.webp",
+      "imagen_portada": "portadas_peliculas/imagen_send_help.webp",
+      "mercados": [
+        "USA",
+        "España"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 60,
+      "titulo": "Send Help",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.5,
+      "categoria": "Terror",
+      "descripcion": "En el pequeño pueblo de Derry, un grupo de siete niños se une para aterrorizar a una entidad malvada que emerge cada tres décadas disfrazada de payaso para alimentarse del miedo local.",
+      "fecha_estreno": "2017-09-08",
+      "id": 8,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_IT.jpg",
+      "imagen_portada": "portadas_peliculas/it.jpg",
+      "mercados": [
+        "Global",
+        "USA",
+        "España"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 700,
+      "titulo": "IT",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.7,
+      "categoria": "Accion",
+      "descripcion": "Con una recompensa millonaria sobre su cabeza y tras ser expulsado del Hotel Continental, el legendario asesino John Wick debe abrirse paso a tiros por Nueva York para intentar sobrevivir.",
+      "fecha_estreno": "2019-05-17",
+      "id": 9,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_john_wick_3.avif",
+      "imagen_portada": "portadas_peliculas/john_wick_3.jpg",
+      "mercados": [
+        "Global",
+        "USA",
+        "España"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 327,
+      "titulo": "John Wick 3",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.6,
+      "categoria": "Animacion",
+      "descripcion": "Po, un panda obsesionado con el kung-fu que trabaja en una tienda de fideos, es elegido por sorpresa para cumplir una antigua profecía y entrenar junto a sus ídolos, los Cinco Furiosos.",
+      "fecha_estreno": "2008-06-06",
+      "id": 10,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_kung_fu_panda.webp",
+      "imagen_portada": "portadas_peliculas/kung_fu_panda.jpg",
+      "mercados": [
+        "Global",
+        "China",
+        "España"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 631,
+      "titulo": "Kung Fu Panda",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Drama",
+      "descripcion": "Corre la Segunda Guerra Mundial y Thomas Shelby se ve obligado a volver a la acción para proteger su legado familiar en un Londres bombardeado y lleno de nuevos enemigos políticos.",
+      "fecha_estreno": "2026-03-30",
+      "id": 11,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_peaky_blinders.webp",
+      "imagen_portada": "portadas_peliculas/peaky_blinders_the_immortal_man.jpg",
+      "mercados": [
+        "UK"
+      ],
+      "pais_origen": "Reino Unido",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Peaky Blinders: Inmortal",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Ciencia Ficcion",
+      "descripcion": "Décadas después de la caída del Imperio, una nueva amenaza surge en la galaxia. Una joven chatarrera y un soldado de asalto desertor se unen en una búsqueda épica por la paz.",
+      "fecha_estreno": "2026-04-10",
+      "id": 12,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_star_wars.jpg",
+      "imagen_portada": "portadas_peliculas/star_wars.webp",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Star Wars",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Accion",
+      "descripcion": "Tras los eventos de la primera invasión, una nueva estirpe de criaturas evoluciona bajo tierra, obligando a los Guardianes de la Muralla a utilizar armas experimentales para evitar el fin del mundo.",
+      "fecha_estreno": "2026-05-05",
+      "id": 13,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/the_great_wall.jpg",
+      "mercados": [
+        "China"
+      ],
+      "pais_origen": "China",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "The Great Wall 2",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.7,
+      "categoria": "Drama",
+      "descripcion": "Una familia atrapada en el tsunami del sudeste asiático lucha por sobrevivir y reencontrarse en medio del caos.",
+      "fecha_estreno": "2012-10-11",
+      "id": 14,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_lo_imposible.jpg",
+      "imagen_portada": "portadas_peliculas/pelicula_lo_imposible.webp",
+      "mercados": [
+        "Global",
+        "España"
+      ],
+      "pais_origen": "España",
+      "proximamente": false,
+      "taquilla": 198,
+      "titulo": "Lo Imposible",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.1,
+      "categoria": "Comedia",
+      "descripcion": "Un matrimonio católico y conservador ve cómo sus cuatro hijas se casan con hombres de diferentes razas y religiones.",
+      "fecha_estreno": "2014-04-16",
+      "id": 15,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_dios_mio_qthh.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_dios_mio_qthh.jpg",
+      "mercados": [
+        "Europa",
+        "Francia"
+      ],
+      "pais_origen": "Francia",
+      "proximamente": false,
+      "taquilla": 174,
+      "titulo": "Dios mío, ¿pero qué te hemos hecho?",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.8,
+      "categoria": "Animacion",
+      "descripcion": "Una familia de superhéroes retirados se ve obligada a volver a la acción para salvar al mundo de un nuevo villano.",
+      "fecha_estreno": "2004-11-05",
+      "id": 16,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_los_increibles.webp",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_los_increibles.webp",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 633,
+      "titulo": "Los Increíbles",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Animacion",
+      "descripcion": "Cuando un nuevo juguete llega al cuarto de Andy, el vaquero Woody teme perder su lugar como el favorito.",
+      "fecha_estreno": "1995-11-22",
+      "id": 17,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_toy_story_1.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_toy_story_1.webp",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 373,
+      "titulo": "Toy Story",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.8,
+      "categoria": "Animacion",
+      "descripcion": "Woody es secuestrado por un coleccionista y Buzz Lightyear lidera una misión de rescate para traerlo de vuelta.",
+      "fecha_estreno": "1999-11-24",
+      "id": 18,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_toy_story_2.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_toy_story_2.webp",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 497,
+      "titulo": "Toy Story 2",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.8,
+      "categoria": "Animacion",
+      "descripcion": "Continuación de las aventuras de los juguetes más famosos del cine en formato digital.",
+      "fecha_estreno": "1999-11-24",
+      "id": 19,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_toy_story_3.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_toy_story_2.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 497,
+      "titulo": "Toy Story 3",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Animacion",
+      "descripcion": "Un anciano viudo viaja a Sudamérica en su casa flotante atada a miles de globos, acompañado por un joven explorador.",
+      "fecha_estreno": "2009-05-29",
+      "id": 20,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_up.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_up.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 735,
+      "titulo": "Up",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.8,
+      "categoria": "Animacion",
+      "descripcion": "Dos monstruos que trabajan asustando niños ven cómo sus vidas se complican cuando una niña humana entra en su mundo.",
+      "fecha_estreno": "2001-11-02",
+      "id": 21,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_moustros_sa.webp",
+      "imagen_portada": "portadas_peliculas/portadas_peliculas_moustros_sa.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 577,
+      "titulo": "Monstruos, S.A.",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Crimen",
+      "descripcion": "Las vidas de dos asesinos a sueldo, un boxeador y una pareja de atracadores se entrelazan en esta violenta historia de redención.",
+      "fecha_estreno": "1994-10-14",
+      "id": 22,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_pulp_fiction.webp",
+      "imagen_portada": "portadas_peliculas/imagen_pulp_fiction.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 213,
+      "titulo": "Pulp Fiction",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 5,
+      "categoria": "Drama",
+      "descripcion": "Un empresario alemán salva a más de mil judíos polacos durante el Holocausto empleándolos en sus fábricas.",
+      "fecha_estreno": "1993-12-15",
+      "id": 23,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_lista_de_schindler.jpg",
+      "imagen_portada": "portadas_peliculas/imagen_la_lista_schindler.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 322,
+      "titulo": "La Lista de Schindler",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Drama",
+      "descripcion": "Un padre judío utiliza su imaginación para proteger a su hijo de los horrores de un campo de concentración nazi.",
+      "fecha_estreno": "1997-12-20",
+      "id": 24,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_la_vida_es_bella.jpg",
+      "imagen_portada": "portadas_peliculas/imagen_la_vida_es_bella.webp",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "Italia",
+      "proximamente": false,
+      "taquilla": 229,
+      "titulo": "La Vida es Bella",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 5,
+      "categoria": "Crimen",
+      "descripcion": "El patriarca de una dinastía del crimen organizado transfiere el control de su imperio clandestino a su hijo reacio.",
+      "fecha_estreno": "1972-03-24",
+      "id": 25,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_el_padrino.jpg",
+      "imagen_portada": "portadas_peliculas/imagen_el_padrino.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 245,
+      "titulo": "El Padrino",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Drama",
+      "descripcion": "Un relato íntimo ambientado en las calles de Málaga, donde las vidas de varios desconocidos se cruzan en un día que cambiará sus destinos para siempre.",
+      "fecha_estreno": "2026-06-15",
+      "id": 26,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_calle_malaga.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_calle_malaga.jpg",
+      "mercados": [
+        "España"
+      ],
+      "pais_origen": "España",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Calle Málaga",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Aventura",
+      "descripcion": "Dos familias viajan al Círculo Polar Ártico para conocer a Papá Noel, pero las tensiones culturales y secretos del pasado convierten el viaje en una comedia dramática.",
+      "fecha_estreno": "2026-12-01",
+      "id": 27,
+      "imagen_en_pelicula": "imagen_por_peli/imagen_peli_laponia.jpg",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_laponia.jpg",
+      "mercados": [
+        "Europa"
+      ],
+      "pais_origen": "España",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Laponia",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Terror",
+      "descripcion": "Grace regresa para enfrentarse a una nueva rama de la familia Le Domas en otra letal e inesperada partida de 'escondite' durante una ceremonia nupcial.",
+      "fecha_estreno": "2026-10-31",
+      "id": 28,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_noche_de_bodas_2.jpg",
+      "mercados": [
+        "Global",
+        "USA"
+      ],
+      "pais_origen": "USA",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Noche de Bodas 2",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Ciencia Ficcion",
+      "descripcion": "Un científico despierta en una nave espacial sin recordar su misión, solo para descubrir que es la última esperanza de la humanidad contra una extinción solar.",
+      "fecha_estreno": "2026-03-20",
+      "id": 29,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_proyecto_salvacion.webp",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Proyecto Salvación",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Animacion",
+      "descripcion": "Mario y Luigi se embarcan en una nueva aventura a través de reinos desconocidos para rescatar a un viejo amigo y detener los nuevos planes de Bowser.",
+      "fecha_estreno": "2026-04-03",
+      "id": 30,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_super_mario_bros.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Super Mario Bros. 2",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Ciencia Ficcion",
+      "descripcion": "Basada en la novela 'Project Hail Mary', Ryland Grace debe utilizar la ciencia y la lógica para salvar la Tierra desde los confines del espacio.",
+      "fecha_estreno": "2026-03-20",
+      "id": 31,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_proyecto_salvacion.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Ave María (Proyecto Salvación)",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Drama",
+      "descripcion": "Un brillante pianista polaco de origen judío vive recluido en el gueto de Varsovia, donde sufre en primera persona el horror de la ocupación nazi.",
+      "fecha_estreno": "2002-05-24",
+      "id": 32,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_el_pianista.jpg",
+      "mercados": [
+        "Global",
+        "Europa"
+      ],
+      "pais_origen": "Polonia",
+      "proximamente": false,
+      "taquilla": 120,
+      "titulo": "El Pianista",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.8,
+      "categoria": "Thriller",
+      "descripcion": "Una joven agente del FBI busca la ayuda de un brillante psiquiatra y asesino en serie caníbal, el Dr. Hannibal Lecter, para atrapar a otro criminal.",
+      "fecha_estreno": "1991-02-14",
+      "id": 33,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_el_silencio_de_los_corderos.jpg",
+      "mercados": [
+        "Global",
+        "USA"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 272,
+      "titulo": "El Silencio de los Corderos",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Drama",
+      "descripcion": "Un ángel enviado del cielo muestra a un empresario desesperado cómo habría sido la vida de sus seres queridos si él nunca hubiera nacido.",
+      "fecha_estreno": "1946-12-20",
+      "id": 34,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_que_bello_es_vivir.jpg",
+      "mercados": [
+        "Global"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 6,
+      "titulo": "¡Qué bello es vivir!",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 4.9,
+      "categoria": "Accion",
+      "descripcion": "Un general romano traicionado por el hijo del emperador busca justicia y venganza tras ser convertido en esclavo y forzado a luchar como gladiador.",
+      "fecha_estreno": "2000-05-05",
+      "id": 35,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_gladiator_2000.webp",
+      "mercados": [
+        "Global",
+        "España"
+      ],
+      "pais_origen": "USA",
+      "proximamente": false,
+      "taquilla": 460,
+      "titulo": "Gladiator",
+      "video_local": ""
+    },
+    {
+      "calificacion_media": 0,
+      "categoria": "Romance",
+      "descripcion": "Una historia contemporánea sobre las segundas oportunidades y las decisiones que tomamos cuando el destino nos pone a prueba una última vez.",
+      "fecha_estreno": "2026-08-14",
+      "id": 36,
+      "imagen_en_pelicula": "imagen_por_peli/",
+      "imagen_portada": "portadas_peliculas/portada_pelicula_tal_vez.jpg",
+      "mercados": [
+        "España"
+      ],
+      "pais_origen": "España",
+      "proximamente": true,
+      "taquilla": 0,
+      "titulo": "Tal Vez",
+      "video_local": ""
+    }
+  ],
+  "usuarios": {
+    "Khm9YWVOcfXOj6qBDcZgGDHRf8h1": {
+      "email": "rubencico@gmail.com",
+      "favoritos": {
+        "init": true
+      },
+      "fecha_registro": "6/3/2026",
+      "user": "rubencico"
+    }
+  },
+  "puntuaciones": {
+  }
+}

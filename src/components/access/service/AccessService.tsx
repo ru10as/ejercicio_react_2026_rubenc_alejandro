@@ -1,5 +1,3 @@
-// YA METIDO
-
 export const AccessService = {
     obtenerMensajeError: (codigo: string): string => {
         switch(codigo) {

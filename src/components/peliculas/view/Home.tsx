@@ -1,41 +1,62 @@
-import CarouselPrincipal from "../components/ui/CarouselPrincipal";
+import CarouselPrincipal from "../../ui/CarouselPrincipal";
 import './home.css';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-//import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import type { Pelicula } from "../domain/Pelicula";
-//import type { FirebasePelicula } from "../domain/Pelicula";
-//import type { FirebaseResponse } from "../domain/Pelicula";
-//import type { PeliFav } from "../domain/Pelicula";
-import { PeliculaRepository } from "../infrastructure/PeliculaRepository";
-import AuthContext from "../store/AuthContext";
-//import MensajeModal from "../components/ui/MensajeModal";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-// Nuevo introducido
+interface Pelicula {
+    id: number;
+    titulo:string,
+    categoria:string,
+    taquilla:number,
+    video_local:string,
+    pais_origen:string,
+    mercados?: any[],
+    imagen_portada:string,
+    imagen_en_pelicula:string,
+    calificacion_media:number,
+    descripcion:string,
+    comentarios?: any[],
+    proximamente: boolean;
+    fecha_estreno:string
+}
 
+interface FirebasePelicula {
+  [key: string]: Omit<Pelicula, "id">;
+}
+
+interface FirebaseResponse {
+  peliculas: FirebasePelicula;
+}
 
 function Home(){
     const [categoriaActual, setCategoriaActual] = useState<string>('Todas');
     const categorias: string[] = ['Todas', 'Accion', 'Drama', 'Terror', 'Animacion', 'Fantasia'];
-    const [peliculas, setPeliculas] = useState<Pelicula[]>([]);
-    const [seccionActiva, setSeccionActiva] = useState<string>('cartelera');
-    const [favoritosIds, setFavoritosIds] = useState<number[]>([]);
-    const authCtx = useContext(AuthContext);
-    const userId = authCtx.userID;
-    const token = authCtx.idToken;
 
-    useEffect(() => {   
-        PeliculaRepository.getAll().then((data) => {
-            setPeliculas(data);
-        });
+    const [peliculas, setPeliculas] = useState<Pelicula[]>([])
+    const [seccionActiva, setSeccionActiva] = useState<string>('cartelera')
 
-        if (userId && token){
-            PeliculaRepository.getFavoritoById(userId,token).then((data) => {
-                setFavoritosIds(data);
-            })
-        }
-    }, [userId,token]);
+    useEffect(() => {
+        axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
+        .then((response) => {
+            const data = response.data;
+            if (data && data.peliculas) {
+                const peliculasArray: Pelicula[] = Object.entries(data.peliculas).map(
+                ([key, value]) => ({
+                id: Number(key),
+                ...value
+                })
+                );
+                const peliculasValidas = peliculasArray.filter(peli => peli.titulo !== undefined);
+                setPeliculas(peliculasValidas);
+            }else{
+                setPeliculas([]);
+            }
+        })
+        .catch((error) =>
+        console.log("Error al obtener los datos",error))
+    }, [])
 
     const peliculasCartelera = peliculas.filter(p => !p.proximamente && p.fecha_estreno.includes('2026'));
     const peliculasProximamente = peliculas.filter(p => p.proximamente);
@@ -48,25 +69,14 @@ function Home(){
 
     const renderTarjetasPelicula = (lista: Pelicula[]) => (
         <Row>
-            {lista.map((peli) => {
-                
-                const esFavorita = favoritosIds.includes(peli.id);
-
-                return (
-                    <Col key={peli.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+            {lista.map((peli) => (
+                <Col key={peli.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
                     <div className="card h-100 movie-card border-0 shadow">
-                        <div style={{position:"relative"}}>
-                            {esFavorita && (
-                                <div className="favorito-ribbon">
-                                    <i className="bi bi-star-fill"></i>
-                                </div>
-                            )}
-                            <img
-                                src={peli.imagen_portada}
-                                alt={peli.titulo}
-                                style={{ height: '320px', objectFit: 'cover' }}
-                            />
-                        </div>
+                        <img
+                            src={peli.imagen_portada}
+                            alt={peli.titulo}
+                            style={{ height: '320px', objectFit: 'cover' }}
+                        />
                         <div className="card-body d-flex flex-column">
                             <h5>{peli.titulo}</h5>
                             <p className="small mb-3" style={{ color: '#2d9d9d' }}>{peli.categoria}</p>
@@ -76,10 +86,9 @@ function Home(){
                         </div>
                     </div>
                 </Col>
-                )}
-            )}
+            ))}
         </Row>
-    )
+    );
 
     return(
         <div>

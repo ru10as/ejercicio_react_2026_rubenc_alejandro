@@ -3,9 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import type { LatLngExpression } from 'leaflet';
 import { Container, Row, Col } from 'react-bootstrap';
 
-// Nuevo introducido
-
 function Contacto() {
+
   const posicionCentro: LatLngExpression = [42.8167, -1.6500];
 
   const sedes = [

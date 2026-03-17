@@ -3,12 +3,12 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Button, Badge, Form } from 'react-bootstrap';
 
-import AuthContext from '../store/AuthContext';
+import AuthContext from '../../../store/AuthContext';
 import './detallepelicula.css';
-import { renderEstrellas } from '../utils/uiHelpers';
-import type { Pelicula } from '../domain/Pelicula';
+import { renderEstrellas } from './utils/RenderHelpers';
+import { Pelicula } from '../domain/Pelicula';
 import { PeliculaRepository } from '../infrastructure/PeliculaRepository';
-import MensajeModal from '../components/ui/MensajeModal';
+import MensajeModal from '../../ui/MensajeModal';
 
 
 // --- COMPONENTE PRINCIPAL ---
@@ -30,9 +30,6 @@ function DetallePelicula() {
     });
 
     const [esFavorita, setEsFavorita] = useState(false);
-
-
-
     const [yaHasPuntuado, setYaHasPuntuado] = useState(false);      // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
     
 
@@ -54,36 +51,15 @@ function DetallePelicula() {
     const cargarDatosIniciales = async () => {
         if (!id) return;
 
-        /* const [peliculaData, comentariosData, puntuacionesData] = await Promise.all([
+        const [peliculaData, comentariosData, puntuacionesData] = await Promise.all([
             PeliculaRepository.getById(id),
             PeliculaRepository.getComentarios(id),
             PeliculaRepository.getPuntuaciones(id)
-        ]); */
+        ]);
 
-        const resultados = await Promise.all([
-            PeliculaRepository.getById(id),
-            PeliculaRepository.getComentarios(id),
-            PeliculaRepository.getPuntuaciones(id),
-            (async () => {
-                if (authCtx.userID && authCtx.idToken){
-                    return await PeliculaRepository.getFavoritoById(authCtx.userID,authCtx.idToken);
-                }
-                return [];
-            })()
-        ])
-
-        setPeli(resultados[0]);
-        setListaComentarios(resultados[1]);
-        procesarPuntuaciones(resultados[2]);
-
-        const listaIdsFavoritos = resultados[3];
-
-        if(listaIdsFavoritos.includes(Number(id))){
-            setEsFavorita(true);
-        }
-        else{
-            setEsFavorita(false);
-        }
+        setPeli(peliculaData);
+        setListaComentarios(comentariosData);
+        procesarPuntuaciones(puntuacionesData);
     }
     // --------------------------------------------------------------
 
@@ -174,7 +150,6 @@ function DetallePelicula() {
 
         await PeliculaRepository.saveFavoritos(authCtx.userID!, nuevoFavorito);
         //alert("Añadida a favoritos");
-        setEsFavorita(true);
         lanzamientoAviso("Añadida a favoritos", "Pelicula añadida a tus favoritos", "success");
     }
     // --------------------------------------------------------------------------------
@@ -202,17 +177,6 @@ function DetallePelicula() {
     }
     // --------------------------------------------------------------------------------
 
-    let variantBoton = "warning";
-    let textoBoton = "AÑADIR A MIS FAVORITOS";
-    let iconoBoton = "bi-plus-lg";
-    let estaBloqueado = false;
-
-    if (esFavorita){
-        variantBoton = "outline-warning";
-        textoBoton = "YA EN MIS FAVORITOS";
-        iconoBoton = "bi-check-lg";
-        estaBloqueado = true;
-    }
 
 
     // --------------------------------------------------------------------------------
@@ -223,10 +187,8 @@ function DetallePelicula() {
                 <Button>
                     <i className='bi bi-play-fill me-2'></i>VER AHORA
                 </Button>
-                <Button onClick={añadirAfavoritos} variant={variantBoton} disabled={estaBloqueado} className='fw-bold'>
-                    {/* <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS */}
-                    <i className={`bi ${iconoBoton} me-2`}></i>
-                    {textoBoton}
+                <Button onClick={añadirAfavoritos}>
+                    <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS
                 </Button>
             </>
         )
@@ -242,50 +204,6 @@ function DetallePelicula() {
     // --------------------------------------------------------------------------------
 
 
-    let seccionPuntuacion;
-    if(!authCtx.login){
-        seccionPuntuacion = (
-            <Badge bg="warning" text="dark" className="p-3">
-                Inicia sesion para puntuar esta pelicula
-            </Badge>
-        )
-    }
-    else if (yaHasPuntuado){
-        seccionPuntuacion = (
-            <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
-                <i className='bi bi-hand-thumbs-up-fill text-success display-6'></i>
-                <h5 className='mt-3'>¡Gracias por tu valoracion!</h5>
-                <p>Has puntuado esta pelicula con un <strong>{notaSeleccionada}</strong></p>
-            </div>
-        )
-    }
-    else {
-        seccionPuntuacion = (
-            <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
-                <h5>Opina sobre esta pelicula</h5>
-
-                <Form className='row align-items-end'>
-                    <Col xs="auto">
-                        <Form.Label>Nota (1-10)</Form.Label>
-                        <Form.Select
-                            value={notaSeleccionada}
-                            onChange={(e) => setNotaSeleccionada(Number(e.target.value))}
-                        >
-                            {[1,2,3,4,5,6,7,8,9,10].map(n=> (
-                                <option key={n} value={n}>{n}</option>
-                            ))}
-                        </Form.Select>
-                    </Col>
-                    <Col>
-                        <Button variant='warning' onClick={enviarNota} className='fw-bold'>
-                            Puntuar
-                        </Button>
-                    </Col>
-                </Form>
-            </div>
-        )
-    }
-
 
     // --------------------------------------------------------------------------------
     let seccionComentarios;
@@ -298,7 +216,7 @@ function DetallePelicula() {
     }
     else if(yaHasComentado){ // Si el usuario ya ha comentado, habra que indicarle que como ya ha comentado, no puede volver a comentar 
         seccionComentarios = (
-        <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
+        <div>
             <h5>
                 <i></i> Gracias por tu reseña
             </h5>
@@ -368,30 +286,29 @@ function DetallePelicula() {
                         </p>
 
                         <hr className="border-secondary mb-5" />
-                
-            {seccionPuntuacion}
-            {/* <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
-                <h5>Opina sobre esta pelicula</h5>
 
-                <Form className='row align-items-end'>
-                    <Col xs="auto">
-                        <Form.Label>Nota (1-10)</Form.Label>
-                        <Form.Select
-                            value={notaSeleccionada}
-                            onChange={(e) => setNotaSeleccionada(Number(e.target.value))}
-                        >
-                            {[1,2,3,4,5,6,7,8,9,10].map(n=> (
-                                <option key={n} value={n}>{n}</option>
-                            ))}
-                        </Form.Select>
-                    </Col>
-                    <Col>
-                        <Button variant='warning' onClick={enviarNota} className='fw-bold'>
-                            Puntuar
-                        </Button>
-                    </Col>
-                </Form>
-            </div> */}
+                        <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
+                            <h5>Opina sobre esta pelicula</h5>
+
+                            <Form className='row align-items-end'>
+                                <Col xs="auto">
+                                    <Form.Label>Nota (1-10)</Form.Label>
+                                    <Form.Select
+                                        value={notaSeleccionada}
+                                        onChange={(e) => setNotaSeleccionada(Number(e.target.value))}
+                                    >
+                                        {[1,2,3,4,5,6,7,8,9,10].map(n=> (
+                                            <option key={n} value={n}>{n}</option>
+                                        ))}
+                                    </Form.Select>
+                                </Col>
+                                <Col>
+                                    <Button variant='warning' onClick={enviarNota} className='fw-bold'>
+                                        Puntuar
+                                    </Button>
+                                </Col>
+                            </Form>
+                        </div>
                         
                         {seccionComentarios}
                     </Col>
