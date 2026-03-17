@@ -1,5 +1,7 @@
 import React from "react";
 
+// Nuevo introducido
+
 interface AuthContextType {
     login: boolean,
     language: string,
