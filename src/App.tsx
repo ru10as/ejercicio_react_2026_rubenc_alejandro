@@ -3,15 +3,14 @@ import { useEffect, useState } from 'react';
 
 import './App.css';
 import Contacto from './pages/Contacto';
-import ErrorPage from './pages/ErrorPage';
-import Home from './components/peliculas/view/Home';
-import DetallePelicula from './components/peliculas/view/DetallePelicula';
+import Home from './pages/Home';
+import DetallePelicula from './pages/DetallePelicula';
 import Footer from './components/ui/Footer';
 import Header from './components/ui/Header';
 import AuthContext from './store/AuthContext';
-import Favoritos from './components/peliculas/view/Favoritos';
-import Login from './components/access/view/Login';
-import Registro from './components/access/view/Registro';
+import Favoritos from './pages/Favoritos';
+import Login from './components/access/Login';
+import Registro from './components/access/Registro';
 import AvisoLegal from './pages/AvisoLegal';
  
 
@@ -79,7 +78,6 @@ function App() {
                 <Route path="/favoritos" element={<Favoritos />}/>
                 <Route path="/contacto" element={<Contacto />}/>
                 <Route path="/home" element={<Home />}/>
-                <Route path="/errorpage" element={<ErrorPage />}/>
                 <Route path='/pelicula/:id' element={<DetallePelicula />}></Route>
                 <Route path='/aviso_legal' element={<AvisoLegal />}></Route>
 
