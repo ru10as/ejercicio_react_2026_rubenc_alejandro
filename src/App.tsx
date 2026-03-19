@@ -12,7 +12,7 @@ import Favoritos from './pages/Favoritos';
 import Login from './components/access/Login';
 import Registro from './components/access/Registro';
 import AvisoLegal from './pages/AvisoLegal';
-import TopPeliculas from './components/peliculas/view/TopPeliculas';
+import TopPeliculas from './pages/TopPeliculas';
  
 
 function App() {

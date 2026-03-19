@@ -1,5 +1,6 @@
-import CarouselPrincipal from "../../ui/CarouselPrincipal";
+import CarouselPrincipal from "../components/ui/CarouselPrincipal";
 import './home.css';
+import '../components/peliculas/view/home.css';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import axios from "axios";
