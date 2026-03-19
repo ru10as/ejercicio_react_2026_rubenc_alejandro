@@ -34,14 +34,43 @@ function Header(){
 
     return (
         <>
-            <Navbar className="header-nav" sticky="top" style={{ padding: "10px 0" }}>
+            <Navbar className="header-nav" sticky="top" style={{ padding: "10px 0" }} expand="md">
                 <Container>
                     <NavbarBrand as={Link} to="/" className="brand-name">
                         <i className='bi bi-film me-2' style={{ color: '#2d9d9d' }}></i>
                         R&A Movies
                     </NavbarBrand>
+
                     <NavbarToggle aria-controls="main-nav" style={{ borderColor: '#2d9d9d' }} />
-                    <NavbarCollapse id="main-nav">
+                    
+                    <NavbarCollapse id="main-nav" className='ms-md-5'>
+
+                        <div className='mx-auto' style={{width:'100%', maxWidth:'400px'}}>
+                            <div className='input-group'>
+                                <span style={{borderColor:'#2d9d9d'}}>
+                                    <i className='bi bi-search'></i>
+                                </span>
+                                <input type='search' className='bg-transparent text-white' style={{borderColor:'#2d9d9d'}} placeholder='Buscar pelicula...'></input>
+                            </div>
+                        </div>
+
+                       {/*  <div className="mx-auto my-2 my-md-0" style={{ width: '100%', maxWidth: '400px' }}>
+                            <div className="input-group">
+                                <span className="input-group-text bg-transparent border-end-0" style={{ borderColor: '#2d9d9d' }}>
+                                    <i className="bi bi-search" style={{ color: '#2d9d9d' }}></i>
+                                </span>
+                                <input
+                                    type="search"
+                                    className="form-control bg-transparent text-white border-start-0"
+                                    placeholder="Buscar película..."
+                                    style={{ borderColor: '#2d9d9d', boxShadow: 'none' }}
+                                    // value={busqueda} -> Esto si decides meter la lógica luego
+                                    // onChange={(e) => setBusqueda(e.target.value)}
+                                />
+                            </div>
+                        </div> */}
+
+
                         <Nav className='ms-auto align-items-center'>
                             <Nav.Link as={Link} to="/" className="nav-link-custom">Home</Nav.Link>
                             <Nav.Link as={Link} to="/contacto" className="nav-link-custom">Contacto</Nav.Link>

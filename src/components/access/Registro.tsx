@@ -89,7 +89,7 @@ function Registro() {
                                             <Form.Control onChange={(event) => setPassword(event.target.value)}
                                                 type="password"
                                                 value={password}
-                                                required>
+                                                required> 
                                             </Form.Control>
                                         </Form.Group>
                                         <Form.Group>

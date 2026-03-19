@@ -1,139 +1,231 @@
+/*-- Seccion principal del catalogo --*/
 .seccion-peliculas {
-    background-color: #141f1e;
+    /* El color de fondo oscuro que le vamos a meter a la zona de peliculas*/
+    background-color: #141f1e;  
+    /* Ponemos un borde que no sea del todo negro para que no sea tan fuerte visualmente */                
     border: 1px solid rgba(45, 157, 157, 0.2);
+    /* Ponemos bordes redondeados que queda mejor*/
     border-radius: 12px;
 }
 
-/* Nav tabs con tema teal */
+/*-- Para la cabecera (la navegacion) --*/
 .nav-tabs-custom .nav-link {
-    color: rgba(255, 255, 255, 0.55);
-    border: none;
+    /*    Un color que no sea del todo blanco    */
+    color: rgba(255, 255, 255, 0.55);      
+    /*    Eliminamos el borde que viene dado     */ 
+    border: none;          
+    /*    Reservamos cierto espacio abajo        */                   
     border-bottom: 2px solid transparent;
-    background: transparent;
+    /*    Implementamos un fondo limpio          */
+    background: transparent;  
+    /*    Grosor de la fuente que establecemos   */             
     font-weight: 500;
+    /* Le metemos un padding de 10px arriba y abajo y 20px para lat (a ojo)*/
     padding: 10px 20px;
+    /**/
     transition: color 0.2s, border-color 0.2s;
 }
 
+/*-- Ejecucion cuando estemos encima del raton --*/
 .nav-tabs-custom .nav-link:hover {
+    /* Le ponemos un color tipico de la pagina web que estamos usando */
     color: #2d9d9d;
+    /* Eliminamos solo el borde un poco */
     border-bottom-color: rgba(45, 157, 157, 0.4);
 }
 
+/*-- Para el estado seleccionado */
 .nav-tabs-custom .nav-link.active {
+    /* He establecido este color como en otros caso y con el important porque no me aperecia (REVISAR*/
     color: #2d9d9d !important;
+    /* Tambien lo establecemos con el color tipico de la web (Revisar lo de important) */
     border-bottom: 2px solid #2d9d9d !important;
+    /* Al igual que en otros casos, ponemos un fondo suave*/
     background: transparent !important;
+    /* Tamaño de la fuente grande para resaltarlo */
     font-weight: 700;
 }
 
+/*-- Esto lo aplicaremos al contenedor padre --*/
 .nav-tabs-custom {
+    /* Establecemos una pequeña linea abajo que queda bien */
     border-bottom: 1px solid rgba(45, 157, 157, 0.2);
+    /* Establecemos un espaciado entre cada boton de categoria */
     gap: 4px;
 }
 
 /* Cards de película */
 .movie-card {
+    /* Fondo oscuro pero no negro del todo que queda muy fuerte */
     background-color: #1c2b29 !important;
+    /* Tambien evitamos aqui el borde del todo negro */
     border: 1px solid rgba(45, 157, 157, 0.12) !important;
+    /* Pasamos a suavizar los bordes redondeandolos */
     border-radius: 10px !important;
-    overflow: hidden;
+    /* Evitamos salirnos de los bordes */
+    overflow: hidden; 
+    /* Hacemos una transicion suave y fluida*/
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    /* Hacemos lo de la manita en vez de flechita*/
     cursor: pointer;
 }
 
+/*Efecto al pasar el raton */
 .movie-card:hover {
+    /* Hacemos esto para que la carta suba un poco al pasar el raton*/
     transform: translateY(-6px) scale(1.02);
+    /* Ponemos como una sombra debajo que queda profesional */
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(45, 157, 157, 0.45);
+    /* Ponemos al color de borde ese verde que estamos usando en la web*/
     border-color: rgba(45, 157, 157, 0.45) !important;
 }
 
+/* Parte del texto de la carta */
 .movie-card .card-body {
+    /* Colo de fondo oscuro pero no ponemos negro completo */
     background-color: #1c2b29;
+    /*Color blanco para que se lea bien*/
     color: white;
 }
 
+/**/
 .movie-card .card-body h5 {
+    /* Colocamos el titulo de color blanco para que se leea bien*/
     color: white;
+    /*grosor adecuado para que se vea bien*/
     font-weight: 600;
+    /*Ajustamos un poco el tamaño de letra*/
     font-size: 0.95rem;
 }
 
 
 /* Botones filtro categoría */
 .btn-categoria {
+    /* Sin fondo para que se vean los bordes */
     background-color: transparent;
+    /* Ponemos un borde fino con ese color verdoso que venimos usando */
     border: 1.5px solid rgba(45, 157, 157, 0.4);
+    /* Las letras las metemos en blanco */
     color: rgba(255, 255, 255, 0.7);
+    /* Esto para que no sean bordes cortantes */
     border-radius: 20px;
+    /* Un poco a ojo hemos puesto esto*/
     padding: 5px 18px;
+    /*Letra mas pequeña que el titulo que habiamos puesto previamente */
     font-size: 0.85rem;
+    /* El grosor tambien un poco mas pequeño*/
     font-weight: 500;
+    /* Queremos implementar que los cambios de color no sean muy bruscos*/
     transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
+/* El boton de categoria cuando lo tocamos*/
 .btn-categoria:hover,
 .btn-categoria.activo {
+    /* Cuando lo elefgimos, sale este color de fondo y asi el usuario sabe que categoria ha elegido */
     background-color: #2d9d9d;
+    /* Lo mismo*/
     border-color: #2d9d9d;
+    /* Color blanco para que se lea bien al poner ese color de fondo*/
     color: white;
 }
 
 /* Título sección */
 .seccion-titulo {
+    /* Color verdoso que se viene empleando*/
     color: #409f9f;
+    /* Un grosor mayor para destacar */
     font-weight: 800;
+    /*Vamos a poner todo en mayusculas*/
     text-transform: uppercase;
+    /* Un espaciado que se ha ido probando hasta establecer*/
     letter-spacing: 1.5px;
 }
 
-/* Botón Ver más del carousel */
+/* Para boton del carousel */
 .btn-carousel {
+    /* Para que respete los bordes */
     display: inline-block;
+    /*Empujamos hacia abajo */
     margin-top: auto;
+    /* Espacio que introducimos dentor del boton*/
     padding: 5px 14px;
+    /**/
     border: 1.5px solid #2d9d9d;
+    /* COlor del texto sin mas*/
     color: #2d9d9d;
+    /*Borde que vemos adecuado*/
     border-radius: 6px;
+    /**/
     font-size: 0.82rem;
+    /*Grosor adecuado*/
     font-weight: 600;
+    /* Quitamos la decoracion que viene dada que no queda bien */
     text-decoration: none;
+    /**/
     transition: background 0.2s, color 0.2s;
 }
 
+/* Cuando pasamos el raton por el Carousel*/
 .btn-carousel:hover {
+    /*Color de fondo que venimos usando */
     background-color: #2d9d9d;
+    /*Para que se lea bien*/
     color: white;
 }
 
+/*Cuando el boton este desactivado*/
 .btn-carousel.disabled {
+    /*Un poco transparente para que se vea mas apagado*/
     opacity: 0.4;
+    /* Dejamos lo de la flecha normal */
     cursor: default;
+    /* Desactivamos eventos de raton */
     pointer-events: none;
 }
 
+/*-- Contenedor de la tarjeta --*/
 .movie-card-container {
+    /* Lo ponemos en formato relative para luego colocar otros elementos */
     position: relative;
+    /* Si el triangulo se sale un poco, cortarlo para que no quede mal*/
     overflow: hidden;
 }
 
+/*Vamos a implementar el triangulo de favoritos*/
 .favorito-ribbon {
+    /*Lo movemos para ponerlo justo en la esquina de la foto*/
     position: absolute;
+    /*Pegado arriba del todo*/
     top: 0;
+    /* Pegado a la derecha del todo */
     right: 0;
+    /* Le damos ancho 0*/
     width: 0;
-    height: 0;
+    /* Y le damos altura 0*/
+    height: 0; 
+    /*Activamos el borde solido*/
     border-style: solid;
-    border-width: 0 45px 45px 0; 
+    /* Creamos el borde para definir el tamaño del triangulo*/
+    border-width: 0 45px 45px 0;
+    /*Pintamos solo el borde derecho*/
     border-color: transparent #198754 transparent transparent;
+    /*Ponemos por encima de lo que es la card*/
     z-index: 10;
 }
 
+/* Este para el icono de la estrella que metemos dentro */
 .favorito-ribbon i {
+    /* Para moverlo con libertad */
     position: absolute;
+    /* Un poco a ojo como queda*/
     top: 5px;
-    right: -40px; 
+    /*Lo mismo*/
+    right: -40px;
+    /*para destacar sobre el fondo verde*/
     color: white;
+    /*Ajustamos el tamaño de la estrella*/
     font-size: 0.9rem;
+    /*Evitamos espacio entre lineas*/
     line-height: 1;
 }

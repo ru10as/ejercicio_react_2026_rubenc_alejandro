@@ -68,7 +68,7 @@ function Favoritos(){
     
     return (
         <Container>
-            <h1 className="text-white mb-4">Mis Favoritos</h1>
+            <h1 className="text-white mb-0 fw-bold text-center my-5 mb-5">Mis Favoritos</h1>
             
             <Row>
                 {misFavs.map((peli) => (
@@ -81,8 +81,7 @@ function Favoritos(){
                                 style={{ height: '350px', objectFit: 'cover' }}>
                             </img>
                             <div className="card-body d-flex flex-column">
-                                <h5 className="">{peli.titulo}</h5>
-                                <p className="small mb-2 text-info">{peli.pelicula_id}</p>
+                                <h5 className="text-center">{peli.titulo}</h5>
                                 <Row>
                                     <Col>
                                         <Link to={`/pelicula/${peli.pelicula_id}`}>

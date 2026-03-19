@@ -9,48 +9,46 @@ import MensajeModal from "../ui/MensajeModal";
 // NUEVO METIDO
 
 function Login(){
-    const authCtx = useContext(AuthContext);
-    const navigate = useNavigate();
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const authCtx = useContext(AuthContext);                                // Accedemos al contexto que existe de la autenticacion 
+    const navigate = useNavigate();                                         // Iniciamos la herramienta para navegar
+    const [email, setEmail] = useState<string>('');                         // Estado para almacenar el email que escriba el usuario
+    const [password, setPassword] = useState<string>('');                   // Estado para la contraseña introducida
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);          // Para guardar mensajes de error
     const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
     const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
     const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
-    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
-    const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
-        setTituloModal(titulo);
-        setMensajeModal(mensaje);
-        setTipoModal(tipo);
-        setMostrarModal(true);
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // Tipo de modal que se va a introducir
+    const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {// Funcion para disparar el aviso visual
+        setTituloModal(titulo);     // Establecemos el titulo
+        setMensajeModal(mensaje);   // El mensaje
+        setTipoModal(tipo);         // El tipo de modal
+        setMostrarModal(true);      // Indicar que vamos a mostrar el modal
     }
 
 
-    const submitHandler = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const submitHandler = async (e: React.FormEvent) => {   //
+        e.preventDefault();                                 // De esta forma vamos a evitar que la pagina se recargue
         try{
-            const resAuth = await AccessRepository.login(email, password);
-            const idToken = resAuth.data.idToken;
-            const localId = resAuth.data.localId;
+            const resAuth = await AccessRepository.login(email, password);  // Utilizamos la funcion creada para hacer el login
+            const idToken = resAuth.data.idToken;       // Obtenemos el token del resultado dado
+            const localId = resAuth.data.localId;       // Obtenemos el id del resultado dado
+            const nombreReal = await AccessRepository.obtenerNombreUsuario(localId,idToken);    // Ahora vamos a obtener el nombre real del usuario que se ha logueado
 
-            // Ahora vamos a obtener el nombre real del usuario que se ha logueado
-            const nombreReal = await AccessRepository.obtenerNombreUsuario(localId,idToken);
-
-            authCtx.loginAction(idToken, localId, nombreReal || "Usuario");
-            lanzamientoAviso("¡Bienvenido!", `Hola de nuevo, ${nombreReal || 'Usuario'}`, "success");
+            authCtx.loginAction(idToken, localId, nombreReal || "Usuario");                             // Guardamos todo en el contexto global
+            lanzamientoAviso("¡Bienvenido!", `Hola de nuevo, ${nombreReal || 'Usuario'}`, "success");   // Sacamos el mensaje modal para que el usuario se entere
             setTimeout(() => {
                 navigate("/");
-            }, 1500);
+            }, 1500);  // Vamos a volver a la home tras 1.5 seg
 
         } 
-        catch(error: any){
-            let codigo = "ERROR_DESCONOCIDO";
+        catch(error: any){                      // Tratamos con el error
+            let codigo = "ERROR_DESCONOCIDO";   // Inicialmente establecemos el error desconocido
             if (error.response && error.response.data && error.response.data.error){
                 codigo = error.response.data.error.message;
             }
 
-            const mensajeParaUsuario = AccessService.obtenerMensajeError(codigo);
-            // alert(mensajeParaUsuario);
+            const mensajeParaUsuario = AccessService.obtenerMensajeError(codigo); 
+            // alert(mensajeParaUsuario); // Solo para pruebas
             lanzamientoAviso("Error de acceso",mensajeParaUsuario,"error");
 
         }

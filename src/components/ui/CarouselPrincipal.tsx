@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Carousel, Row, Col, Card } from 'react-bootstrap';
+import { Carousel, Row, Col, Card, CarouselItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import type { Pelicula_destacada,Pelicula } from '../../domain/Pelicula';
 import { PELICULAS_DESTACADAS } from '../../data/destacados';
@@ -60,18 +60,32 @@ function CarouselPrincipal({ peliculas }: Props) {
     );
 
     return (
-        <Carousel activeIndex={index} onSelect={handleSelect} variant='dark' style={{ paddingBottom: '24px' }}>
-            <Carousel.Item>
-                <Row className='px-3 pb-3'>
-                    {destacadasConId.slice(0, 3).map(renderCard)}
-                </Row>
-            </Carousel.Item>
-            <Carousel.Item>
-                <Row className='px-3 pb-3'>
-                    {destacadasConId.slice(3, 6).map(renderCard)}
-                </Row>
-            </Carousel.Item>
-        </Carousel>
+        <>
+            {/* Esto solo para FORMATO MOVIL*/} {/*HECHO*/}
+            <Carousel className='d-md-none' indicators={true} touch={true} variant='dark' style={{ paddingBottom: '24px' }}>
+                {destacadasConId.map((pelicula) => (
+                    <Carousel.Item key={index}> 
+                        <Row>
+                            {renderCard(pelicula)}
+                        </Row>
+                    </Carousel.Item>
+                ))}
+            </Carousel>
+
+            {/* Esto para FORMATO NORMAL*/} {/*HECHO*/}
+            <Carousel className='d-none d-md-block' activeIndex={index} onSelect={handleSelect} variant='dark' style={{ paddingBottom: '24px' }}>
+                <Carousel.Item>
+                    <Row className='px-3 pb-3'>
+                        {destacadasConId.slice(0, 3).map(renderCard)}
+                    </Row>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Row className='px-3 pb-3'>
+                        {destacadasConId.slice(3, 6).map(renderCard)}
+                    </Row>
+                </Carousel.Item>
+            </Carousel>
+        </>
     );
 }
 

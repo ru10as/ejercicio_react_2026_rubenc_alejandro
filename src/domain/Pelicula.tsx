@@ -1,71 +1,70 @@
 // NUEVO METIDO
 
+// ------------------------------------------------------------
 export interface Pelicula { // Nuevo introducido
-    id: number;   
-    titulo: string;
-    categoria: string;
-    taquilla: number;
-    video_local: string;
-    pais_origen: string;
-    mercados?: any[];
-    imagen_portada: string;
-    imagen_en_pelicula: string;
-    calificacion_media: number;
-    descripcion: string;
-    comentarios?: { usuario: string; texto: string; nota: number }[];
-    proximamente: boolean;
-    fecha_estreno: string;
+    id: number;                 // Este va a ser el identificador unico de la pelicula 
+    titulo: string;             // El titulo de la pelicula 
+    categoria: string;          // Genero de cine al que pertenece
+    taquilla: number;           // Datos de recaudacion (se puede usar en el futuro)
+    video_local: string;        // Identificador del archivo de video (revisar)
+    pais_origen: string;        // Informacion de la procedencia de la peli
+    mercados?: any[];           // Mercados donde se ha distribuido la pelicula
+    imagen_portada: string;     // La imagen que aparece al principio (cuando se ve el conjunto de cartas en el Home)
+    imagen_en_pelicula: string; // Esta se va a usar como imagen de fondo cuando establecemos el DetallePelicula
+    calificacion_media: number; // La nota media de la peli
+    descripcion: string;        // Breve descripcion de que va la pelicula
+    comentarios?: { usuario: string; texto: string; nota: number }[];   // MODIFICAR (solo va a haber texto)
+    proximamente: boolean;      // para indicar si aun no ha salido y saldra proximamente
+    fecha_estreno: string;      // Su fecha de estreno
 }
+// ------------------------------------------------------------
 
-// Nuevo introducido
-export interface PeliFav {
-    id: string,
-    titulo: string,
-    imagen_portada: string, 
-    categoria?: string,
-    pelicula_id:number
+
+// ------------------------------------------------------------
+export interface PeliFav { 
+    id: string,             // Id GENERADO para la pelicula establecida como favorita (ESTE NO ES EL ID NUMERICO DE CADA PELI)
+    titulo: string,         // Titulo de la pelicula establecida como favorita
+    imagen_portada: string, // Imagen que aparece al rpincipio
+    categoria?: string,     // La pelicula a la que pertenece esta pelicula añadida a peliculas favoritas
+    pelicula_id:number      // id del la pelicula 
 }
+// ------------------------------------------------------------
 
-// NO LO VAMOS A EMPLEAR
-/* export function calcularMedia(comentarios: { nota: number }[] | undefined): number { // ----- ESTO LO VAMOS A ENVIAR A domain/Pelicula.ts ----------
-if (!comentarios || comentarios.length === 0) {
-return 0;
+
+// ------------------------------------------------------------
+export interface PeliculaFirebase {// Lo empleamos para los objetos que vienen de la base de datos
+    id: number;         // 
+    titulo: string;     // 
+    [key: string]: any; // Permitimos cierta flexibilidad para adaptarnos a lo que nos devuelve
 }
-const suma = comentarios.reduce((acc,curr) => {
-return acc + curr.nota;
-},0);
-
-const promedio = suma / comentarios.length;
-const resultadoFormateado = promedio.toFixed(1);
-
-return Number(resultadoFormateado);
-} */
+// ------------------------------------------------------------
 
 
-// Nuevo introducido
-export interface PeliculaFirebase {
-    id: number;
-    titulo: string;
-    [key: string]: any;
-}
-
-// Nuevo introducido
-export interface Props {
+// ------------------------------------------------------------
+export interface Props {    // Para que las listas de peliculas que enviamos a la UI tengan el formato correcto
     peliculas: PeliculaFirebase[];
 }
+// ------------------------------------------------------------
 
-// Nuevo introducido
-export interface Pelicula_destacada {
-    titulo: string;
-    imagen: string;
-    descripcion: string;
-}
 
-export interface FirebasePelicula {
-    [key: string]: Omit<Pelicula, "id">;
+// ------------------------------------------------------------
+export interface Pelicula_destacada {   // Datos empleados para el baner de destacados
+    titulo: string;         // Titulo de la pelicula
+    imagen: string;         // Imagen de la pelicula 
+    descripcion: string;    // Descripcion de la misma
 }
+// ------------------------------------------------------------
 
-// Introducido para el Home 
-export interface FirebaseResponse {
-  peliculas: FirebasePelicula;
+
+// ------------------------------------------------------------
+export interface FirebasePelicula { // Para obtener cada una de las peliculas pero omitiendo el id (es la clave externa y no un campo de interes)
+    [key: string]: Omit<Pelicula, "id">;    // Proceso de omision
 }
+// ------------------------------------------------------------
+
+
+// ------------------------------------------------------------
+export interface FirebaseResponse { // 
+  peliculas: FirebasePelicula;          // Respuesta con objeto llamado peliculas que tiene la forma de mapeo definida arriba
+}
+// ------------------------------------------------------------
