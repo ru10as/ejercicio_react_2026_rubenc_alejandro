@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Col, Container, Row, Form, Alert } from "react-bootstrap";
+import { Col, Container, Row, Form } from "react-bootstrap";
+import './access.css';
 
 import { AccessRepository } from "../infrastructure/AccessRepository";
 import { AccessService } from "../service/AccessService";
@@ -58,63 +59,57 @@ function Login(){
         }
     }
     return(
-        <div style={{backgroundColor: "#141414", minHeight: "100vh", display:"flex", alignItems:"center"}}>
+        <div className="access-page">
             <Container>
-                <Row>
-                    <Col className='text-center'>
-                        <div style={{border:"2px solid #2d9d9d", overflow:"hidden", height:"600px"}}>
-                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' 
-                            style={{width:"100%", height:"100%", objectFit:"cover"}}>
-                            </img>
+                <Row className="align-items-center g-4">
+                    <Col className="d-none d-md-block">
+                        <div className="access-side-img">
+                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' />
                         </div>
                     </Col>
 
+                    <Col xs={12} md={6}>
+                        <div className="access-card">
+                            <h2 className="access-card-title text-center">Login</h2>
+                            <div className="access-card-divider mx-auto"></div>
 
-                    <Col xs={6}>
-                        <Row style={{height:"100px"}}>
+                            <Form onSubmit={submitHandler}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="access-label">Email</Form.Label>
+                                    <Form.Control
+                                        className="access-input"
+                                        type='email'
+                                        placeholder='tu@email.com'
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </Form.Group>
 
-                        </Row>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="access-label">Contraseña</Form.Label>
+                                    <Form.Control
+                                        className="access-input"
+                                        type='password'
+                                        placeholder='••••••••'
+                                        value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                    />
+                                </Form.Group>
 
-                        <Row>
-                            <Card style={{backgroundColor:"#2d9d9d"}} className='text-center'>
-                            <Card.Body>
-                                <h2 className='text-center fw-bold'>LOGIN</h2>
-                                <Form onSubmit={submitHandler}>
-                                    <Form.Group className='mt-2 mb-2'>
-                                        <Form.Label className='fw-bold'>Email:</Form.Label>
-                                        <Form.Control 
-                                            type='email' placeholder='Introduce tu email' value={email} onChange={e => setEmail(e.target.value)}>
-                                        </Form.Control>
-                                    </Form.Group>
+                                <button className="access-btn" type='submit'>
+                                    Entrar
+                                </button>
 
-                                    <Form.Group className='mt-2 mb-2'>
-                                        <Form.Label className='fw-bold'>Contraseña:</Form.Label>
-                                        <Form.Control
-                                            type='password' placeholder='Introduce tu contraseña' value={password} onChange={e => setPassword(e.target.value)}>   
-                                        </Form.Control>
-                                    </Form.Group>
-
-                                    <Button className='mt-2 mb-2' type='submit'>
-                                        ¡¡VAMOS!!
-                                    </Button>
-
-                                    <div className='text-center'>
-                                        <small style={{cursor:"pointer", color:"black"}} onClick={() => navigate('/registro')}>
-                                            ¿No tienes cuenta? Registrate
-                                        </small>
-                                    </div>
-                                </Form>
-                            </Card.Body>
-                        </Card>
-                        </Row>
-                        
+                                <p className="access-link" onClick={() => navigate('/registro')}>
+                                    ¿No tienes cuenta? <span>Regístrate</span>
+                                </p>
+                            </Form>
+                        </div>
                     </Col>
 
-                    <Col className='text-center'>
-                        <div style={{border:"2px solid #2d9d9d", overflow:"hidden", height:"600px"}}>
-                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' 
-                            style={{width:"100%", height:"100%", objectFit:"cover"}}>
-                            </img>
+                    <Col className="d-none d-md-block">
+                        <div className="access-side-img">
+                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' />
                         </div>
                     </Col>
                 </Row>

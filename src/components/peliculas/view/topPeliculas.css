@@ -1,0 +1,253 @@
+/* ── Top Películas Page ─────────────────────────────────── */
+
+.top-page {
+    background-color: #171616;
+    min-height: 100vh;
+    color: white;
+}
+
+.top-page-title {
+    color: white;
+    font-size: 2.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.top-page-subtitle {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    margin-top: 8px;
+}
+
+/* Filtro buttons */
+.btn-top-filtro {
+    background: transparent;
+    border: 1.5px solid rgba(45, 157, 157, 0.4);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    padding: 6px 22px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-top-filtro:hover,
+.btn-top-filtro.activo {
+    background: #2d9d9d;
+    border-color: #2d9d9d;
+    color: white;
+}
+
+/* ── Podio Top 3 ──────────────────────────────────────── */
+
+.top3-card {
+    background: #1c2b29;
+    border: 2px solid var(--medal-color, rgba(45, 157, 157, 0.3));
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.top3-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--medal-color, #2d9d9d);
+}
+
+.top3-rank-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 2rem;
+    z-index: 2;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7));
+}
+
+.top3-img-wrapper {
+    overflow: hidden;
+    height: 280px;
+}
+
+.top3-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.top3-card:hover .top3-img {
+    transform: scale(1.05);
+}
+
+.top3-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.top3-titulo {
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.top3-cat {
+    color: #2d9d9d;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.top3-rating {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    margin: 4px 0;
+}
+
+.top3-rating-num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--medal-color, #2d9d9d);
+    line-height: 1;
+}
+
+.top3-rating-max {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.top3-desc {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin: 2px 0 4px;
+}
+
+.btn-top-detalles {
+    display: inline-block;
+    padding: 7px 18px;
+    background: #2d9d9d;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    align-self: flex-start;
+    margin-top: 4px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-top-detalles:hover {
+    background: #3ab5b5;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* ── Lista posiciones 4+ ──────────────────────────────── */
+
+.top-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-lista-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #1c2b29;
+    border: 1px solid rgba(45, 157, 157, 0.12);
+    border-radius: 10px;
+    padding: 12px 18px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.top-lista-item:hover {
+    background: #1f3230;
+    border-color: rgba(45, 157, 157, 0.35);
+}
+
+.top-lista-rank {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.3);
+    min-width: 38px;
+    text-align: center;
+}
+
+.top-lista-img {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.top-lista-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.top-lista-titulo {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-lista-cat {
+    color: #2d9d9d;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.top-lista-rating {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    min-width: 64px;
+}
+
+.top-lista-rating-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2d9d9d;
+    line-height: 1;
+}
+
+.top-lista-rating-max {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+.btn-top-lista-detalles {
+    padding: 5px 14px;
+    border: 1.5px solid #2d9d9d;
+    color: #2d9d9d;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-top-lista-detalles:hover {
+    background: #2d9d9d;
+    color: white;
+}

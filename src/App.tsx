@@ -13,6 +13,7 @@ import Favoritos from './components/peliculas/view/Favoritos';
 import Login from './components/access/view/Login';
 import Registro from './components/access/view/Registro';
 import AvisoLegal from './pages/AvisoLegal';
+import TopPeliculas from './components/peliculas/view/TopPeliculas';
  
 
 function App() {
@@ -82,6 +83,7 @@ function App() {
                 <Route path="/errorpage" element={<ErrorPage />}/>
                 <Route path='/pelicula/:id' element={<DetallePelicula />}></Route>
                 <Route path='/aviso_legal' element={<AvisoLegal />}></Route>
+                <Route path='/top-peliculas' element={<TopPeliculas />}></Route>
 
               </Routes>
             </div>

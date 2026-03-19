@@ -70,19 +70,34 @@ function Home(){
     const renderTarjetasPelicula = (lista: Pelicula[]) => (
         <Row>
             {lista.map((peli) => (
-                <Col key={peli.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                    <div className="card h-100 movie-card border-0 shadow">
+                <Col key={peli.id} xs={12} sm={6} md={4} lg={3} className="mb-4 netflix-col">
+                    <div className="netflix-card">
                         <img
                             src={peli.imagen_portada}
                             alt={peli.titulo}
-                            style={{ height: '320px', objectFit: 'cover' }}
+                            className="netflix-card-img"
                         />
-                        <div className="card-body d-flex flex-column">
-                            <h5>{peli.titulo}</h5>
-                            <p className="small mb-3" style={{ color: '#2d9d9d' }}>{peli.categoria}</p>
-                            <Link to={`/pelicula/${peli.id}`} className="btn btn-sm btn-outline-info mt-auto fw-semibold">
-                                Ver detalles
-                            </Link>
+                        <div className="netflix-title-bar">
+                            <h5 className="netflix-title-bar-text">{peli.titulo}</h5>
+                            <span className="netflix-title-bar-cat">{peli.categoria}</span>
+                        </div>
+                        <div className="netflix-hover-overlay">
+                            <div className="netflix-overlay-content">
+                                <h5 className="netflix-overlay-title">{peli.titulo}</h5>
+                                <span className="netflix-overlay-cat">{peli.categoria}</span>
+                                <p className="netflix-overlay-desc">
+                                    {peli.descripcion
+                                        ? peli.descripcion.substring(0, 130) + (peli.descripcion.length > 130 ? '...' : '')
+                                        : 'Sin descripción disponible.'}
+                                </p>
+                                <div className="netflix-overlay-meta">
+                                    <span>⭐ {peli.calificacion_media}/10</span>
+                                    <span>{peli.pais_origen}</span>
+                                </div>
+                                <Link to={`/pelicula/${peli.id}`} className="netflix-btn-detalles">
+                                    Ver detalles →
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </Col>

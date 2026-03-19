@@ -43,6 +43,7 @@ function Header(){
                         <Nav className='ms-auto align-items-center'>
                             <Nav.Link as={Link} to="/" className="nav-link-custom">Home</Nav.Link>
                             <Nav.Link as={Link} to="/contacto" className="nav-link-custom">Contacto</Nav.Link>
+                            <Nav.Link as={Link} to="/top-peliculas" className="nav-link-custom">Top</Nav.Link>
                             {authCtx.login && (
                                 <Nav.Link as={Link} to="/favoritos" className="nav-link-custom">Favoritos</Nav.Link>
                             )}

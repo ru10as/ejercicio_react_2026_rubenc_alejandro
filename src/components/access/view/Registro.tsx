@@ -4,7 +4,8 @@ import AuthContext from "../../../store/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Button, Card, Col, Container, Row, Form } from "react-bootstrap";
+import { Col, Container, Row, Form } from "react-bootstrap";
+import './access.css';
 import MensajeModal from "../../ui/MensajeModal";
 
 
@@ -53,71 +54,75 @@ function Registro() {
 
 
     return (
-        <div style={{backgroundColor: "#141414", minHeight: "100vh", display:"flex", alignItems:"center"}}>
+        <div className="access-page">
             <Container>
-                <Row>
-                    <Col className='text-center'>
-                        <div style={{border:"2px solid #2d9d9d", overflow:"hidden", height:"600px"}}>
-                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' 
-                            style={{width:"100%", height:"100%", objectFit:"cover"}}>
-                            </img>
+                <Row className="align-items-center g-4">
+                    <Col className="d-none d-md-block">
+                        <div className="access-side-img">
+                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' />
                         </div>
                     </Col>
 
-                    <Col>
-                        <Row style={{height:"80px"}}>
+                    <Col xs={12} md={6}>
+                        <div className="access-card">
+                            <h2 className="access-card-title text-center">Registro</h2>
+                            <div className="access-card-divider mx-auto"></div>
 
-                        </Row>
+                            <Form onSubmit={submitHandler}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="access-label">Email</Form.Label>
+                                    <Form.Control
+                                        className="access-input"
+                                        type="email"
+                                        placeholder="tu@email.com"
+                                        value={email}
+                                        onChange={(event) => setEmail(event.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
 
-                        <Row>
-                            <Card style={{backgroundColor:"#2d9d9d"}} className='text-center'>
-                                <Card.Body>
-                                    <h2 className='text-center fw-bold'>REGISTRARSE</h2>
-                                    <Form onSubmit={submitHandler}>
-                                        <Form.Group>
-                                            <Form.Label className="fw-bold">Email:</Form.Label>
-                                            <Form.Control onChange={(event) => setEmail(event.target.value)}
-                                                type="email"
-                                                value={email}
-                                                placeholder="email"
-                                                required>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Form.Group>
-                                            <Form.Label className="fw-bold">Contraseña:</Form.Label>
-                                            <Form.Control onChange={(event) => setPassword(event.target.value)}
-                                                type="password"
-                                                value={password}
-                                                required>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Form.Group>
-                                            <Form.Label className="fw-bold">Nombre de usuario:</Form.Label>
-                                            <Form.Control onChange={(event) => setUserName(event.target.value)}
-                                                type="text"
-                                                value={username}
-                                                placeholder="Ej: Bonjovi87"
-                                                required>
-                                            </Form.Control>
-                                        </Form.Group>
-                                        <Button variant="primary" type="submit" className="w-100 mt-3">
-                                            VAMOS!!
-                                        </Button>
-                                    </Form>
-                                </Card.Body>  
-                            </Card>
-                        </Row>
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="access-label">Contraseña</Form.Label>
+                                    <Form.Control
+                                        className="access-input"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={password}
+                                        onChange={(event) => setPassword(event.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                    <Form.Label className="access-label">Nombre de usuario</Form.Label>
+                                    <Form.Control
+                                        className="access-input"
+                                        type="text"
+                                        placeholder="Ej: Bonjovi87"
+                                        value={username}
+                                        onChange={(event) => setUserName(event.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
+
+                                <button className="access-btn" type="submit">
+                                    Crear cuenta
+                                </button>
+
+                                <p className="access-link" onClick={() => navigate('/login')}>
+                                    ¿Ya tienes cuenta? <span>Inicia sesión</span>
+                                </p>
+                            </Form>
+                        </div>
                     </Col>
 
-                    <Col className='text-center'>
-                        <div style={{border:"2px solid #2d9d9d", overflow:"hidden", height:"600px"}}>
-                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' 
-                            style={{width:"100%", height:"100%", objectFit:"cover"}}>
-                            </img>
+                    <Col className="d-none d-md-block">
+                        <div className="access-side-img">
+                            <img src='imagen_por_peli/imagen_pelicula_peaky_blinders.webp' alt='Peaky Blinders' />
                         </div>
                     </Col>
                 </Row>
-                  
+
             </Container>
 
             <MensajeModal 
