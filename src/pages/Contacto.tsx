@@ -4,13 +4,12 @@ import type { LatLngExpression } from 'leaflet';
 import { Container, Row, Col } from 'react-bootstrap';
 
 function Contacto() {
+  const posicionCentro: LatLngExpression = [42.8167, -1.6500]; // 
 
-  const posicionCentro: LatLngExpression = [42.8167, -1.6500];
-
-  const sedes = [
-    { nombre: 'Videoclub Centro', lat: 42.8167, lng: -1.6500 },
-    { nombre: 'Videoclub Norte', lat: 42.8200, lng: -1.6400 },
-    { nombre: 'Videoclub Sur',   lat: 42.8100, lng: -1.6550 },
+  const sedes = [ // Distintas sedes donde vamos a vender peliculas
+    { nombre: 'Videoclub Centro', lat: 42.8167, lng: -1.6500 }, // 
+    { nombre: 'Videoclub Norte', lat: 42.8200, lng: -1.6400 },  // 
+    { nombre: 'Videoclub Sur',   lat: 42.8100, lng: -1.6550 },  // 
   ];
 
   return (

@@ -2,10 +2,12 @@ import { useEffect, useState, useContext } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../../store/AuthContext";
+import AuthContext from "../store/AuthContext";
 import { PeliculaRepository } from "../infrastructure/PeliculaRepository";
-import { PeliFav } from "../domain/Pelicula";
-import MensajeModal from "../../ui/MensajeModal";
+import type { PeliFav } from "../domain/Pelicula";
+import MensajeModal from "../components/ui/MensajeModal";
+
+// YA METIDO
 
 // ------------------------------------------------------------------------
 function Favoritos(){
@@ -66,10 +68,11 @@ function Favoritos(){
     
     return (
         <Container>
-            <h1 className="text-white mb-4">Mis Favoritos</h1>
+            <h1 className="text-white mb-0 fw-bold text-center my-5 mb-5">Mis Favoritos</h1>
             
             <Row>
                 {misFavs.map((peli) => (
+                    
                     <Col xs={12} sm={6} md={4} lg={3} className="mb-4">
                         <div className="card h-100 bg-secundary border-0 shadow">
                             <img 
@@ -78,12 +81,11 @@ function Favoritos(){
                                 style={{ height: '350px', objectFit: 'cover' }}>
                             </img>
                             <div className="card-body d-flex flex-column">
-                                <h5 className="">{peli.titulo}</h5>
-                                <p className="small mb-2 text-info">{peli.categoria}</p>
+                                <h5 className="text-center">{peli.titulo}</h5>
                                 <Row>
                                     <Col>
-                                        <Link to={`/pelicula/${peli.id}`}>
-                                            <Button>
+                                        <Link to={`/pelicula/${peli.pelicula_id}`}>
+                                            <Button variant="primary" className="w-100 btn-sm">
                                                 Ver detalles
                                             </Button>
                                         </Link>

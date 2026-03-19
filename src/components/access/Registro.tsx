@@ -1,82 +1,57 @@
-/* import axios from "axios";
-import { useContext, useState } from "react";
-import { Container, Row, Col, Card, Form, Button, Alert, CardBody, FormGroup } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { AccessRepository } from "../../infrastructure/AccessRepository";
+import { AccessService } from "../../services/AuthService";
 import AuthContext from "../../store/AuthContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Button, Card, Col, Container, Row, Form } from "react-bootstrap";
+import MensajeModal from "../ui/MensajeModal";
 
-function Registro(){
-    const navigate = useNavigate();
+// NUEVO METIDO
+
+function Registro() {
     const authCtx = useContext(AuthContext);
-
-    const [email, setEmail] = useState<string>('');
+    const navigate = useNavigate();
+    const [email,setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [username, setUsername] = useState<string>('');
+    const [username, setUserName] = useState<string>('');
 
-    const API_KEY = "AIzaSyBY5z4uU0OUlp9x_ZcaFRICSUe_42GwlOk";
-
-    const submitHandler = (event: React.FormEvent) => {
-        event.preventDefault();
-        
-        const authData = {
-            email: email,
-            password: password,
-            returnSecureToken: true
-        }
-
-        axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, authData)
-        .then((response) => {
-            
-            const uid = response.data.localId;
-            const idToken = response.data.idToken;
-
-            const datosDeUsuarioParaBD = {
-                user:username,
-                email:email,
-                fecha_registro: new Date().toLocaleDateString('es-ES'), 
-                favoritos:{init: true}
-            };
-
-            return axios.put(`https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/usuarios/${uid}.json?auth=${idToken}`,datosDeUsuarioParaBD)
-                .then(()=>{
-                    console.log('OK - Token:', idToken, 'UID:', uid);
-                    authCtx.loginAction(idToken, uid);
-                    navigate("/home");
-                }
-            )
-        })
-      .catch((error) => {
-            let codigoError = "";
-
-            if (error.response){
-                if (error.response.data){
-                    if (error.response.data.error){
-                        codigoError = error.response.data.error.message;
-                    }
-                }
-            }
-
-            let mensajeParaUsuario = "";
-
-            if (codigoError === "EMAIL_EXISTS"){
-                mensajeParaUsuario = "El correo ya esta en uso. Prueba con otro o haz login";
-            }
-            else if (codigoError === "WEAK_PASSWORD") {
-                mensajeParaUsuario = "La contraseña es muy corta. Pon al menos 6 caracteres.";
-            } 
-            else if (codigoError === "INVALID_EMAIL") {
-                mensajeParaUsuario = "El formato del correo no es correcto (falta @ o punto).";
-            } 
-            else if (codigoError === "OPERATION_NOT_ALLOWED") {
-                mensajeParaUsuario = "El registro con contraseña está desactivado en Firebase.";
-            } 
-            else {
-                mensajeParaUsuario = "Ha ocurrido un error tecnico: " + codigoError;
-            }
-
-            alert(mensajeParaUsuario);
-            // Revisar aqui si falta algo
-        });
+    const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
+    const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
+    const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
+    const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
+        setTituloModal(titulo);
+        setMensajeModal(mensaje);
+        setTipoModal(tipo);
+        setMostrarModal(true);
     }
+
+
+    const submitHandler  = async (e: React.FormEvent) => {
+        e.preventDefault(); 
+
+        try {
+            const data = await AccessRepository.registroCompleto(email,password,username);
+            authCtx.loginAction(data.idToken,data.localId,username);
+            lanzamientoAviso("¡Bienvenido!", `Registro completado, ${username}`, "success");
+            setTimeout(() => {
+                navigate("/");
+            }, 1500);
+        }
+        catch (error:any){
+            let codigo = "ERROR_DESCONOCIDO";
+            if (error.response && error.response.data && error.response.data.error){
+                codigo = error.response.data.error.message;
+            }
+
+            const mensajeParaUsuario = AccessService.obtenerMensajeError(codigo);
+            // alert(mensajeParaUsuario);
+            lanzamientoAviso("Error de acceso",mensajeParaUsuario,"error");
+
+        }
+    }
+
 
     return (
         <div style={{backgroundColor: "#141414", minHeight: "100vh", display:"flex", alignItems:"center"}}>
@@ -114,12 +89,12 @@ function Registro(){
                                             <Form.Control onChange={(event) => setPassword(event.target.value)}
                                                 type="password"
                                                 value={password}
-                                                required>
+                                                required> 
                                             </Form.Control>
                                         </Form.Group>
                                         <Form.Group>
                                             <Form.Label className="fw-bold">Nombre de usuario:</Form.Label>
-                                            <Form.Control onChange={(event) => setUsername(event.target.value)}
+                                            <Form.Control onChange={(event) => setUserName(event.target.value)}
                                                 type="text"
                                                 value={username}
                                                 placeholder="Ej: Bonjovi87"
@@ -143,8 +118,17 @@ function Registro(){
                         </div>
                     </Col>
                 </Row>
+                  
             </Container>
+
+            <MensajeModal 
+                show={mostrarModal}
+                onHide={() => setMostrarModal(false)}
+                titulo={tituloModal}
+                mensaje={mensajeModal}
+                tipo={tipoModal}
+            />
         </div>
     )
 }
-export default Registro; */
+export default Registro;

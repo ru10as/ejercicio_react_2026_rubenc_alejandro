@@ -1,50 +1,14 @@
 import { useState } from 'react';
-import { Carousel, Row, Col, Card } from 'react-bootstrap';
+import { Carousel, Row, Col, Card, CarouselItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import type { Pelicula_destacada,Pelicula } from '../../domain/Pelicula';
+import { PELICULAS_DESTACADAS } from '../../data/destacados';
 
-interface PeliculaFirebase {
-    id: number;
-    titulo: string;
-    [key: string]: any;
-}
+// REVISADO
 
 interface Props {
-    peliculas: PeliculaFirebase[];
+    peliculas: Pelicula[];
 }
-
-interface Pelicula_destacada {
-    titulo: string;
-    imagen: string;
-    descripcion: string;
-}
-
-const PELICULAS_DESTACADAS: Pelicula_destacada[] = [
-    {
-        titulo: "Cumbres borrascosas",
-        imagen: "/portadas_peliculas/cumbres_borroscosas.webp",
-        descripcion: "Margot Robbie y Jacob Elordi protagonizan esta salvaje adaptación del clásico de Emily Brontë."
-    },
-    {
-        titulo: "Avengers: Doomsday",
-        imagen: "/portadas_peliculas/imagen_avengers_doomsday.jpg",
-        descripcion: "El regreso de Robert Downey Jr. al UCM como el temible Doctor Doom. El destino del multiverso está en juego."
-    },
-    {
-        titulo: "Peaky Blinders: The inmortal man",
-        imagen: "/portadas_peliculas/peaky_blinders_the_immortal_man.jpg",
-        descripcion: "Tommy Shelby vuelve para un último capítulo épico en la gran pantalla. Por orden de los Peaky Blinders."
-    },
-    {
-        titulo: "Greenland 2",
-        imagen: "/portadas_peliculas/imagen_greenland_2.jpg",
-        descripcion: "La familia Garrity debe abandonar la seguridad del búnker para enfrentarse a un mundo congelado y hostil."
-    },
-    {
-        titulo: "Crime 101",
-        imagen: "/portadas_peliculas/imagen_crime_101.jpg",
-        descripcion: "Un thriller de robos de alto voltaje con Chris Hemsworth y Mark Ruffalo en un duelo de ingenio."
-    }
-];
 
 function CarouselPrincipal({ peliculas }: Props) {
     const [index, setIndex] = useState<number>(0);
@@ -96,18 +60,32 @@ function CarouselPrincipal({ peliculas }: Props) {
     );
 
     return (
-        <Carousel activeIndex={index} onSelect={handleSelect} variant='dark' style={{ paddingBottom: '24px' }}>
-            <Carousel.Item>
-                <Row className='px-3 pb-3'>
-                    {destacadasConId.slice(0, 3).map(renderCard)}
-                </Row>
-            </Carousel.Item>
-            <Carousel.Item>
-                <Row className='px-3 pb-3'>
-                    {destacadasConId.slice(3, 6).map(renderCard)}
-                </Row>
-            </Carousel.Item>
-        </Carousel>
+        <>
+            {/* Esto solo para FORMATO MOVIL*/} {/*HECHO*/}
+            <Carousel className='d-md-none' indicators={true} touch={true} variant='dark' style={{ paddingBottom: '24px' }}>
+                {destacadasConId.map((pelicula) => (
+                    <Carousel.Item key={index}> 
+                        <Row>
+                            {renderCard(pelicula)}
+                        </Row>
+                    </Carousel.Item>
+                ))}
+            </Carousel>
+
+            {/* Esto para FORMATO NORMAL*/} {/*HECHO*/}
+            <Carousel className='d-none d-md-block' activeIndex={index} onSelect={handleSelect} variant='dark' style={{ paddingBottom: '24px' }}>
+                <Carousel.Item>
+                    <Row className='px-3 pb-3'>
+                        {destacadasConId.slice(0, 3).map(renderCard)}
+                    </Row>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Row className='px-3 pb-3'>
+                        {destacadasConId.slice(3, 6).map(renderCard)}
+                    </Row>
+                </Carousel.Item>
+            </Carousel>
+        </>
     );
 }
 
