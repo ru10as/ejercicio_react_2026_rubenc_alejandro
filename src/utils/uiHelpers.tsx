@@ -1,6 +1,5 @@
 import React from "react";
 
-
 // --------------------------------------------------------------------
 export function renderEstrellas(nota: number) { // ----- ESTO LO VAMOS A ENVIAR A X ----------
     const estrellasMax = 5;             // Vamos a tratar sobre 5 estrellas en vez de sobre 10
