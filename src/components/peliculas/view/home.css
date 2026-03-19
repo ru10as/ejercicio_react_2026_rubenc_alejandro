@@ -247,3 +247,62 @@
     cursor: default;
     pointer-events: none;
 }
+
+/* ── Responsive Móvil ───────────────────────────────────────── */
+
+/*
+ * En dispositivos táctiles no existe hover, por lo que el overlay
+ * nunca se mostraría. Con (hover: none) lo forzamos siempre visible.
+ */
+@media (hover: none) and (pointer: coarse) {
+    /* Sin escala al tocar */
+    .netflix-card:hover {
+        transform: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        border-color: rgba(45, 157, 157, 0.3);
+        z-index: 1;
+    }
+
+    .netflix-card:hover .netflix-card-img {
+        transform: none;
+    }
+
+    /* Overlay siempre visible */
+    .netflix-hover-overlay {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Ocultar barra de título: el overlay ya la muestra */
+    .netflix-title-bar {
+        display: none;
+    }
+
+    /* Botón ocupa todo el ancho en móvil para ser más fácil de pulsar */
+    .netflix-btn-detalles {
+        align-self: stretch;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Pantallas muy pequeñas (< 480px): afinar tamaños */
+@media (max-width: 480px) {
+    .netflix-card-img {
+        height: 220px;
+    }
+
+    .netflix-overlay-desc {
+        -webkit-line-clamp: 2;
+        font-size: 0.78rem;
+    }
+
+    .netflix-overlay-title {
+        font-size: 1rem;
+    }
+
+    .netflix-overlay-meta {
+        font-size: 0.76rem;
+    }
+}
