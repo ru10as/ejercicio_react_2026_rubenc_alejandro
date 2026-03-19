@@ -4,7 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthContext from '../../store/AuthContext';
 import { useContext } from 'react';
 
-function Header(){
+  interface HeaderProps{
+    onSearch: (parametro:string) => void;
+  }
+
+function Header({onSearch}:HeaderProps){
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
     let contenidoDerecha;
@@ -50,7 +54,8 @@ function Header(){
                                 <span style={{borderColor:'#2d9d9d'}}>
                                     <i className='bi bi-search'></i>
                                 </span>
-                                <input type='search' className='bg-transparent text-white' style={{borderColor:'#2d9d9d'}} placeholder='Buscar pelicula...'></input>
+                                <input type='search' className='bg-transparent text-white' style={{borderColor:'#2d9d9d'}} placeholder='Buscar pelicula...'
+                                onChange={(e) => onSearch(e.target.value)}></input>
                             </div>
                         </div>
 

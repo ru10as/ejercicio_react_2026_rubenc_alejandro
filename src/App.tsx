@@ -22,6 +22,7 @@ function App() {
   const [token, setToken] = useState("");                   // Es como la llave temporal para Firebase
   const [uId, setUId] = useState("");                       // Codigo unico del usuario en la base de datos
   const [userName, setUserName] = useState("");             //  Donde vamos a almacenar el nombre que se ha puesto el usuario
+  const [busqueda, setBusqueda] = useState(""); // Para la busqueda que vamos a hacer en el Header
   // --------------------------------------------------------
 
 
@@ -46,7 +47,7 @@ function App() {
   }
   // -------------------------------
 
-  
+
   useEffect(() => {                                         // De esta forma evitamos que el usario tenga que escribir el email y contraseña cada vez
     const tokenGuardado = localStorage.getItem('token');    // Buscamos si en el localStorage tenemos el token guardado
     const idGuardado = localStorage.getItem('userId');      // Buscamos si en el localStorage tenemos el userId guardado
@@ -57,6 +58,14 @@ function App() {
       setUId(idGuardado);               // Almacenamos el UId
     }
   }, []);
+
+  interface HeaderProps{
+    onSearch: (parametro:string) => void;
+  }
+
+  interface HomeProps{
+    textobuscado:string;
+}
 
   return (
     <>
@@ -70,15 +79,15 @@ function App() {
         userName:userName
       }}>
         <div className='d-flex flex-column min-vh-100'>
-          <Header />
+          <Header onSearch={setBusqueda}/>
             <div className='flex-grow-1'>
               <Routes>
-                <Route path="/" element={<Home />}/>
+                <Route path="/" element={<Home textobuscado={busqueda}/>}/>
                 <Route path="/login" element={<Login />}></Route>
                 <Route path="/registro" element={<Registro />}></Route>
                 <Route path="/favoritos" element={<Favoritos />}/>
                 <Route path="/contacto" element={<Contacto />}/>
-                <Route path="/home" element={<Home />}/>
+                <Route path="/home" element={<Home textobuscado={busqueda}/>}/>
                 <Route path='/pelicula/:id' element={<DetallePelicula />}></Route>
                 <Route path='/aviso_legal' element={<AvisoLegal />}></Route>
                 <Route path='/top-peliculas' element={<TopPeliculas />}></Route>
