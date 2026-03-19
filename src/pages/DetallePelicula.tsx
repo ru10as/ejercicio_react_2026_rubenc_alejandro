@@ -9,7 +9,7 @@ import { renderEstrellas } from '../utils/uiHelpers';
 import type { Pelicula } from '../domain/Pelicula';
 import { PeliculaRepository } from '../infrastructure/PeliculaRepository';
 import MensajeModal from '../components/ui/MensajeModal';
-
+import ModoCine from '../components/peliculas/view/ModoCine/ModoCine';
 
 // --- COMPONENTE PRINCIPAL ---
 function DetallePelicula() {
@@ -31,7 +31,7 @@ function DetallePelicula() {
 
     const [esFavorita, setEsFavorita] = useState(false);
 
-
+    const [modoCine, setModoCine] = useState(false);
 
     const [yaHasPuntuado, setYaHasPuntuado] = useState(false);      // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
     
@@ -48,6 +48,7 @@ function DetallePelicula() {
     }
     // --------------------------------------------------------------
 
+    
 
     // MODIFICADO
     // --------------------------------------------------------------
@@ -220,7 +221,7 @@ function DetallePelicula() {
     if (authCtx.login){
         botonesAccion = (
             <>
-                <Button>
+                <Button onClick={() => setModoCine(true)}>
                     <i className='bi bi-play-fill me-2'></i>VER AHORA
                 </Button>
                 <Button onClick={añadirAfavoritos} variant={variantBoton} disabled={estaBloqueado} className='fw-bold'>
@@ -359,6 +360,14 @@ function DetallePelicula() {
 
             {/* INFO SECTION: Sinopsis + Video + Zona de comentarios*/}
             <Container className='mt-5 pb-5'>
+                
+                {modoCine && (
+                    <ModoCine 
+                        tituloPeli={peli.titulo} 
+                        onClose={() => setModoCine(false)} 
+                    />
+                )}
+                
                 <Row className='gy-5'>
                     {/* Columna Izquierda: Sinopsis y Comentarios */}
                     <Col lg={7}>
@@ -369,30 +378,7 @@ function DetallePelicula() {
 
                         <hr className="border-secondary mb-5" />
                 
-            {seccionPuntuacion}
-            {/* <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
-                <h5>Opina sobre esta pelicula</h5>
-
-                <Form className='row align-items-end'>
-                    <Col xs="auto">
-                        <Form.Label>Nota (1-10)</Form.Label>
-                        <Form.Select
-                            value={notaSeleccionada}
-                            onChange={(e) => setNotaSeleccionada(Number(e.target.value))}
-                        >
-                            {[1,2,3,4,5,6,7,8,9,10].map(n=> (
-                                <option key={n} value={n}>{n}</option>
-                            ))}
-                        </Form.Select>
-                    </Col>
-                    <Col>
-                        <Button variant='warning' onClick={enviarNota} className='fw-bold'>
-                            Puntuar
-                        </Button>
-                    </Col>
-                </Form>
-            </div> */}
-                        
+                        {seccionPuntuacion}
                         {seccionComentarios}
                     </Col>
 
