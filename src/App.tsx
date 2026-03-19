@@ -12,6 +12,7 @@ import Favoritos from './pages/Favoritos';
 import Login from './components/access/Login';
 import Registro from './components/access/Registro';
 import AvisoLegal from './pages/AvisoLegal';
+import TopPeliculas from './pages/TopPeliculas';
  
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
                 <Route path="/home" element={<Home />}/>
                 <Route path='/pelicula/:id' element={<DetallePelicula />}></Route>
                 <Route path='/aviso_legal' element={<AvisoLegal />}></Route>
+                <Route path='/top-peliculas' element={<TopPeliculas />}></Route>
 
               </Routes>
             </div>

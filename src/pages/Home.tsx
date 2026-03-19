@@ -1,100 +1,110 @@
 import CarouselPrincipal from "../components/ui/CarouselPrincipal";
 import './home.css';
+import '../components/peliculas/view/home.css';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import type { Pelicula } from "../domain/Pelicula";
-import { PeliculaRepository } from "../infrastructure/PeliculaRepository";
-import AuthContext from "../store/AuthContext";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+interface Pelicula {
+    id: number;
+    titulo:string,
+    categoria:string,
+    taquilla:number,
+    video_local:string,
+    pais_origen:string,
+    mercados?: any[],
+    imagen_portada:string,
+    imagen_en_pelicula:string,
+    calificacion_media:number,
+    descripcion:string,
+    comentarios?: any[],
+    proximamente: boolean;
+    fecha_estreno:string
+}
 
+interface FirebasePelicula {
+  [key: string]: Omit<Pelicula, "id">;
+}
 
-function Home(){ 
-    // Aqui lo que vamos a guardar es la categoria de la pelicula con la que estemos tratando (por defecto estableceremos la categoria de TODAS)
-    const [categoriaActual, setCategoriaActual] = useState<string>('Todas');     
+interface FirebaseResponse {
+  peliculas: FirebasePelicula;
+}
 
-    // definimos el conjunto de posibles categorias que puede haber (array con strings)
+function Home(){
+    const [categoriaActual, setCategoriaActual] = useState<string>('Todas');
     const categorias: string[] = ['Todas', 'Accion', 'Drama', 'Terror', 'Animacion', 'Fantasia'];
 
-    // Aqui es donde vamos a almacenar todas las peliculas disponibles en este instante
-    const [peliculas, setPeliculas] = useState<Pelicula[]>([]);
+    const [peliculas, setPeliculas] = useState<Pelicula[]>([])
+    const [seccionActiva, setSeccionActiva] = useState<string>('cartelera')
 
-    // Aqui es donde vamos a guardar el campo que haya seleccionado el usuario (de los de abajo )
-    const [seccionActiva, setSeccionActiva] = useState<string>('cartelera');
+    useEffect(() => {
+        axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
+        .then((response) => {
+            const data = response.data;
+            if (data && data.peliculas) {
+                const peliculasArray: Pelicula[] = Object.entries(data.peliculas).map(
+                ([key, value]) => ({
+                id: Number(key),
+                ...value
+                })
+                );
+                const peliculasValidas = peliculasArray.filter(peli => peli.titulo !== undefined);
+                setPeliculas(peliculasValidas);
+            }else{
+                setPeliculas([]);
+            }
+        })
+        .catch((error) =>
+        console.log("Error al obtener los datos",error))
+    }, [])
 
-    // Aqui es donde vamos a almacenar el conjunto de peliculas favoritas pero indicadas por su id
-    const [favoritosIds, setFavoritosIds] = useState<number[]>([]);
-
-    //tomamos el contexto actual global
-    const authCtx = useContext(AuthContext);
-
-    // de este contexto, tomamos el userId (identificativo de dicho usuario)
-    const userId = authCtx.userID;
-
-    // Tomamos el token de dicho usuario
-    const token = authCtx.idToken;
-
-    useEffect(() => { // En este caso vamos a controlar que suece cuando se modifica o el userId o el token (por tanto, el usuario)
-        PeliculaRepository.getAll().then((data) => {    // Primero tomamos todas las pelis con el getAll 
-            setPeliculas(data);                         // Las almacenamos en peliculas
-        });
-
-        if (userId && token){// En el caso de que haya un usuario dentro (de los registrados vaya)
-            PeliculaRepository.getFavoritoById(userId,token).then((data) => {   // Tomamos sus peliculas favoritas y las guardamos
-                setFavoritosIds(data);
-            })
-        }
-    }, [userId,token]);
-
-    // Filtramos las peliculas quedandonos con las que ya han salido pero que han salido hace poco (en el 2026)
     const peliculasCartelera = peliculas.filter(p => !p.proximamente && p.fecha_estreno.includes('2026'));
-
-    // Aqui nos quedamos con las pelis que aun no han salido pero que van a salir proximamente
     const peliculasProximamente = peliculas.filter(p => p.proximamente);
-
-    // Aqui basicamente nos quedamos con las pelis que no son ni proximas ni muy recientes
     const peliculasCatalogo = peliculas.filter(p => !p.proximamente && !p.fecha_estreno.includes('2026'));
 
-    // Aqui vamos a filtrar dentro del conjunto de peliculas del catalogo, por la subcategoria por asi decir
-    const pelisFiltradas = peliculasCatalogo.filter((peli: Pelicula) => {   // Pillamos el conjunto de peliculas 
-        if (categoriaActual === 'Todas') return true;                       // Si la categoria es todas, permitimos el paso
-        return peli.categoria === categoriaActual;                          // Y sino, mostramos solo las que pertenezcan a dicha categoria
+    const pelisFiltradas = peliculasCatalogo.filter((peli: Pelicula) => {
+        if (categoriaActual === 'Todas') return true;
+        return peli.categoria === categoriaActual;
     })
 
     const renderTarjetasPelicula = (lista: Pelicula[]) => (
         <Row>
-            {lista.map((peli) => { 
-                // Esto lo vamos a hacer para luego poder aplicar el indicativo de que es favorita (la estrellita con el triangulo verde) 
-                const esFavorita = favoritosIds.includes(peli.id); 
-                
-                return (
-                    <Col key={peli.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
-                        <div className="card h-100 movie-card border-0 shadow" style={{width:'100%', alignItems:'center'}}>
-                            <div style={{position:"relative",height:'420px',}}>
-                                {esFavorita && (
-                                    <div className="favorito-ribbon">
-                                        <i className="bi bi-star-fill"></i>
-                                    </div>
-                                )}
-                                <img
-                                    src={peli.imagen_portada}
-                                    alt={peli.titulo} 
-                                    style={{ height: '400px', objectFit: 'cover', width:'250px', display:'block'}}
-                                />
-                            </div>
-                            <div className="card-body d-flex flex-column">
-                                <h5>{peli.titulo}</h5>
-                                <p className="small mb-3 text-center" style={{ color: '#2d9d9d' }}>{peli.categoria}</p>
-                                <Link to={`/pelicula/${peli.id}`} className="btn btn-sm btn-outline-info mt-auto fw-semibold">
-                                    Ver detalles
+            {lista.map((peli) => (
+                <Col key={peli.id} xs={12} sm={6} md={4} lg={3} className="mb-4 netflix-col">
+                    <div className="netflix-card">
+                        <img
+                            src={peli.imagen_portada}
+                            alt={peli.titulo}
+                            className="netflix-card-img"
+                        />
+                        <div className="netflix-title-bar">
+                            <h5 className="netflix-title-bar-text">{peli.titulo}</h5>
+                            <span className="netflix-title-bar-cat">{peli.categoria}</span>
+                        </div>
+                        <div className="netflix-hover-overlay">
+                            <div className="netflix-overlay-content">
+                                <h5 className="netflix-overlay-title">{peli.titulo}</h5>
+                                <span className="netflix-overlay-cat">{peli.categoria}</span>
+                                <p className="netflix-overlay-desc">
+                                    {peli.descripcion
+                                        ? peli.descripcion.substring(0, 130) + (peli.descripcion.length > 130 ? '...' : '')
+                                        : 'Sin descripción disponible.'}
+                                </p>
+                                <div className="netflix-overlay-meta">
+                                    <span>⭐ {peli.calificacion_media}/10</span>
+                                    <span>{peli.pais_origen}</span>
+                                </div>
+                                <Link to={`/pelicula/${peli.id}`} className="netflix-btn-detalles">
+                                    Ver detalles →
                                 </Link>
                             </div>
                         </div>
-                    </Col>
-                )}
-            )}
+                    </div>
+                </Col>
+            ))}
         </Row>
-    )
+    );
 
     return(
         <div>

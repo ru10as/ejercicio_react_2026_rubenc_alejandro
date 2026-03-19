@@ -172,5 +172,21 @@ export const PeliculaRepository = {
             console.error("Error cargando tus peliculas favoritas",error);
             return [];
         }
+    },
+
+    // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+    // 11)
+    async getTopRanking(): Promise<Pelicula[]> {
+        try{
+            const todasLasPeliculas = await this.getAll(); // Tomamos todas las pelis que existen en la actualidad
+            const PelisFiltradas = todasLasPeliculas.filter(p => p.titulo !== undefined && !p.proximamente);
+            const PelisFiltradasYordenadas = PelisFiltradas.sort((a,b) => b.calificacion_media - a.calificacion_media);
+
+            return PelisFiltradasYordenadas;
+        }
+        catch(error){
+            console.error("Error al rankear las peliculas",error);
+            return[];
+        }
     }
 }
