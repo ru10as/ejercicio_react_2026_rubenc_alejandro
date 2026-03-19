@@ -3,58 +3,38 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import type { Pelicula } from '../domain/Pelicula';
+import type { FirebasePelicula } from '../domain/Pelicula';
+import type { FirebaseResponse } from '../domain/Pelicula';
+import { PeliculaRepository } from '../infrastructure/PeliculaRepository';
+// Meter al domain
 
-interface Pelicula {
-    id: number;
-    titulo: string;
-    categoria: string;
-    taquilla: number;
-    video_local: string;
-    pais_origen: string;
-    mercados?: any[];
-    imagen_portada: string;
-    imagen_en_pelicula: string;
-    calificacion_media: number;
-    descripcion: string;
-    comentarios?: any[];
-    proximamente: boolean;
-    fecha_estreno: string;
-}
-
-interface FirebasePelicula {
-    [key: string]: Omit<Pelicula, 'id'>;
-}
-
-interface FirebaseResponse {
-    peliculas: FirebasePelicula;
-}
-
+// Hemos tomado simplemente simbolos de oro, plata y bronce 
 const MEDALLAS = ['🥇', '🥈', '🥉'];
+
+//Colores asociados
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
 function TopPeliculas() {
-    const [peliculas, setPeliculas] = useState<Pelicula[]>([]);
+    // Aqui es donde vamos a guardar las peliculas ya rankeadas por la nota
+    const [peliculasRankeadas, setPeliculasRankeadas] = useState<Pelicula[]>([]); 
+
+    // Aqui es donde guardaremos cuantas peliculas vamos a querer ver
     const [filtro, setFiltro] = useState<number>(10);
 
     useEffect(() => {
-        axios.get<FirebaseResponse>("https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app/.json")
-            .then((response) => {
-                const data = response.data;
-                if (data && data.peliculas) {
-                    const arr: Pelicula[] = Object.entries(data.peliculas).map(([key, value]) => ({
-                        id: Number(key),
-                        ...value
-                    }));
-                    const validas = arr.filter(p => p.titulo !== undefined && !p.proximamente);
-                    const ordenadas = validas.sort((a, b) => b.calificacion_media - a.calificacion_media);
-                    setPeliculas(ordenadas);
-                }
-            })
-            .catch(err => console.log('Error al cargar películas:', err));
+        // Hacemos la llamada generada en el Infrastructure
+        PeliculaRepository.getTopRanking()
+        .then((datos) => setPeliculasRankeadas(datos)); // La establecemos en peliculasRankeadas
     }, []);
 
-    const peliculasMostradas = filtro === 0 ? peliculas : peliculas.slice(0, filtro);
+    // Aqui es donde vamos a amplicar el filtro segun lo que se haya pulsado
+    const peliculasMostradas = filtro === 0 ? peliculasRankeadas : peliculasRankeadas.slice(0, filtro);
+
+    // Extraemos las tres primeras porque vamos a querer mostrar una especie de podio
     const top3 = peliculasMostradas.slice(0, 3);
+
+    // Resto de pelicualas fuera del top
     const resto = peliculasMostradas.slice(3);
 
     return (
@@ -89,8 +69,7 @@ function TopPeliculas() {
                                 <Col key={peli.id} xs={12} sm={6} md={4}>
                                     <div
                                         className="top3-card"
-                                        style={{ '--medal-color': MEDAL_COLORS[idx] } as React.CSSProperties}
-                                    >
+                                        style={{ '--medal-color': MEDAL_COLORS[idx] } as React.CSSProperties}>
                                         <div className="top3-rank-badge">{MEDALLAS[idx]}</div>
                                         <div className="top3-img-wrapper">
                                             <img src={peli.imagen_portada} alt={peli.titulo} className="top3-img" />
