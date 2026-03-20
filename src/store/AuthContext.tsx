@@ -1,5 +1,10 @@
 import React from "react"; // Aqui importamos el nucleo de React
 import { AuthContextType } from "../domain/Usuario";
+import { useTranslation } from 'react-i18next';
+
+// ARQUITECTURA HEXAGONAL: SI
+// TODO COMPLETADO: NO
+
 
 const AuthContext = React.createContext<AuthContextType>({ // Aqui lo que vamos a hacer es crear el contenedor de contexto
     // Indicamos que se tiene que usar lo generado en <AuthContextType> => Muy importante

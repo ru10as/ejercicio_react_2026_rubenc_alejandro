@@ -2,15 +2,17 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Col, Container, Row, Form } from "react-bootstrap";
 import './access.css';
-
-import { AccessRepository } from "../infrastructure/AccessRepository";
-import { AccessService } from "../service/AccessService";
+import { AccessRepository } from "../../../infrastructure/AccessRepository";
+import { AccessService } from "../../../services/AuthService";
 import AuthContext from "../../../store/AuthContext";
 import MensajeModal from "../../ui/MensajeModal";
+import { useTranslation } from 'react-i18next';
 
 function Login(){
     const authCtx = useContext(AuthContext);
     const navigate = useNavigate();
+
+    const {t} = useTranslation();
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -40,7 +42,7 @@ function Login(){
             const nombreReal = await AccessRepository.obtenerNombreUsuario(localId,idToken);
 
             authCtx.loginAction(idToken, localId, nombreReal || "Usuario");
-            lanzamientoAviso("¡Bienvenido!", `Hola de nuevo, ${nombreReal || 'Usuario'}`, "success");
+            lanzamientoAviso(t('welcome'),t('hello') + ", " + nombreReal, "success");
             setTimeout(() => {
                 navigate("/");
             }, 1500);
@@ -54,8 +56,8 @@ function Login(){
 
             const mensajeParaUsuario = AccessService.obtenerMensajeError(codigo);
             // alert(mensajeParaUsuario);
-            lanzamientoAviso("Error de acceso",mensajeParaUsuario,"error");
-
+            //lanzamientoAviso("Error de acceso",mensajeParaUsuario,"error");
+            lanzamientoAviso(t('error_de_acceso'),mensajeParaUsuario,"error");
         }
     }
     return(
@@ -70,12 +72,12 @@ function Login(){
 
                     <Col xs={12} md={6}>
                         <div className="access-card">
-                            <h2 className="access-card-title text-center">Login</h2>
+                            <h2 className="access-card-title text-center">{t('login_title')}</h2>
                             <div className="access-card-divider mx-auto"></div>
 
                             <Form onSubmit={submitHandler}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="access-label">Email</Form.Label>
+                                    <Form.Label className="access-label">{t('email')}</Form.Label>
                                     <Form.Control
                                         className="access-input"
                                         type='email'
@@ -86,7 +88,7 @@ function Login(){
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="access-label">Contraseña</Form.Label>
+                                    <Form.Label className="access-label">{t('password')}</Form.Label>
                                     <Form.Control
                                         className="access-input"
                                         type='password'
@@ -97,11 +99,11 @@ function Login(){
                                 </Form.Group>
 
                                 <button className="access-btn" type='submit'>
-                                    Entrar
+                                    {t('login_btn')}
                                 </button>
 
                                 <p className="access-link" onClick={() => navigate('/registro')}>
-                                    ¿No tienes cuenta? <span>Regístrate</span>
+                                    {t('no_account_question')} <span>{t('register_link')}</span>
                                 </p>
                             </Form>
                         </div>

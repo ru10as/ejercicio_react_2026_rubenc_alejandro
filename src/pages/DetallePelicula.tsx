@@ -10,36 +10,67 @@ import type { Pelicula } from '../domain/Pelicula';
 import { PeliculaRepository } from '../infrastructure/PeliculaRepository';
 import MensajeModal from '../components/ui/MensajeModal';
 import ModoCine from '../components/peliculas/view/ModoCine/ModoCine';
+import { useTranslation } from 'react-i18next';
+
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
 
 // --- COMPONENTE PRINCIPAL ---
 function DetallePelicula() {
     
-    // MODIFICADO
     // ------------------------------------------------------------------
-    const { id } = useParams<{ id: string }>();                         // Aqui extraemos el id de la url que estmamos poniendo
-    const authCtx = useContext(AuthContext);                            // Tomamos el contexto del usuario que se encuentra dentro en este momento
-    const [peli, setPeli] = useState<Pelicula | null>(null);            // Aqui vamos a guardar el objeto completo de la pelicula
-    const [comentarioTexto, setComentarioTexto] = useState("");         // Aqui guardamos el comentario de texto que puede escribir el usuario
-    const [listaComentarios, setListaComentarios] = useState<any[]>([]);// Aqui guardamos todos los comentarios sobre esta peli que han hecho los usuarios
-    const [notaSeleccionada, setNotaSeleccionada] = useState(5);        // Vamos a guardar la nota a la pelicula que le da el usuario
-    const [mediaPeli, setMediaPeli] = useState<number>(0);              // Media final que vamos a calcular con el conjunto de notas
-    
-    const yaHasComentado = listaComentarios.find((comentario) => {      // Todo esto, suponiendo que listaComentarios ya venga filtrada para esta pelicula en especifico
-        const esMismoUsuario = comentario.usuario_id === authCtx.userID;
-        return esMismoUsuario;
-    });
+    // Esto para gestionar las traducciones
+    const {t} = useTranslation();
 
+    // Aqui extraemos el id de la url que estmamos poniendo
+    const { id } = useParams<{ id: string }>();
+    
+    // Tomamos el contexto del usuario que se encuentra dentro en este momento
+    const authCtx = useContext(AuthContext);
+    
+    // Aqui vamos a guardar el objeto completo de la pelicula
+    const [peli, setPeli] = useState<Pelicula | null>(null);
+    
+    // Aqui guardamos el comentario de texto que puede escribir el usuario
+    const [comentarioTexto, setComentarioTexto] = useState("");
+    
+    // Aqui guardamos todos los comentarios sobre esta peli que han hecho los usuarios
+    const [listaComentarios, setListaComentarios] = useState<any>(null)
+    
+    // Vamos a guardar la nota a la pelicula que le da el usuario
+    const [notaSeleccionada, setNotaSeleccionada] = useState(5);
+    
+    // Media final que vamos a calcular con el conjunto de notas
+    const [mediaPeli, setMediaPeli] = useState<number>(0);
+    
+    // Aqui es donde vamos a transformar lo que es la lista de comentarios a array adecuado
+    const arrayDeComentarios = listaComentarios ? Object.values(listaComentarios) : [];
+
+    // Vamos a recorrer ahora el conjunto de comentarios de dicha peli y vamos a comprobar si este usuario ha realizado o no un comentario
+    const [yaHasComentado, setYaHasComentado] = useState(false);
+
+    // Para indicar si la pelicula que estamos viendo es o no es favorita
     const [esFavorita, setEsFavorita] = useState(false);
 
+    // Para indicar si el usuario ha entrado en modo cine (se va a poner a ver la peli)
     const [modoCine, setModoCine] = useState(false);
 
-    const [yaHasPuntuado, setYaHasPuntuado] = useState(false);      // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
+    // Vamos a comprobar si este usuario que esta dentro ya ha puntuado (No dejamos puntuar dos veces a la misma peli)
+    const [yaHasPuntuado, setYaHasPuntuado] = useState(false);
     
-
-    const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
-    const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
-    const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
-    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
+    // Para indicar si vamos a mostrar el mensaje de Modal
+    const [mostrarModal, setMostrarModal] = useState(false);
+    
+    // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
+    const [tituloModal, setTituloModal] = useState("");
+    
+    // Para indicar el tipo de mensaje que aparece en el modal
+    const [mensajeModal, setMensajeModal] = useState("");
+    
+    // Para indicar el tipo de modal, si es success o si es de tipo error
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success');
+    
+    // Para cuando lancemos el aviso 
     const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
         setTituloModal(titulo);
         setMensajeModal(mensaje);
@@ -50,35 +81,36 @@ function DetallePelicula() {
 
     
 
-    // MODIFICADO
     // --------------------------------------------------------------
     const cargarDatosIniciales = async () => {
+        // Si no hemos podido tomar la id de la peli, nos salimos
         if (!id) return;
 
-        /* const [peliculaData, comentariosData, puntuacionesData] = await Promise.all([
-            PeliculaRepository.getById(id),
-            PeliculaRepository.getComentarios(id),
-            PeliculaRepository.getPuntuaciones(id)
-        ]); */
-
+        // Aqui vamos a hacer las 4 peticiones a la vez
         const resultados = await Promise.all([
+            // Esta funcion lo que devuelve es los datos propios de la peli identificada por su id
             PeliculaRepository.getById(id),
+            // Esta funcion lo que devuelve es el conjunto de comentarios que los usuarios han escrito sobre la peli con ese id
             PeliculaRepository.getComentarios(id),
+            // Esta funcion lo que devuelve es el conjunto de puntuaciones de esta peli identificada por su id
             PeliculaRepository.getPuntuaciones(id),
+            // Usamos el async para esperar a la llamada a la base de datos
             (async () => {
-                if (authCtx.userID && authCtx.idToken){
+                // Revisamos si el usuario esta logueado
+                if (authCtx.userID && authCtx.idToken){ 
+                    // Tomamos la pelicula fav por su ID
                     return await PeliculaRepository.getFavoritoById(authCtx.userID,authCtx.idToken);
                 }
                 return [];
             })()
         ])
 
-        setPeli(resultados[0]);
-        setListaComentarios(resultados[1]);
-        procesarPuntuaciones(resultados[2]);
+        setPeli(resultados[0]);             // Guardamos la pelicula
+        setListaComentarios(resultados[1]); // Guardamos la lista de comentarios
+        procesarPuntuaciones(resultados[2]);// Guardamos el conjunto de puntuaciones devueltas
+        const listaIdsFavoritos = resultados[3]; // Almacenamos el conjunto de numeros de ids asociadas a las pelic favs
 
-        const listaIdsFavoritos = resultados[3];
-
+        // Esto de aqui para comprobar si la peli con la que estamos es una favorita para dicho usuario
         if(listaIdsFavoritos.includes(Number(id))){
             setEsFavorita(true);
         }
@@ -89,21 +121,26 @@ function DetallePelicula() {
     // --------------------------------------------------------------
 
 
-    // MODIFICADO
     // --------------------------------------------------------------
+    // Esta funcion la vamos a implementar para sacar la nota media (estrellas) y ver si el usuario voto para no dejarle votar de nuevo
     const procesarPuntuaciones = (data: any[]) => {
+        // Comprobamos si es el caso en que no hay aun votacion de nadie (para ponerle media de 0)
         if (!data || data.length === 0) {
             setMediaPeli(0);
             return;
         }
 
+        // Aqui es donde hacemos el proceso para tomar la suma total (previa a hacer el promedio)
         let suma = 0;
         for (let i = 0; i < data.length; i++) {
             suma = suma + Number(data[i].nota);
         }
+
+        // Hacemos el promediado
         const promedio = (suma / data.length).toFixed(1);
         setMediaPeli(Number(promedio));
 
+        // Si el usuario esta logueado, buscamos si este ya ha puntuado
         if (authCtx.userID) {
             for (let i = 0; i < data.length; i++) {
                 if (data[i].usuario_id === authCtx.userID) {
@@ -116,103 +153,152 @@ function DetallePelicula() {
     // --------------------------------------------------------------
 
 
-    // MODIFICADO
     // --------------------------------------------------------------------------------
-    const enviarComentario = async () => { // ----- ESTO LO VAMOS A ENVIAR A X ----------
-        const nuevoComentario = {               // Definimos el nuevo comentario que va a introducir este usuario
-            pelicula_id:peli?.id,               // 
-            texto:comentarioTexto,              // Almacenamos el comentario de texto
-            usuario_id:authCtx.userID,          // Almacenamos con el comentario el usuario id que esta ahora dentro
-            fecha:new Date().toLocaleString()   //
+    // Aqui es donde vamos a enviar el comentario desde que lo escribe hasta la base de datos
+    const enviarComentario = async () => {
+        
+        if (yaHasComentado || !comentarioTexto.trim()) {
+            return;
         }
 
+        const nuevoComentario = {               // Definimos el nuevo comentario que va a introducir este usuario
+            pelicula_id:peli?.id,               // Vamos a vincular el comentario a esta pelicula
+            texto:comentarioTexto,              // Almacenamos el comentario de texto
+            usuario_id:authCtx.userID,          // Almacenamos con el comentario el usuario id que esta ahora dentro
+            nombre_usuario: authCtx.userName || "Usuario",
+            fecha:new Date().toLocaleString()   // Guardamos el momento en el que lo ha escrito 
+        }
+
+        // Empleamos la funcion generada para guardar el comentario en Firebase (esta en la carpeta de infrastructure)
         await PeliculaRepository.saveComentario(nuevoComentario);
-        setComentarioTexto("");
-        // alert("Comentario guardado correctamente"); // Solo para pruebas
-        lanzamientoAviso("Comentario guardado","¡Gracias por darnos tu opinion!","success")
+        
+
+        // Sacamos lo que es el aviso indicandole que se ha almacenado correctamente
+        lanzamientoAviso(t('movie_detail_modal_comm_title'), t('movie_detail_modal_comm_msg'), "success");
+        
+        // Obtenemos la lista actualizada con el nuevo comentario del usuario
         const nuevosComentarios = await PeliculaRepository.getComentarios(id!);
+
+        // Lo establecemos en el conjunto de comentarios
         setListaComentarios(nuevosComentarios);
+
+        // Limpiamos la parte de la caja de comentarios
+        setComentarioTexto("");
     };
     // --------------------------------------------------------------------------------
 
 
 
-    // MODIFICADO
     // --------------------------------------------------------------------------------
-    const enviarNota = async () => { // Proceso en la que este usuario va a enviar la nota
+    // Esta funcino la vamos a utilizar para almacenar la puntuacion que envie el usuario
+    const enviarNota = async () => {
         
+        // Para el caso de que el usuario este ya haya puntuado o q la pelicula no haya cargado, salimos
         if (!peli || yaHasPuntuado){
             return
         }
         
+        // Creamos el paquete para la nueva puntuacion que se va a introducir
         const nuevaPuntuacion = {
-            pelicula_id:peli?.id,
-            nota:notaSeleccionada,
-            usuario_id:authCtx.userID, // Asociado a esa nota le introducimos un indicativo del usuario = el usuario_id
+            pelicula_id:peli?.id,       // El id de la peli
+            nota:notaSeleccionada,      // La nota seleccionada
+            usuario_id:authCtx.userID,  // el id de dicho usuario
         }
 
+        // Utilizamos la funcion generada en infrastructure para guardar la puntuacion
         await PeliculaRepository.savePuntuacion(nuevaPuntuacion);
-        // alert('Puntuacion guardada'); // Solo para pruebas
-        lanzamientoAviso("Puntuacion guardada","¡Gracias por valorar la pelicula!","success")
+
+        // Enviamos el mensaje indicando que se ha guardado la puntuacion
+        lanzamientoAviso(t('movie_detail_modal_rate_title'), t('movie_detail_modal_rate_msg'), "success");
+
+        // Almacenamos que ya ha puntuado dicho usuario
         setYaHasPuntuado(true);
+
+        // Cargamos de nuevo los datos para actualizar
         cargarDatosIniciales();
     }
     // --------------------------------------------------------------------------------
 
 
 
-    // MODIFICADO
     // --------------------------------------------------------------------------------
+    // Generamos la funcion para añadir a favoritos
     const añadirAfavoritos = async () => {
+        
+        // Generamos el paquete para añadir dicha peli en favoritas
         const nuevoFavorito = {
-            pelicula_id: peli?.id,
-            usuario_id:authCtx.userID,
-            titulo: peli?.titulo,
-            imagen_portada:peli?.imagen_portada,
-            categoria:peli?.categoria
+            pelicula_id: Number(id),              
+            usuario_id:authCtx.userID,          
+            titulo: peli?.titulo,                
+            imagen_portada:peli?.imagen_portada, 
+            categoria:peli?.categoria       
 
         }
 
+        // Utilizamos la funcion generada en infrastructure para guardar en los favoritos de dicho usuario
         await PeliculaRepository.saveFavoritos(authCtx.userID!, nuevoFavorito);
-        //alert("Añadida a favoritos");
+        
+        // Indicamos que esta peli esta entre los favoritos
         setEsFavorita(true);
-        lanzamientoAviso("Añadida a favoritos", "Pelicula añadida a tus favoritos", "success");
+
+        // Lanzamos el mensaje
+        lanzamientoAviso(t('movie_detail_modal_fav_title'), t('movie_detail_modal_fav_msg'), "success");
     }
     // --------------------------------------------------------------------------------
     
 
+    // -----------------------------------------
+    useEffect(() => {
+
+        if (!listaComentarios || !authCtx.userID) return;
+
+        const comentariosArray = Object.values(listaComentarios);
+
+        const haComentado = comentariosArray.some((comentario: any) => {
+            return comentario.usuario_id === authCtx.userID;
+        });
+
+        setYaHasComentado(haComentado);
+
+    }, [listaComentarios, authCtx.userID]);
+    // -----------------------------------------
+
+
     // --------------------------------------------------------------------------------
     useEffect(() => {
-        // 1) Hacemos la limpieza para que salga inicialmente lo de Cargando...
+        // Primero ponemos en el recargo la pelicula a null para que se vea lo de Cargando...
         setPeli(null);
+
+        // Si no esta el id por lo que sea, detenemos la ejecucion
         if(!id)return;
 
-        // 2) Cargamos los detalles
+        // Cargamos los detalles mediante las 4 funciones
         cargarDatosIniciales();
-    },[id, authCtx.login]);
+    },[id, authCtx.login]); // Esto se volvera a ejecutar si cambiamos de peli(id) o si cambiamos de usuario o se cierra sesion
     // --------------------------------------------------------------------------------
 
 
     // --------------------------------------------------------------------------------
-    if (!peli) { // Para el caso de que la peli no exista (haya puesto algo mal en la url, dejaremos en Cargando..) => ESTO SE PUEDE MODIFICAR
+    // Para el caso de que la peli no exista 
+    if (!peli) {
         return (
             <div className="bg-dark text-white min-vh-100 d-flex align-items-center justify-content-center">
-                <p>Cargando detalles de la pelicula...</p>
+                <p>{t('movie_detail_loading')}</p>
             </div>
         );
     }
     // --------------------------------------------------------------------------------
 
-    let variantBoton = "warning";
-    let textoBoton = "AÑADIR A MIS FAVORITOS";
-    let iconoBoton = "bi-plus-lg";
-    let estaBloqueado = false;
+    let variantBoton = "warning";               // 
+    let textoBoton = t('movie_detail_add_fav'); // 
+    let iconoBoton = "bi-plus-lg";              // 
+    let estaBloqueado = false;                  // 
 
-    if (esFavorita){
-        variantBoton = "outline-warning";
-        textoBoton = "YA EN MIS FAVORITOS";
-        iconoBoton = "bi-check-lg";
-        estaBloqueado = true;
+    if (esFavorita){                                // 
+        variantBoton = "outline-warning";           // 
+        textoBoton = t('movie_detail_already_fav'); // 
+        iconoBoton = "bi-check-lg";                 // 
+        estaBloqueado = true;                       // 
     }
 
 
@@ -222,7 +308,7 @@ function DetallePelicula() {
         botonesAccion = (
             <>
                 <Button onClick={() => setModoCine(true)}>
-                    <i className='bi bi-play-fill me-2'></i>VER AHORA
+                    <i className='bi bi-play-fill me-2'></i>{t('movie_detail_btn_watch')}
                 </Button>
                 <Button onClick={añadirAfavoritos} variant={variantBoton} disabled={estaBloqueado} className='fw-bold'>
                     {/* <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS */}
@@ -236,7 +322,7 @@ function DetallePelicula() {
         botonesAccion = (
             <Badge bg='warning' text='dark'>
                 <i className='bi bi-lock-fill me-2'></i>
-                Inicia sesion para reproducir el contenido
+                {t('movie_detail_login_to_watch')}
             </Badge>
         )
     }
@@ -247,7 +333,7 @@ function DetallePelicula() {
     if(!authCtx.login){
         seccionPuntuacion = (
             <Badge bg="warning" text="dark" className="p-3">
-                Inicia sesion para puntuar esta pelicula
+                {t('movie_detail_login_to_rate')}
             </Badge>
         )
     }
@@ -255,15 +341,15 @@ function DetallePelicula() {
         seccionPuntuacion = (
             <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
                 <i className='bi bi-hand-thumbs-up-fill text-success display-6'></i>
-                <h5 className='mt-3'>¡Gracias por tu valoracion!</h5>
-                <p>Has puntuado esta pelicula con un <strong>{notaSeleccionada}</strong></p>
+                <h5 className='mt-3'>{t('movie_detail_thanks_rating')}</h5>
+                <p>{t('movie_detail_your_rating_display', { nota: notaSeleccionada })}</p>
             </div>
         )
     }
     else {
         seccionPuntuacion = (
             <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
-                <h5>Opina sobre esta pelicula</h5>
+                <h5>{t('movie_detail_rate_title_section')}</h5>
 
                 <Form className='row align-items-end'>
                     <Col xs="auto">
@@ -301,25 +387,25 @@ function DetallePelicula() {
         seccionComentarios = (
         <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
             <h5>
-                <i></i> Gracias por tu reseña
+                <i className="bi bi-chat-check-fill me-2"></i> {t('movie_detail_review_thanks_title')}
             </h5>
-            <p>Ya has participado en la comunidad de esta pelicula</p>
+            <p>{t('movie_detail_review_already_done')}</p>
         </div>
         )
     }
     else{ // Aqui tratamos el caso en que no se haya comentado
         seccionComentarios = (
             <div className="bg-secondary bg-opacity-10 p-4 rounded shadow-sm">
-                <h5 className="mb-3">Comentanos que te ha parecido</h5>
+                <h5 className="mb-3">{t('movie_detail_write_review')}</h5>
                 <Form.Control 
                     as="textarea" 
                     rows={3} 
                     className="bg-dark text-white border-secondary mb-3"
-                    placeholder="Escribe tu reseña..."
+                    placeholder={t('movie_detail_placeholder_review')}
                     value={comentarioTexto}
-                    onChange={(e) => setComentarioTexto(e.target.value)} // Establecemos el comentario actual
+                    onChange={(e) => setComentarioTexto(e.target.value)} 
                 />
-                <Button variant="primary" onClick={enviarComentario}>Enviar comentario</Button>
+                <Button variant="primary" onClick={enviarComentario}>{t('movie_detail_btn_send_comm')}</Button>
             </div>
         )
     }
@@ -371,7 +457,7 @@ function DetallePelicula() {
                 <Row className='gy-5'>
                     {/* Columna Izquierda: Sinopsis y Comentarios */}
                     <Col lg={7}>
-                        <h5 className='text-uppercase text-secondary mb-3 small fw-bold tracking-wider'>Sinopsis</h5>
+                        <h5 className='text-uppercase text-secondary mb-3 small fw-bold tracking-wider'>{t('movie_detail_synopsis')}</h5>
                         <p className="fs-5 lh-base mb-5">
                             {peli.descripcion}
                         </p>
@@ -384,7 +470,7 @@ function DetallePelicula() {
 
                     <Col lg={5}>
                         <div className='ms-lg-4'>
-                            <h5 className='text-uppercase text-secondary mb-3 small fw-bold'>Trailer Oficial</h5>
+                            <h5 className='text-uppercase text-secondary mb-3 small fw-bold'>{t('movie_detail_official_trailer')}</h5>
                             <div className='ratio ratio-16x9 rounded overflow-hidden shadow-lg border border-secondary' 
                                  style={{ maxWidth: '480px', margin: '0 auto' }}>
                                 <video 
@@ -401,22 +487,18 @@ function DetallePelicula() {
                 </Row>
                 <Row className='mt-4'>
                     <Col>
-                        <h4 className='mb-4'>Comentarios de la comunidad</h4>
+                        <h4 className='mb-4'>{t('movie_detail_community_comments')}</h4>
                         {(()=> {
-                            if(listaComentarios && listaComentarios.length > 0){
+                            if(arrayDeComentarios && arrayDeComentarios.length > 0){
                                 return (
                                     <div className="bg-secondary bg-opacity-10 p-3 rounded shadow-sm">
-                                        {listaComentarios.map((c, i) => (
+                                        {arrayDeComentarios.map((c:any, i:number) => (
                                             <div key={i} className="mb-3 p-2 border-bottom border-secondary">
-                                                <div className='d-flex align-items'>
-                                                    <div>
-                                                        <i className='bi bi-person-fill text-white'></i>
-                                                    </div>
-                                                </div>
-                                                <div>
+                                                <div className='d-flex align-items-center gap-2'>
+                                                    <i className='bi bi-person-fill text-white'></i>
                                                     <h6 className='mb-0'>{c.nombre_usuario}</h6>
                                                 </div>
-                                                
+ 
                                                 <strong>{c.usuario}</strong>
                                                 <p className="mb-0">{c.texto}</p>
                                             </div>
@@ -426,7 +508,7 @@ function DetallePelicula() {
                             }
                             else{
                                 return (
-                                    <p>Todavia no hay comentarios sobre esta pelicula</p>
+                                    <p>{t('movie_detail_no_comments_yet')}</p>
                                 )
                             }
                         })()}

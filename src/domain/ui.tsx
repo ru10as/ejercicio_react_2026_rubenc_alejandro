@@ -1,3 +1,6 @@
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
+
 // ------------------------------------------------------------
 export interface AvisoDeProps { // 
     show: boolean,              // Esto lo que nos ayuda es a indicar si el modal esta visible o no

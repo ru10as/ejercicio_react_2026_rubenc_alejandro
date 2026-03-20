@@ -1,18 +1,24 @@
 // YA METIDO
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+
+// ARQUITECTURA HEXAGONAL: SI
+// TODO COMPLETADO: SI
+
 
 export const AccessService = {
     obtenerMensajeError: (codigo: string): string => {
         switch(codigo) {
             case "EMAIL_EXISTS":
-                return "El correo ya esta en uso. Prueba con otro o haz login";
+                return i18next.t('error_email_exists');
             case "WEAK_PASSWORD":
-                return "La contraseña es muy corta. Pon al menos 6 caracteres.";
+                return i18next.t('error_weak_password');
             case "INVALID_EMAIL":
-                return "El formato del correo no es correcto (falta @ o punto).";
+                return i18next.t('error_invalid_email');
             case "OPERATION_NOT_ALLOWED":
-                return "El registro con contraseña está desactivado en Firebase.";
+                return i18next.t('operation_not_allowed');
             default:
-                return "Ha ocurrido un error tecnico: " + codigo;
+                return i18next.t('error_general') + codigo;
         }
     }
 }

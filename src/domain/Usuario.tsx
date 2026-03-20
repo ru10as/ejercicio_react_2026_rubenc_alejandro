@@ -1,3 +1,6 @@
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
+
 // ------------------------------------------------------------
 export interface UserAuthResponse{ // Para tratar con los datos que nos devuelve Firebase tras validar las credenciales
     idToken: string,    // El token de acceso que nos devuelve

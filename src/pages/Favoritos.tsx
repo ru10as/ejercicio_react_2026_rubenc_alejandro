@@ -6,12 +6,14 @@ import AuthContext from "../store/AuthContext";
 import { PeliculaRepository } from "../infrastructure/PeliculaRepository";
 import type { PeliFav } from "../domain/Pelicula";
 import MensajeModal from "../components/ui/MensajeModal";
+import { useTranslation } from 'react-i18next';
 
-// YA METIDO
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
 
 // ------------------------------------------------------------------------
 function Favoritos(){
-
+    const {t} = useTranslation();
     // ------------------------------------------------------
     const [misFavs, setMisFavs] = useState<PeliFav[]>([]);  // Definimos donde vamos a guardar el conjunto de Peliculas favoritas del usuario
     const authCtx = useContext(AuthContext);                // Almacenamos la informacion que se ha obtenido una vez el usuario ha introducido
@@ -40,7 +42,7 @@ function Favoritos(){
                     setMisFavs(lista);    
                 }
                 catch (err){
-                    lanzamientoAviso("Error de carga","No pudimos cargar tus favoritos","success")
+                    lanzamientoAviso(t('fav_error_load_title'), t('fav_error_load_msg'), "error");
                 }
             }
         };
@@ -57,18 +59,18 @@ function Favoritos(){
         try{
             await PeliculaRepository.deleteFavorito(userId, peliId, token);
             setMisFavs((listaAnterior) => listaAnterior.filter(p => p.id !== peliId));
-            lanzamientoAviso("Pelicula eliminada","Pelicula eliminada de tus favoritas","success");
+            lanzamientoAviso(t('fav_removed_title'), t('fav_removed_msg'), "success");
         }
         catch(error:any){
             console.error("Error al eliminar el favorito", error);
             //alert("No se ha podido eliminar la pelicula de los favoritos"); // Para pruebas
-            lanzamientoAviso("Error","No se ha podido eliminar la pelicula","success");
+            lanzamientoAviso(t('fav_error_delete_title'), t('fav_error_delete_msg'), "error");
         }
     }
     
     return (
         <Container>
-            <h1 className="text-white mb-0 fw-bold text-center my-5 mb-5">Mis Favoritos</h1>
+            <h1 className="text-white mb-0 fw-bold text-center my-5 mb-5">{t('favorites_title_page')}</h1>
             
             <Row>
                 {misFavs.map((peli) => (
@@ -86,14 +88,14 @@ function Favoritos(){
                                     <Col>
                                         <Link to={`/pelicula/${peli.pelicula_id}`}>
                                             <Button variant="primary" className="w-100 btn-sm">
-                                                Ver detalles
+                                                {t('fav_btn_details')}
                                             </Button>
                                         </Link>
                                     </Col>
 
                                     <Col>
                                         <Button variant="outline-danger" size="sm" onClick={() => eliminarFavoritoHandler(peli.id)}>
-                                            Eliminar de favoritos
+                                            {t('fav_btn_remove')}
                                         </Button>
                                     </Col>
                                 </Row>
