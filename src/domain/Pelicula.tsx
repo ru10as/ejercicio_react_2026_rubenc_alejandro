@@ -1,21 +1,35 @@
-// NUEVO METIDO
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
+
+
+// ------------------------------------------------------------
+export interface InfoIntroducida { // Aqui es lo que vamos a definir en distintos idiomas 
+    titulo:string;
+    categoria:string;
+    descripcion:string;
+}
+// ------------------------------------------------------------
+
 
 // ------------------------------------------------------------
 export interface Pelicula { // Nuevo introducido
     id: number;                 // Este va a ser el identificador unico de la pelicula 
-    titulo: string;             // El titulo de la pelicula 
-    categoria: string;          // Genero de cine al que pertenece
-    taquilla: number;           // Datos de recaudacion (se puede usar en el futuro)
-    video_local: string;        // Identificador del archivo de video (revisar)
-    pais_origen: string;        // Informacion de la procedencia de la peli
-    mercados?: any[];           // Mercados donde se ha distribuido la pelicula
+    calificacion_media: number; // La nota media de la peli
     imagen_portada: string;     // La imagen que aparece al principio (cuando se ve el conjunto de cartas en el Home)
     imagen_en_pelicula: string; // Esta se va a usar como imagen de fondo cuando establecemos el DetallePelicula
-    calificacion_media: number; // La nota media de la peli
-    descripcion: string;        // Breve descripcion de que va la pelicula
-    comentarios?: { usuario: string; texto: string; nota: number }[];   // MODIFICAR (solo va a haber texto)
-    proximamente: boolean;      // para indicar si aun no ha salido y saldra proximamente
+    video_local: string;        // Identificador del archivo de video (revisar)
     fecha_estreno: string;      // Su fecha de estreno
+    proximamente: boolean;      // para indicar si aun no ha salido y saldra proximamente
+    taquilla: number;           // Datos de recaudacion (se puede usar en el futuro)
+    pais_origen: string;        // Informacion de la procedencia de la peli
+    mercados?: any[];           // Mercados donde se ha distribuido la pelicula
+
+    es:InfoIntroducida;
+    en:InfoIntroducida;
+    eu:InfoIntroducida;
+
+    [key:string]:any;
+
 }
 // ------------------------------------------------------------
 

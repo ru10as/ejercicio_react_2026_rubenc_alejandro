@@ -1,35 +1,38 @@
 import { Container, Row, Col } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
-// Nuevo introducido
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
 
 function AvisoLegal() {
+
+    const{t} = useTranslation();
+
     return (
         <Container>
             <Row>
                 <Col>
-                    <h1 className='mb-4 text-white mt-4'>Aviso Legal</h1>
+                    <h1 className='mb-4 text-white mt-4'>{t('legal_title')}</h1>
 
                     <section className='mb-4'>
-                        <h3 className='text-uppercase fw-bold text-secondary'>1. Datos Identificativos</h3>
+                        <h3 className='text-uppercase fw-bold text-secondary'>{t('legal_sec1_title')}</h3>
                         <p className='text-white'>
-                            Este sitio web es un proyecto academico desarrollado por los estudiantes Ruben Cameo y Alejandro Guerra. El portal ha sido creado con fines exclusivamente educativos para la asignatura de desarrollo web.
+                            {t('legal_sec1_text')}
                         </p>
                     </section>
                     
 
                     <section className='mb-4'>
-                        <h3 className='text-uppercase fw-bold text-secondary'>2. Propiedad Intelactual</h3>
+                        <h3 className='text-uppercase fw-bold text-secondary'>{t('legal_sec2_title')}</h3>
                         <p className='text-white'>
-                            Todo el contenido visual (carteles de peliculas, trailers y sinopsis) es propiedad de sus respectivos autores y productoras cinematograficas. 
-                            Su uso en esta plataforma se realiza bajo el concepto de uso legitimo con fines docentes. 
+                            {t('legal_sec2_text')}
                         </p>
                     </section>
 
                     <section className='mb-4'>
-                        <h3 className='text-uppercase fw-bold text-secondary'>3. Contenido Multimedia</h3>
+                        <h3 className='text-uppercase fw-bold text-secondary'>{t('legal_sec3_title')}</h3>
                         <p className='text-white'>
-                            Los autores no se hacen responsables de la exactitud de los datos proporcionados por servicios externos, ni la disponibilidad 
-                            continua del servicio, al tratarse de un entorno de pruebas. 
+                            {t('legal_sec3_text')} 
                         </p>
                     </section>
 

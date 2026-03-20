@@ -7,7 +7,11 @@ import type { Pelicula } from '../domain/Pelicula';
 import type { FirebasePelicula } from '../domain/Pelicula';
 import type { FirebaseResponse } from '../domain/Pelicula';
 import { PeliculaRepository } from '../infrastructure/PeliculaRepository';
-// Meter al domain
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+
+// ARQUITECTURA HEXAGONAL: SI
+// TODO COMPLETADO: NO
 
 // Hemos tomado simplemente simbolos de oro, plata y bronce 
 const MEDALLAS = ['🥇', '🥈', '🥉'];
@@ -16,6 +20,10 @@ const MEDALLAS = ['🥇', '🥈', '🥉'];
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
 function TopPeliculas() {
+    
+    const {t,i18n} = useTranslation();
+    const idiomaActual = i18n.language as 'es' | 'en' | 'eu';
+
     // Aqui es donde vamos a guardar las peliculas ya rankeadas por la nota
     const [peliculasRankeadas, setPeliculasRankeadas] = useState<Pelicula[]>([]); 
 
@@ -44,9 +52,9 @@ function TopPeliculas() {
                 {/* Cabecera */}
                 <div className="top-page-header text-center mb-5">
                     <h1 className="top-page-title">
-                        Top Películas
+                        {t('top_title')}
                     </h1>
-                    <p className="top-page-subtitle">Las películas mejor valoradas por nuestra comunidad</p>
+                    <p className="top-page-subtitle">{t('top_subtitle')}</p>
 
                     <div className="d-flex gap-2 justify-content-center mt-4">
                         {[5, 10, 0].map(n => (
@@ -55,7 +63,7 @@ function TopPeliculas() {
                                 className={`btn-top-filtro ${filtro === n ? 'activo' : ''}`}
                                 onClick={() => setFiltro(n)}
                             >
-                                {n === 0 ? 'Todas' : `Top ${n}`}
+                                {n === 0 ? t('cat_todas') : `Top ${n}`}
                             </button>
                         ))}
                     </div>
@@ -72,22 +80,22 @@ function TopPeliculas() {
                                         style={{ '--medal-color': MEDAL_COLORS[idx] } as React.CSSProperties}>
                                         <div className="top3-rank-badge">{MEDALLAS[idx]}</div>
                                         <div className="top3-img-wrapper">
-                                            <img src={peli.imagen_portada} alt={peli.titulo} className="top3-img" />
+                                            <img src={peli.imagen_portada} alt={peli[idiomaActual].titulo} className="top3-img" />
                                         </div>
                                         <div className="top3-info">
-                                            <h4 className="top3-titulo">{peli.titulo}</h4>
-                                            <span className="top3-cat">{peli.categoria}</span>
+                                            <h4 className="top3-titulo">{peli[idiomaActual].titulo}</h4>
+                                            <span className="top3-cat">{peli[idiomaActual].categoria}</span>
                                             <div className="top3-rating">
                                                 <span className="top3-rating-num">{peli.calificacion_media}</span>
                                                 <span className="top3-rating-max">/10</span>
                                             </div>
                                             <p className="top3-desc">
-                                                {peli.descripcion
-                                                    ? peli.descripcion.substring(0, 110) + (peli.descripcion.length > 110 ? '...' : '')
-                                                    : 'Sin descripción disponible.'}
+                                                {peli[idiomaActual].descripcion
+                                                    ? peli[idiomaActual].descripcion.substring(0, 110) + (peli[idiomaActual].descripcion.length > 110 ? '...' : '')
+                                                    : t('top_no_desc')}
                                             </p>
                                             <Link to={`/pelicula/${peli.id}`} className="btn-top-detalles">
-                                                Ver detalles →
+                                                {t('top_view_short')} →
                                             </Link>
                                         </div>
                                     </div>
@@ -103,17 +111,17 @@ function TopPeliculas() {
                         {resto.map((peli, idx) => (
                             <div key={peli.id} className="top-lista-item">
                                 <span className="top-lista-rank">#{idx + 4}</span>
-                                <img src={peli.imagen_portada} alt={peli.titulo} className="top-lista-img" />
+                                <img src={peli.imagen_portada} alt={peli[idiomaActual].titulo} className="top-lista-img" />
                                 <div className="top-lista-info">
-                                    <h5 className="top-lista-titulo">{peli.titulo}</h5>
-                                    <span className="top-lista-cat">{peli.categoria}</span>
+                                    <h5 className="top-lista-titulo">{peli[idiomaActual].titulo}</h5>
+                                    <span className="top-lista-cat">{peli[idiomaActual].categoria}</span>
                                 </div>
                                 <div className="top-lista-rating">
                                     <span className="top-lista-rating-num">{peli.calificacion_media}</span>
                                     <span className="top-lista-rating-max">/10</span>
                                 </div>
                                 <Link to={`/pelicula/${peli.id}`} className="btn-top-lista-detalles">
-                                    Ver →
+                                    {t('top_view_short')} →
                                 </Link>
                             </div>
                         ))}

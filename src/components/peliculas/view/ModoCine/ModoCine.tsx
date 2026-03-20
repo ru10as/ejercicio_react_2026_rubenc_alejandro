@@ -1,4 +1,6 @@
 import { Badge, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import type { Pelicula } from '../../../../domain/Pelicula';
 
 interface ModoCineProps {
     tituloPeli: string;
@@ -6,6 +8,10 @@ interface ModoCineProps {
 }
 
 const ModoCine = ({ tituloPeli, onClose }: ModoCineProps) => {
+
+    const {t,i18n} = useTranslation();
+    const lang = i18n.language as 'es' | 'en' | 'eu';
+
     return (
         <div className='overflow-hidden mb-3'
         style={{
@@ -27,11 +33,11 @@ const ModoCine = ({ tituloPeli, onClose }: ModoCineProps) => {
             <div className='d-flex flex-column align-items-center justify-content-center text-center h-100 text-white'>
                 <h3>{tituloPeli}</h3>
                 <p>
-                   Esta pelicula no puede ser reproducida debido a derechos de autor 
+                   {t('copyright_error')}
                 </p>
                 {/* Lo que meto aqu lo voy a hacer para que, como no podemos poner pelis por derechos, tener de momento algo */}
                 <Badge bg='danger' className='text-uppercase'>
-                    Contenido protegido
+                    {t('protected_error')}
                 </Badge>
 
             </div>

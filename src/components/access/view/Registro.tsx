@@ -1,5 +1,5 @@
-import { AccessRepository } from "../infrastructure/AccessRepository";
-import { AccessService } from "../service/AccessService";
+import { AccessRepository } from "../../../infrastructure/AccessRepository";
+import { AccessService } from "../../../services/AuthService";
 import AuthContext from "../../../store/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Col, Container, Row, Form } from "react-bootstrap";
 import './access.css';
 import MensajeModal from "../../ui/MensajeModal";
-
+import { useTranslation } from 'react-i18next';
 
 function Registro() {
     const authCtx = useContext(AuthContext);
@@ -27,6 +27,7 @@ function Registro() {
         setMostrarModal(true);
     }
 
+    const {t} = useTranslation();
 
     const submitHandler  = async (e: React.FormEvent) => {
         e.preventDefault(); 
@@ -34,21 +35,20 @@ function Registro() {
         try {
             const data = await AccessRepository.registroCompleto(email,password,username);
             authCtx.loginAction(data.idToken,data.localId,username);
-            lanzamientoAviso("¡Bienvenido!", `Registro completado, ${username}`, "success");
+            lanzamientoAviso(t('welcome'),t('registration_success')+", "+username,"success");
             setTimeout(() => {
                 navigate("/");
             }, 1500);
         }
         catch (error:any){
-            let codigo = "ERROR_DESCONOCIDO";
+            let codigo = t("unknown_error");
             if (error.response && error.response.data && error.response.data.error){
                 codigo = error.response.data.error.message;
             }
 
             const mensajeParaUsuario = AccessService.obtenerMensajeError(codigo);
             // alert(mensajeParaUsuario);
-            lanzamientoAviso("Error de acceso",mensajeParaUsuario,"error");
-
+            lanzamientoAviso(t("auth_error"), mensajeParaUsuario,"error");
         }
     }
 
@@ -65,16 +65,16 @@ function Registro() {
 
                     <Col xs={12} md={6}>
                         <div className="access-card">
-                            <h2 className="access-card-title text-center">Registro</h2>
+                            <h2 className="access-card-title text-center">{t('register_title')}</h2>
                             <div className="access-card-divider mx-auto"></div>
 
                             <Form onSubmit={submitHandler}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="access-label">Email</Form.Label>
+                                    <Form.Label className="access-label">{t('email_label')}</Form.Label>
                                     <Form.Control
                                         className="access-input"
                                         type="email"
-                                        placeholder="tu@email.com"
+                                        placeholder={t('email_placeholder')}
                                         value={email}
                                         onChange={(event) => setEmail(event.target.value)}
                                         required
@@ -82,7 +82,7 @@ function Registro() {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="access-label">Contraseña</Form.Label>
+                                    <Form.Label className="access-label">{t('password_label')}</Form.Label>
                                     <Form.Control
                                         className="access-input"
                                         type="password"
@@ -94,11 +94,11 @@ function Registro() {
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="access-label">Nombre de usuario</Form.Label>
+                                    <Form.Label className="access-label">{t('username_label')}</Form.Label>
                                     <Form.Control
                                         className="access-input"
                                         type="text"
-                                        placeholder="Ej: Bonjovi87"
+                                        placeholder={t('example_placeholder')}
                                         value={username}
                                         onChange={(event) => setUserName(event.target.value)}
                                         required
@@ -106,11 +106,11 @@ function Registro() {
                                 </Form.Group>
 
                                 <button className="access-btn" type="submit">
-                                    Crear cuenta
+                                    {t('register_button')}
                                 </button>
 
                                 <p className="access-link" onClick={() => navigate('/login')}>
-                                    ¿Ya tienes cuenta? <span>Inicia sesión</span>
+                                    {t('already_have_account')} <span>{t('login_link')}</span>
                                 </p>
                             </Form>
                         </div>

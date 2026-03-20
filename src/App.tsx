@@ -9,13 +9,19 @@ import Footer from './components/ui/Footer';
 import Header from './components/ui/Header';
 import AuthContext from './store/AuthContext';
 import Favoritos from './pages/Favoritos';
-import Login from './components/access/Login';
-import Registro from './components/access/Registro';
+import Login from './components/access/view/Login';
+import Registro from './components/access/view/Registro';
 import AvisoLegal from './pages/AvisoLegal';
 import TopPeliculas from './pages/TopPeliculas';
- 
+import { useTranslation } from 'react-i18next';
+
+// ARQUITECTURA HEXAGONAL: NO
+// TODO COMPLETADO: NO
+
 
 function App() {
+
+  const {t,i18n} = useTranslation();
 
   // --------------------------------------------------------
   const [estaLogueado, setEstaLogueado] = useState(false);  // Para ver si hay alguien dentro por asi decir 
@@ -33,6 +39,7 @@ function App() {
     setUId(localId);                                                        // Guardamos dato para que este disponible
     localStorage.setItem('token',idToken);                                  // Guardamos el token en el localStorage para que no haya problema al refrescar
     localStorage.setItem('userId',localId);                                 // Guardamos el token en el localStorage para que no haya problema al refrescar
+    localStorage.setItem('userName', name);
     setUserName(name);                                                      // Guardamos tambien el nombre del usuario
   }
   // ------------------------------------------------------------------------
@@ -51,11 +58,13 @@ function App() {
   useEffect(() => {                                         // De esta forma evitamos que el usario tenga que escribir el email y contraseña cada vez
     const tokenGuardado = localStorage.getItem('token');    // Buscamos si en el localStorage tenemos el token guardado
     const idGuardado = localStorage.getItem('userId');      // Buscamos si en el localStorage tenemos el userId guardado
+    const nombreGuardado = localStorage.getItem('userName');
 
     if (tokenGuardado && idGuardado){   // Si ambos se dan, esta logueado
       setEstaLogueado(true);            // Indicamos que esta logueado
       setToken(tokenGuardado);          // Almacenamos el token
       setUId(idGuardado);               // Almacenamos el UId
+      if(nombreGuardado) setUserName(nombreGuardado);
     }
   }, []);
 
@@ -71,7 +80,7 @@ function App() {
     <>
       <AuthContext.Provider value={{
         login:estaLogueado,           // Compartimos el estado para indicar si hay alguien dentro o no
-        language:'es-ES',             // Indicamos un valor fijo con el idioma (Castellano)
+        language:i18n.language,             // Indicamos un valor fijo con el idioma (Castellano)
         idToken:token,                // Le pasamos el token
         userID:uId,                   // Pasamos el ID unico del usuario
         loginAction: loginHandler,    // Pasamos la funcion
