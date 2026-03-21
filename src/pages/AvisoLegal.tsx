@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 function AvisoLegal() {
 
+    // 
     const{t} = useTranslation();
 
     return (
