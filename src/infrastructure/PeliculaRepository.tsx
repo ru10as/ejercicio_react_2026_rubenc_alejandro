@@ -254,7 +254,7 @@ export const PeliculaRepository = {
             const todasLasPeliculas = await this.getAll(); // Tomamos todas las pelis que existen en la actualidad
             
             //
-            const PelisFiltradas = todasLasPeliculas.filter(p => p.titulo !== undefined && !p.proximamente);
+            const PelisFiltradas = todasLasPeliculas.filter(p => !p.proximamente && (p.es || p.en || p.eu));
             
             //
             const PelisFiltradasYordenadas = PelisFiltradas.sort((a,b) => b.calificacion_media - a.calificacion_media);

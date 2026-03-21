@@ -227,12 +227,11 @@ function DetallePelicula() {
         
         // Generamos el paquete para añadir dicha peli en favoritas
         const nuevoFavorito = {
-            pelicula_id: Number(id),              
-            usuario_id:authCtx.userID,          
-            titulo: peli?.titulo,                
-            imagen_portada:peli?.imagen_portada, 
-            categoria:peli?.categoria       
-
+            pelicula_id: Number(id),
+            usuario_id:authCtx.userID,
+            titulo: peli?.titulo || peli?.es?.titulo || peli?.en?.titulo || peli?.eu?.titulo || '',
+            imagen_portada:peli?.imagen_portada,
+            categoria: peli?.categoria || peli?.es?.categoria || peli?.en?.categoria || peli?.eu?.categoria || ''
         }
 
         // Utilizamos la funcion generada en infrastructure para guardar en los favoritos de dicho usuario
