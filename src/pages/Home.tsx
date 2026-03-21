@@ -55,7 +55,7 @@ function Home({textobuscado}:HomeProps){
     // Aplicamos el filtro segun lo que haya elegido
     const pelisFiltradas = peliculasCatalogo.filter((peli: Pelicula) => {
         if (categoriaActual === 'Todas') return true;
-        return peli.categoria === categoriaActual;
+        return peli.es?.categoria === categoriaActual;
     })
 
     // Definimos lo que es el grid de tarjetas
