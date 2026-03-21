@@ -73,25 +73,27 @@ function TopPeliculas() {
                 {top3.length > 0 && (
                     <section className="mb-5">
                         <Row className="justify-content-center g-4">
-                            {top3.map((peli, idx) => (
+                            {top3.map((peli, idx) => {
+                                const info = peli[idiomaActual] ?? peli.es ?? peli.en ?? peli.eu;
+                                return (
                                 <Col key={peli.id} xs={12} sm={6} md={4}>
                                     <div
                                         className="top3-card"
                                         style={{ '--medal-color': MEDAL_COLORS[idx] } as React.CSSProperties}>
                                         <div className="top3-rank-badge">{MEDALLAS[idx]}</div>
                                         <div className="top3-img-wrapper">
-                                            <img src={peli.imagen_portada} alt={peli[idiomaActual].titulo} className="top3-img" />
+                                            <img src={peli.imagen_portada} alt={info?.titulo} className="top3-img" />
                                         </div>
                                         <div className="top3-info">
-                                            <h4 className="top3-titulo">{peli[idiomaActual].titulo}</h4>
-                                            <span className="top3-cat">{peli[idiomaActual].categoria}</span>
+                                            <h4 className="top3-titulo">{info?.titulo}</h4>
+                                            <span className="top3-cat">{info?.categoria}</span>
                                             <div className="top3-rating">
                                                 <span className="top3-rating-num">{peli.calificacion_media}</span>
                                                 <span className="top3-rating-max">/10</span>
                                             </div>
                                             <p className="top3-desc">
-                                                {peli[idiomaActual].descripcion
-                                                    ? peli[idiomaActual].descripcion.substring(0, 110) + (peli[idiomaActual].descripcion.length > 110 ? '...' : '')
+                                                {info?.descripcion
+                                                    ? info.descripcion.substring(0, 110) + (info.descripcion.length > 110 ? '...' : '')
                                                     : t('top_no_desc')}
                                             </p>
                                             <Link to={`/pelicula/${peli.id}`} className="btn-top-detalles">
@@ -100,7 +102,8 @@ function TopPeliculas() {
                                         </div>
                                     </div>
                                 </Col>
-                            ))}
+                                );
+                            })}
                         </Row>
                     </section>
                 )}
@@ -108,13 +111,15 @@ function TopPeliculas() {
                 {/* Lista del resto */}
                 {resto.length > 0 && (
                     <section className="top-lista">
-                        {resto.map((peli, idx) => (
+                        {resto.map((peli, idx) => {
+                            const info = peli[idiomaActual] ?? peli.es ?? peli.en ?? peli.eu;
+                            return (
                             <div key={peli.id} className="top-lista-item">
                                 <span className="top-lista-rank">#{idx + 4}</span>
-                                <img src={peli.imagen_portada} alt={peli[idiomaActual].titulo} className="top-lista-img" />
+                                <img src={peli.imagen_portada} alt={info?.titulo} className="top-lista-img" />
                                 <div className="top-lista-info">
-                                    <h5 className="top-lista-titulo">{peli[idiomaActual].titulo}</h5>
-                                    <span className="top-lista-cat">{peli[idiomaActual].categoria}</span>
+                                    <h5 className="top-lista-titulo">{info?.titulo}</h5>
+                                    <span className="top-lista-cat">{info?.categoria}</span>
                                 </div>
                                 <div className="top-lista-rating">
                                     <span className="top-lista-rating-num">{peli.calificacion_media}</span>
@@ -124,7 +129,8 @@ function TopPeliculas() {
                                     {t('top_view_short')} →
                                 </Link>
                             </div>
-                        ))}
+                            );
+                        })}
                     </section>
                 )}
 

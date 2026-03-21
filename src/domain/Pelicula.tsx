@@ -82,3 +82,9 @@ export interface FirebaseResponse { //
   peliculas: FirebasePelicula;          // Respuesta con objeto llamado peliculas que tiene la forma de mapeo definida arriba
 }
 // ------------------------------------------------------------
+
+// 
+export interface ModoCineProps {
+    tituloPeli: string;
+    onClose: () => void;
+}

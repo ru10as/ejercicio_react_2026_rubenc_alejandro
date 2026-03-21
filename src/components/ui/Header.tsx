@@ -4,10 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthContext from '../../store/AuthContext';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { HeaderProps } from '../../domain/Header';
 
-  interface HeaderProps{
+  /* interface HeaderProps{
     onSearch: (parametro:string) => void;
-  }
+  } */
 
 function Header({onSearch}:HeaderProps){
     //

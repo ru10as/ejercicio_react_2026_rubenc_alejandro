@@ -1,6 +1,5 @@
 import CarouselPrincipal from "../components/ui/CarouselPrincipal";
 import './home.css';
-import '../components/peliculas/view/home.css';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -14,8 +13,9 @@ import { useTranslation } from 'react-i18next';
 import { HomeProps } from "../domain/Home";
 import { PeliculaFirebase } from "../domain/Pelicula";
 import { PeliculaRepository } from "../infrastructure/PeliculaRepository";
-// ESTO LO DEBEMOS PASAR A LO QUE ES DOMAIN PARA CUMPLIR CON LA ARQUITECTURA HEXAGONAL
 
+// ARQUITECTURA HEXAGONAL: CUMPLIDA
+// TODO COMPLETADO: SI
 
 function Home({textobuscado}:HomeProps){
     // Categoria que se haya seleccionado en el catalogo

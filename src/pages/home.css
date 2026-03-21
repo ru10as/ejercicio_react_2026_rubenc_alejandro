@@ -229,3 +229,158 @@
     /*Evitamos espacio entre lineas*/
     line-height: 1;
 }
+
+/* --------------------- TODO LO ASOCIADO A NETFLIX ------------------ */
+.netflix-col {
+    position: relative;
+}
+
+.netflix-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #1c2b29;
+    border: 1px solid rgba(45, 157, 157, 0.15);
+    transition:
+        transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+    z-index: 1;
+}
+
+.netflix-card:hover {
+    transform: scale(1.38);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 0 2px rgba(45, 157, 157, 0.55);
+    border-color: rgba(45, 157, 157, 0.55);
+    z-index: 20;
+}
+
+.netflix-card-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.netflix-card:hover .netflix-card-img {
+    transform: scale(1.07);
+}
+
+.netflix-title-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px 12px 12px;
+    background: linear-gradient(to top, rgba(10, 20, 20, 0.95) 0%, transparent 100%);
+    transition: opacity 0.25s ease;
+}
+
+.netflix-card:hover .netflix-title-bar {
+    opacity: 0;
+}
+
+.netflix-title-bar-text {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 0 2px;
+    line-height: 1.2;
+}
+
+.netflix-title-bar-cat {
+    color: #2d9d9d;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.netflix-hover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+        to top,
+        rgba(10, 20, 20, 0.98) 0%,
+        rgba(10, 20, 20, 0.92) 55%,
+        rgba(10, 20, 20, 0.55) 80%,
+        transparent 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.netflix-card:hover .netflix-hover-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.netflix-overlay-content {
+    padding: 16px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+.netflix-overlay-title {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.netflix-overlay-cat {
+    color: #2d9d9d;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.netflix-overlay-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.76rem;
+    line-height: 1.45;
+    margin: 3px 0 2px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.netflix-overlay-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.73rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.netflix-btn-detalles {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 16px;
+    background: #2d9d9d;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.15s;
+    align-self: flex-start;
+}
+
+.netflix-btn-detalles:hover {
+    background: #3ab5b5;
+    color: white;
+    transform: translateY(-1px);
+}
+/*-----------------------------------------------------------------------------*/

@@ -227,12 +227,11 @@ function DetallePelicula() {
         
         // Generamos el paquete para añadir dicha peli en favoritas
         const nuevoFavorito = {
-            pelicula_id: Number(id),              
-            usuario_id:authCtx.userID,          
-            titulo: peli?.titulo,                
-            imagen_portada:peli?.imagen_portada, 
-            categoria:peli?.categoria       
-
+            pelicula_id: Number(id),
+            usuario_id:authCtx.userID,
+            titulo: peli?.titulo || peli?.es?.titulo || peli?.en?.titulo || peli?.eu?.titulo || '',
+            imagen_portada:peli?.imagen_portada,
+            categoria: peli?.categoria || peli?.es?.categoria || peli?.en?.categoria || peli?.eu?.categoria || ''
         }
 
         // Utilizamos la funcion generada en infrastructure para guardar en los favoritos de dicho usuario
@@ -379,7 +378,7 @@ function DetallePelicula() {
     if(!authCtx.login){ // Para el caso que no este registrado, habra que indicarle que se registre para que pueda reproducir la peli
         seccionComentarios = (
             <Badge bg="warning" text="dark" className="p-3">
-                Inicia sesion para reproducir el contenido
+                Inicia sesion para comentar que te ha parecido esta pelicula
             </Badge>
         )
     }
@@ -465,6 +464,10 @@ function DetallePelicula() {
                         <hr className="border-secondary mb-5" />
                 
                         {seccionPuntuacion}
+                        <br>
+                        </br>
+                        <br>
+                        </br>
                         {seccionComentarios}
                     </Col>
 

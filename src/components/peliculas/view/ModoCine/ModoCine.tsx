@@ -1,11 +1,13 @@
 import { Badge, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type { Pelicula } from '../../../../domain/Pelicula';
+import { ModoCineProps } from '../../../../domain/Pelicula';
 
-interface ModoCineProps {
+// Esto lo tengo que introducir en lo que es la interfaz
+/* interface ModoCineProps {
     tituloPeli: string;
     onClose: () => void;
-}
+} */
 
 const ModoCine = ({ tituloPeli, onClose }: ModoCineProps) => {
 
