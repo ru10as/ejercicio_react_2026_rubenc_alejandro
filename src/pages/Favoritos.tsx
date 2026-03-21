@@ -13,17 +13,33 @@ import { useTranslation } from 'react-i18next';
 
 // ------------------------------------------------------------------------
 function Favoritos(){
+    // ------------------------------------------------------ 
     const {t} = useTranslation();
-    // ------------------------------------------------------
-    const [misFavs, setMisFavs] = useState<PeliFav[]>([]);  // Definimos donde vamos a guardar el conjunto de Peliculas favoritas del usuario
-    const authCtx = useContext(AuthContext);                // Almacenamos la informacion que se ha obtenido una vez el usuario ha introducido
-    const userId = authCtx.userID;                          // Extraemos el codigo unico del usuario
-    const token = authCtx.idToken;                          // 
+    // Definimos donde vamos a guardar el conjunto de Peliculas favoritas del usuario
+    const [misFavs, setMisFavs] = useState<PeliFav[]>([]); 
+
+    // Almacenamos la informacion que se ha obtenido una vez el usuario ha introducido
+    const authCtx = useContext(AuthContext);
+
+    // Extraemos el codigo unico del usuario
+    const userId = authCtx.userID;
+
+    //
+    const token = authCtx.idToken;
     
-    const [mostrarModal, setMostrarModal] = useState(false);                    // Para indicar si vamos a mostrar el mensaje de Modal
-    const [tituloModal, setTituloModal] = useState("");                         // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
-    const [mensajeModal, setMensajeModal] = useState("");                       // Para indicar el tipo de mensaje que aparece en el modal
-    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); // 
+    // Para indicar si vamos a mostrar el mensaje de Modal
+    const [mostrarModal, setMostrarModal] = useState(false);
+
+    // Para establecer el tipo de titulo en el Modal (segun si hemos añadido comentario, puntuacion, etc..)
+    const [tituloModal, setTituloModal] = useState("");
+
+    // Para indicar el tipo de mensaje que aparece en el modal
+    const [mensajeModal, setMensajeModal] = useState("");
+
+    // 
+    const [tipoModal, setTipoModal] = useState<'success' | 'error'>('success'); 
+
+    //
     const lanzamientoAviso = (titulo:string, mensaje:string, tipo: 'success' | 'error') => {
         setTituloModal(titulo);
         setMensajeModal(mensaje);
@@ -32,9 +48,9 @@ function Favoritos(){
     }
     // ------------------------------------------------------
 
-    // ----------------------------------------------------------------------------------------------------------------
-    
+    // ------------------------------------------------------
     useEffect(() => {
+        // 
         const cargarFavoritos = async () => {
             if(userId && token){
                 try{
@@ -50,9 +66,10 @@ function Favoritos(){
         cargarFavoritos();
 
     },[userId,token]);
+    // ------------------------------------------------------
 
 
-
+    // ------------------------------------------------------
     const eliminarFavoritoHandler = async (peliId: string) => {
         if(!userId || !token)return;
 
@@ -63,11 +80,31 @@ function Favoritos(){
         }
         catch(error:any){
             console.error("Error al eliminar el favorito", error);
-            //alert("No se ha podido eliminar la pelicula de los favoritos"); // Para pruebas
             lanzamientoAviso(t('fav_error_delete_title'), t('fav_error_delete_msg'), "error");
         }
     }
+    // ------------------------------------------------------
     
+    if (!userId) {
+        return (
+            <Container className="text-center my-5 py-5">
+                <h1 className="text-white mb-4 fw-bold">{t('favorites_title_page')}</h1>
+                <div className="alert alert-dark border-warning text-white bg-dark p-5 shadow-lg">
+                    <h3 className="mb-3">{t('auth_required_title', 'Acceso restringido')}</h3>
+                    <p className="mb-4">
+                        {t('auth_required_favs_msg', 'Debes iniciar sesión para gestionar tu lista de películas favoritas.')}
+                    </p>
+                    <Link to="/login">
+                        <Button variant="primary" size="lg" className="px-5 shadow">
+                            {t('nav_login', 'Iniciar Sesion')}
+                        </Button>
+                    </Link>
+                </div>
+            </Container>
+        );
+    }
+
+
     return (
         <Container>
             <h1 className="text-white mb-0 fw-bold text-center my-5 mb-5">{t('favorites_title_page')}</h1>

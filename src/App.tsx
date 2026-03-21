@@ -14,9 +14,11 @@ import Registro from './components/access/view/Registro';
 import AvisoLegal from './pages/AvisoLegal';
 import TopPeliculas from './pages/TopPeliculas';
 import { useTranslation } from 'react-i18next';
+import { HeaderProps } from './domain/Header';
+import { HomeProps } from './domain/Home';
 
 // ARQUITECTURA HEXAGONAL: NO
-// TODO COMPLETADO: NO
+// TODO COMPLETADO: SI
 
 
 function App() {
@@ -24,29 +26,51 @@ function App() {
   const {t,i18n} = useTranslation();
 
   // --------------------------------------------------------
-  const [estaLogueado, setEstaLogueado] = useState(false);  // Para ver si hay alguien dentro por asi decir 
-  const [token, setToken] = useState("");                   // Es como la llave temporal para Firebase
-  const [uId, setUId] = useState("");                       // Codigo unico del usuario en la base de datos
-  const [userName, setUserName] = useState("");             //  Donde vamos a almacenar el nombre que se ha puesto el usuario
-  const [busqueda, setBusqueda] = useState(""); // Para la busqueda que vamos a hacer en el Header
+  // Para ver si hay alguien dentro por asi decir 
+  const [estaLogueado, setEstaLogueado] = useState(false);
+
+  // Es como la llave temporal para Firebase
+  const [token, setToken] = useState("");
+
+  // Codigo unico del usuario en la base de datos
+  const [uId, setUId] = useState(""); 
+
+  //  Donde vamos a almacenar el nombre que se ha puesto el usuario
+  const [userName, setUserName] = useState("");
+
+  // Para la busqueda que vamos a hacer en el Header
+  const [busqueda, setBusqueda] = useState("");
   // --------------------------------------------------------
 
 
   // ------------------------------------------------------------------------
-  const loginHandler = (idToken:string, localId: string, name: string) => { // La funcion recibe dos parametros
-    setEstaLogueado(true);                                                  // Indicamos a toda la web que alguien ha entrado
-    setToken(idToken);                                                      // Guardamos dato para que este disponible
-    setUId(localId);                                                        // Guardamos dato para que este disponible
-    localStorage.setItem('token',idToken);                                  // Guardamos el token en el localStorage para que no haya problema al refrescar
-    localStorage.setItem('userId',localId);                                 // Guardamos el token en el localStorage para que no haya problema al refrescar
+  // La funcion recibe dos parametros
+  const loginHandler = (idToken:string, localId: string, name: string) => {
+    // Indicamos a toda la web que alguien ha entrado
+    setEstaLogueado(true);
+
+    // Guardamos dato para que este disponible
+    setToken(idToken);
+
+    // Guardamos dato para que este disponible
+    setUId(localId);
+
+    // Guardamos el token en el localStorage para que no haya problema al refrescar
+    localStorage.setItem('token',idToken);
+
+    // Guardamos el token en el localStorage para que no haya problema al refrescar
+    localStorage.setItem('userId',localId);
+
+    // Guardamos tambien el nombre del usuario
     localStorage.setItem('userName', name);
-    setUserName(name);                                                      // Guardamos tambien el nombre del usuario
+    setUserName(name); 
   }
   // ------------------------------------------------------------------------
 
 
   // -------------------------------
-  const logoutHandler = () => {   //
+  //
+  const logoutHandler = () => {
     setEstaLogueado(false);       // Cuando le damos a logout, indicamos que ya no esta logueado
     setToken("");                 // quitamos el token
     setUId("");                   // quitamos el UId
@@ -55,36 +79,46 @@ function App() {
   // -------------------------------
 
 
-  useEffect(() => {                                         // De esta forma evitamos que el usario tenga que escribir el email y contraseña cada vez
-    const tokenGuardado = localStorage.getItem('token');    // Buscamos si en el localStorage tenemos el token guardado
-    const idGuardado = localStorage.getItem('userId');      // Buscamos si en el localStorage tenemos el userId guardado
+  // -------------------------------
+  // De esta forma evitamos que el usario tenga que escribir el email y contraseña cada vez
+  useEffect(() => {
+    // Buscamos si en el localStorage tenemos el token guardado
+    const tokenGuardado = localStorage.getItem('token');
+
+    // Buscamos si en el localStorage tenemos el userId guardado
+    const idGuardado = localStorage.getItem('userId');
+
+    //
     const nombreGuardado = localStorage.getItem('userName');
 
-    if (tokenGuardado && idGuardado){   // Si ambos se dan, esta logueado
+    // Si ambos se dan, esta logueado
+    if (tokenGuardado && idGuardado){
       setEstaLogueado(true);            // Indicamos que esta logueado
       setToken(tokenGuardado);          // Almacenamos el token
       setUId(idGuardado);               // Almacenamos el UId
       if(nombreGuardado) setUserName(nombreGuardado);
     }
   }, []);
+  // -------------------------------
 
-  interface HeaderProps{
+
+  /* interface HeaderProps{
     onSearch: (parametro:string) => void;
-  }
+  } */
 
-  interface HomeProps{
+  /* interface HomeProps{
     textobuscado:string;
-}
+  } */
 
   return (
     <>
       <AuthContext.Provider value={{
         login:estaLogueado,           // Compartimos el estado para indicar si hay alguien dentro o no
-        language:i18n.language,             // Indicamos un valor fijo con el idioma (Castellano)
+        language:i18n.language,       // Indicamos un valor fijo con el idioma (Castellano)
         idToken:token,                // Le pasamos el token
         userID:uId,                   // Pasamos el ID unico del usuario
         loginAction: loginHandler,    // Pasamos la funcion
-        logoutAction: logoutHandler,   // Pasamos la funcion (para limpiar)
+        logoutAction: logoutHandler,  // Pasamos la funcion (para limpiar)
         userName:userName
       }}>
         <div className='d-flex flex-column min-vh-100'>

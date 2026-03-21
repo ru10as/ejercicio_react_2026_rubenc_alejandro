@@ -379,7 +379,7 @@ function DetallePelicula() {
     if(!authCtx.login){ // Para el caso que no este registrado, habra que indicarle que se registre para que pueda reproducir la peli
         seccionComentarios = (
             <Badge bg="warning" text="dark" className="p-3">
-                Inicia sesion para reproducir el contenido
+                Inicia sesion para comentar que te ha parecido esta pelicula
             </Badge>
         )
     }
@@ -465,6 +465,10 @@ function DetallePelicula() {
                         <hr className="border-secondary mb-5" />
                 
                         {seccionPuntuacion}
+                        <br>
+                        </br>
+                        <br>
+                        </br>
                         {seccionComentarios}
                     </Col>
 

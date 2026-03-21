@@ -5,7 +5,7 @@ import i18next from 'i18next';
 // ARQUITECTURA HEXAGONAL: SI
 // TODO COMPLETADO: SI
 
-
+// -----------------------------------------------
 export const AccessService = {
     obtenerMensajeError: (codigo: string): string => {
         switch(codigo) {
@@ -22,3 +22,4 @@ export const AccessService = {
         }
     }
 }
+// ---------------------------------------------------------
