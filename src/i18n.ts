@@ -13,7 +13,7 @@ const resources = {
       login: "Login",
       register: "Registrarse",
       logout: "Cerrar sesion",
-      search_results_for: "Buscar pelicula...",
+      search_placeholder: "Buscar pelicula...",
       welcome: "¡Bienvenido!",
       hello: "Hola",
 
@@ -151,7 +151,7 @@ const resources = {
       login: "Login",
       register: "Register",
       logout: "Logout",
-      search_results_for: "Search movie...",
+      search_placeholder: "Search movie...",
       welcome: "Welcome!",
       hello: "Hello",
 
@@ -289,7 +289,7 @@ const resources = {
       login: "Saioa hasi",
       register: "Erregistratu",
       logout: "Saioa itxi",
-      search_results_for: "Pelikula bilatu...",
+      search_placeholder: "Pelikula bilatu...",
       welcome: "Ongi etorri!",
       hello: "Kaixo",
 
