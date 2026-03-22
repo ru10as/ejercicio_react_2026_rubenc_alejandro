@@ -42,7 +42,7 @@ function Home({ textobuscado }: HomeProps) {
     "Drama",
     "Terror",
     "Animacion",
-    "Fantasía",
+    "Fantasia",
   ];
 
   // La lista general de peliculas en la base de datos

@@ -1,16 +1,102 @@
-# React + Vite
+# Plataforma de Streaming - React 2026
+Este proyecto es una aplicacion web de catalogo y reproduccion de peliculas desarrollada en React con TypeScript. Implementa una arquitectura robusta y funcionalidades avanzadas de interactividad para el usuario.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Caracteristicas Principales
+- Arquitectura Hexagonal: Separacion clara entre dominio, infraestructura y vistas para facilitar el mantenimiento y la escalabilidad.
+- Internacionalizacion (i18next): Soporte completo para multiples idiomas (Español, Ingles y Euskera).
+- Gestion de Usuarios: Sistema de autenticacion para acceso a contenido exclusivo.
+- Interactividad: - Valoraciones mediante sistema de estrellas con calculo de media en tiempo real.
+- Hilo de comentarios por pelicula.
+- Gestion de lista de "Favoritos" personalizada.
+- Modo Cine: Interfaz optimizada para la visualizacion de trailers y contenido de video local.
 
-Currently, two official plugins are available:
+# Stack Tecnologico
+## Frontend: React 18+ con TypeScript.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Estilos: Bootstrap y React-Bootstrap.
 
-## React Compiler
+## Gestion de Estado: Context API (AuthContext).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Backend / DB: Firebase (gestionado a traves de PeliculaRepository).
 
-## Expanding the ESLint configuration
+## Traducciones: react-i18next.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# Estructura del Proyecto (Hexagonal)
+src/
+└──  public
+    ├── imagen_por_peli
+    ├── imagenes_banderas
+    ├── nueva_cartelera
+    └── portadas_peliculas
+└──  src
+    ├── assets/ 
+    └──  components/ 
+        └──  access/ 
+            └──  view
+                ├── access.css
+                ├── Login.tsx
+                ├── Registro.tsx
+        └──  peliculas/
+            └── view
+                └──  CardPelicula
+                    ├── cardpelicula.css
+                    ├── CardPelicula.tsx
+                └──  ModoCine
+                    ├── ModoCine.css
+                    └──  ModoCine.tsx
+        └── ui/
+            ├── CarouselPrincipal.tsx
+            ├── footer.css
+            ├── Footer.tsx
+            ├── header.css
+            ├── MensajeModal.tsx
+            └── Header.tsx
+    └── domain/
+        ├── Busqueda.tsx
+        ├── Header.tsx
+        ├── Home.tsx
+        ├── Pelicula.tsx
+        ├── ui.tsx
+        └── Usuario.tsx
+    └── infrastructure/
+        ├── AccessRepository.tsx
+        └── PeliculaRepository.tsz
+    └── pages/
+        ├── AvisoLegal.tsx
+        ├── Contacto.tsx
+        ├── detallepelicula.css
+        ├── DetallePelicula.tsx
+        ├── Favoritos.tsx
+        ├── home.css
+        ├── Home.tsx
+        ├── ResultadoBusqueda.css
+        ├── ResultadoBusqueda.tsx
+        ├── topPeliculas.css
+        └── TopPeliculas.tsx
+    └── services/
+        └── AuthService.tsx
+    └── store/ 
+        └── AuthContext.tsx
+    └── utils/ 
+        └── uiHelpers.tsx    
+    ├── App.tsx   
+    ├── App.css 
+    ├── i18n.ts
+    └── main.tsx     
+
+# Instalacion
+- Clona el repositorio:
+
+Bash
+git clone [url-del-repositorio]
+Instala las dependencias:
+
+Bash
+npm install
+Lanza el servidor de desarrollo:
+
+Bash
+npm start
+Equipo (UPNA)
+- Ruben Cameo
+- Alejandro Guerra

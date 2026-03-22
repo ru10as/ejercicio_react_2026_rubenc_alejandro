@@ -21,7 +21,7 @@ function DetallePelicula() {
     
     // ------------------------------------------------------------------
     // Esto para gestionar las traducciones
-    const {t} = useTranslation();
+    const { t, i18n } = useTranslation();
 
     // Aqui extraemos el id de la url que estmamos poniendo
     const { id } = useParams<{ id: string }>();
@@ -467,11 +467,11 @@ function DetallePelicula() {
 
                         {/* Para lo que va a ser el encabezado */}
                         <Col>
-                            <h1 className="display-4 fw-bold">{peli.titulo}</h1>
+                            <h1 className="display-4 fw-bold">{peli[i18n.language]?.titulo || peli.titulo}</h1>
 
                             <div className='mb-4 d-flex align-items-center flex-wrap'>
                                 <span className="me-3">{renderEstrellas(mediaPeli)}</span>
-                                <Badge bg='primary' className='me-3 px-3 py-2'>{peli.categoria}</Badge>
+                                <Badge bg='primary' className='me-3 px-3 py-2'>{peli[i18n.language]?.categoria || peli.categoria}</Badge>
                                 <span className='text-secondary fw-bold'>{peli.fecha_estreno}</span>
                             </div>
 
@@ -504,7 +504,7 @@ function DetallePelicula() {
                         <h5 className='text-uppercase text-secondary mb-3 small fw-bold tracking-wider'>{t('movie_detail_synopsis')}</h5>
                         
                         <p className="fs-5 lh-base mb-5">
-                            {peli.descripcion}
+                            {peli[i18n.language]?.descripcion || peli.descripcion}
                         </p>
 
                         <hr className="border-secondary mb-5" />
