@@ -88,8 +88,8 @@ function TopPeliculas() {
                                             <h4 className="top3-titulo">{info?.titulo}</h4>
                                             <span className="top3-cat">{info?.categoria}</span>
                                             <div className="top3-rating">
-                                                <span className="top3-rating-num">{peli.calificacion_media}</span>
-                                                <span className="top3-rating-max">/10</span>
+                                                <span className="top3-rating-num">{(peli.calificacion_media / 2).toFixed(1)}</span>
+                                                <span className="top3-rating-max">/5</span>
                                             </div>
                                             <p className="top3-desc">
                                                 {info?.descripcion
@@ -122,8 +122,8 @@ function TopPeliculas() {
                                     <span className="top-lista-cat">{info?.categoria}</span>
                                 </div>
                                 <div className="top-lista-rating">
-                                    <span className="top-lista-rating-num">{peli.calificacion_media}</span>
-                                    <span className="top-lista-rating-max">/10</span>
+                                    <span className="top-lista-rating-num">{(peli.calificacion_media / 2).toFixed(1)}</span>
+                                    <span className="top-lista-rating-max">/5</span>
                                 </div>
                                 <Link to={`/pelicula/${peli.id}`} className="btn-top-lista-detalles">
                                     {t('top_view_short')} →
