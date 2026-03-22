@@ -65,6 +65,9 @@ function Home({ textobuscado }: HomeProps) {
             PeliculaRepository.getFavoritoById(userId,token)
                 .then(ids => setListaFavoritosIds(ids));
         }
+        else{
+          setListaFavoritosIds([]);
+        }
     }, [userId, token]);
     // ----------------------------------------------------------------------------------------------------------
 
