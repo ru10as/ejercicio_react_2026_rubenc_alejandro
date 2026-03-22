@@ -1,22 +1,36 @@
 import React from "react";
 
-// --------------------------------------------------------------------
-export function renderEstrellas(nota: number) { // ----- ESTO LO VAMOS A ENVIAR A X ----------
-    const estrellasMax = 5;             // Vamos a tratar sobre 5 estrellas en vez de sobre 10
-    const valor_sobre_5 = nota / 2;     // Por ello, aqui hacemos el ajuste
-    const iconos = [];                  // aqui vamos a almacenar los iconos (el numero de estrellas)
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
+// --------------------------------------------------------------------
+export function renderEstrellas(nota: number) { 
+    // Vamos a tratar sobre 5 estrellas en vez de sobre 10
+    const estrellasMax = 5; 
+
+    // Por ello, aqui hacemos el ajuste        
+    const valor_sobre_5 = nota / 2; 
+
+    // aqui vamos a almacenar los iconos (el numero de estrellas)
+    const iconos = [];                  
+
+    // Definimos el estilo de las estrellas 
     const estiloEstrellas = {
         fontSize: '2rem',
         textShadow: '0 0 1px rgba(252, 251, 251, 0.93)',
     }
 
-    for (let i = 1; i <= estrellasMax; i++) {                               // Recorremos hasta un maximo de 5 estrellas
-        if (i <= valor_sobre_5) {                                           // Damos estrella completa
+    // Recorremos hasta un maximo de 5 estrellas
+    for (let i = 1; i <= estrellasMax; i++) {
+        // Damos estrella completa                             
+        if (i <= valor_sobre_5) {                                          
             iconos.push(<i key={i} className="bi bi-star-fill text-warning me-1" style={estiloEstrellas}></i>);
-        } else if (i - 0.5 === valor_sobre_5) {                             // Damos media estrella
+        } // Damos media estrella
+        else if (i - 0.5 === valor_sobre_5) {                            
             iconos.push(<i key={i} className="bi bi-star-half text-warning me-1" style={estiloEstrellas}></i>);
-        } else {                                                            // Damos estrella vacia
+        } // Damos estrella vacia
+        else {                                                         
             iconos.push(<i key={i} className="bi bi-star text-muted me-1" style={estiloEstrellas}></i>);
         }
     }

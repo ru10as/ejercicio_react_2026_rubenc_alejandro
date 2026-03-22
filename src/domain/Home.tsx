@@ -1,7 +1,9 @@
-// ARQUITECTURA HEXAGONAL: CUMPLIDA
-// TODO COMPLETADO: SI
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
-// Propiedades que va a necesitar Home para funcionar
+// Contrato para la componente de Home
 export interface HomeProps{ 
+    // Filtrado segun el texto que se introduce
     textobuscado:string;
 }

@@ -1,32 +1,59 @@
-// ARQUITECTURA HEXAGONAL: CUMPLIDA
-// TODO COMPLETADO: SI
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
 // ------------------------------------------------------------
-export interface UserAuthResponse{ // Para tratar con los datos que nos devuelve Firebase tras validar las credenciales
-    idToken: string,    // El token de acceso que nos devuelve
-    localId: string,    // Identificador unico para el usuario
-    email:string        // Correo electronico que ha introducido el usuario al registrarse
+// Para tratar con los datos que nos devuelve Firebase tras validar las credenciales
+export interface UserAuthResponse{ 
+    // El token de acceso que nos devuelve
+    idToken: string,    
+
+    // Identificador unico para el usuario
+    localId: string,    
+
+    // Correo electronico que ha introducido el usuario al registrarse
+    email:string        
 }
 // ------------------------------------------------------------
 
 
 // ------------------------------------------------------------
-export interface UserProfile{ // Definimos la estructura de la informacion personal que almacenamos
-    user:string,            // Nombre de usauario que haya elegido el propio usuario
-    email:string,           // Email que haya elegido el propio usuario
-    fecha_registro:string   // fecha en la que el usuario se registro
+// Definimos la estructura de la informacion personal que almacenamos
+export interface UserProfile{
+    // Nombre de usauario que haya elegido el propio usuario 
+    user:string,           
+    
+    // Email que haya elegido el propio usuario
+    email:string,   
+
+    // fecha en la que el usuario se registro
+    fecha_registro:string  
 }
 // ------------------------------------------------------------
 
 
 // ------------------------------------------------------------
-export interface AuthContextType { // Pasamos a definir lo que seria el contrato por asi decir
-    login: boolean,             // O esta logueado o no
-    language: string,           // Para establecer el leng global
-    idToken: string,            // Es el token que nos devuelve firebase
-    userID: string,             // Es el ID unico del usuario para filtrar
-    userName: string,           // Nombre que usaremos para referirnos a dicho usuario por toda la web
+// Pasamos a definir lo que seria el contrato por asi decir
+export interface AuthContextType {
+    // O esta logueado o no
+    login: boolean,         
+    
+    // Para establecer el leng global
+    language: string,       
+
+    // Es el token que nos devuelve firebase
+    idToken: string,        
+
+    // Es el ID unico del usuario para filtrar
+    userID: string,           
+
+    // Nombre que usaremos para referirnos a dicho usuario por toda la web
+    userName: string,      
+    
+    // Funcion para el login
     loginAction: (idToken:string, localId:string, name:string) => void;
+
+    // Funcion para cerrar sesion
     logoutAction: () => void;
 }
 // ------------------------------------------------------------

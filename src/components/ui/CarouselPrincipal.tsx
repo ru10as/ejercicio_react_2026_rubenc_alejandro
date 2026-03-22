@@ -3,48 +3,51 @@ import { Carousel, Row, Col, Card, CarouselItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import type { Pelicula_destacada,Pelicula } from '../../domain/Pelicula';
 import { useTranslation } from 'react-i18next';
-// REVISADO
+import { PropsCarousel } from '../../domain/Pelicula';
 
-interface Props {
-    peliculas: Pelicula[];
-}
 
-function CarouselPrincipal({ peliculas }: Props) {
+// Tratamiento con multiples idiomas = SI
+// Arquitectura hexagonal = SI
+// Comentarios introducidos = SI
 
+
+function CarouselPrincipal({ peliculas }: PropsCarousel) {
+
+    // Extramos esto para poder saber el idioma que esta activo
     const{t,i18n} = useTranslation();
+
+    // Para definir el idioma actual (entre los 3 que se muestran ahi)
     const lang = i18n.language as 'es' | 'en' | 'eu';
 
-
+    // Aqui almacenamos que diapo del carrusel se esta mostrando 
     const [index, setIndex] = useState<number>(0);
+
+    // Para actualizar el indice cuando el usuario cambia manualmente el carousel
     const handleSelect = (selectedIndex: number) => setIndex(selectedIndex);
 
-    // Cruza cada peli destacada con su ID real en Firebase por nombre de archivo de imagen
-    /* const getFilename = (path: string) => path.split('/').pop()?.split('.')[0] ?? '';
-    const destacadasConId = PELICULAS_DESTACADAS.map(dest => {
-        const match = peliculas.find(
-            p => getFilename(p.imagen_portada) === getFilename(dest.imagen)
-        );
-        return { ...dest, id: match?.id ?? null };
-    }); */
-
+    // Aqui almacenamos aquellas peliculas que se encuentran entre las favs
     const destacadas = peliculas.filter(p => p.destacada === true);
 
+    // Este es el objeto de estilos que definimos para las tarjetas del carrusel
     const cardStyle: React.CSSProperties = {
         height: "350px",
         backgroundColor: "#1c2b29",
-        border: "1px solid rgba(45,157,157,0.2)",
+        border: "1px solid rgba(45,157,157,0.2)", // Borde con cierta transicion
         borderRadius: "10px",
         overflow: "hidden",
         color: "white"
     };
 
-
+    // Vamos a definir lo que es la tarjeta que va a aparecer 
     const renderCard = (peli: Pelicula) => {
+        // Seleccion del texto segun el idioma actual 
         const info = peli[lang] || peli['es'];
         return(
             <Col key={peli.id}>
+                {/*La carta que definimos */}
                 <Card style={cardStyle} className='shadow'>
                     <Row className='h-100 g-0'>
+                        {/*La columna de la imagen*/}
                         <Col xs={5}>
                             <Card.Img
                                 src={peli.imagen_portada}
@@ -52,6 +55,7 @@ function CarouselPrincipal({ peliculas }: Props) {
                                 style={{ height: "350px", objectFit: "cover", borderRadius: "10px 0 0 10px" }}
                             />
                         </Col>
+                        {/*Columna con lo que es la info*/}
                         <Col xs={7}>
                             <Card.Body className='d-flex flex-column justify-content-center h-100' style={{ padding: '1.2rem' }}>
                                 <Card.Title style={{ color: 'white', fontWeight: 700, fontSize: '1rem' }}>

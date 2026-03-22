@@ -1,9 +1,9 @@
-// YA METIDO
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 
-// ARQUITECTURA HEXAGONAL: SI
-// TODO COMPLETADO: SI
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
 // -----------------------------------------------
 export const AccessService = {

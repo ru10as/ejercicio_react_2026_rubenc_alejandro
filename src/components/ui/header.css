@@ -1,28 +1,33 @@
+/* Para el contenedor principal*/
 .header-nav {
-    background: rgba(12, 18, 18, 0.97) !important;
+    background: rgba(12, 18, 18, 0.97) !important;/*Negro casi total con cierta trans*/
     border-bottom: 2px solid #2d9d9d;
-    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.7);/*Le damos cierta profundidad*/
 }
 
+/*Para como se va a ver el logotipo*/
 .brand-name {
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.25rem;/*Un tamaño adecuado*/
     color: #2d9d9d !important;
     letter-spacing: 0.5px;
-    transition: color 0.2s;
+    transition: color 0.2s;/*Ponemos esto para que haya cierta transicion*/
 }
 
+/*Cuando pasamos por encima*/
 .brand-name:hover {
-    color: #5ec4c4 !important;
+    color: #5ec4c4 !important;/*Ponemos un cierto color*/
 }
 
+/*Los botones de Home, de contacto, etc*/
 .nav-link-custom {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: rgba(255, 255, 255, 0.75) !important;/*UN blanco que sea mas suave*/
     font-weight: 500;
     transition: color 0.2s;
-    padding: 0.4rem 0.85rem !important;
+    padding: 0.4rem 0.85rem !important;/*Para que los enlaces no esten pegados unos con otros*/
 }
 
+/*Para cuando este por encima, cierto color*/
 .nav-link-custom:hover,
 .nav-link-custom.active {
     color: #2d9d9d !important;

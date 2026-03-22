@@ -2,17 +2,19 @@ import axios from "axios"; // Importamos axios
 import { FirebaseResponse, type Pelicula } from "../domain/Pelicula"; // importamos el contrato de Pelicula que hemos creado en domain
 import { useTranslation } from 'react-i18next';
 
-// ARQUITECTURA HEXAGONAL: CUMPLIDA
-// TODO COMPLETADO: SI
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
 // ------------------------------------------------------------------------
-const BASE_URL = 'https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app'; // La url a nuestro Realtime database
+// La url a nuestro Realtime database
+const BASE_URL = 'https://pelis-react-upna-ru-al-default-rtdb.europe-west1.firebasedatabase.app';
 // ------------------------------------------------------------------------
 
 export const PeliculaRepository = {
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
     // 1) Metodo para obtener todas las peliculas de la base de datos
-    async getAll(): Promise<Pelicula[]> { // Aqui empleamos el Promise para que espere a que le lleguen los datos
+    async getAll(): Promise<Pelicula[]> { 
         try {
             // Hacemos la llamada a Realtime firebase y esperamos a que nos de la respuesta
             const res = await axios.get(`${BASE_URL}/peliculas.json`);
@@ -83,7 +85,7 @@ export const PeliculaRepository = {
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
     // 3) Metodo para recuperar los comentarios asociados a una pelicula especifica
-    async getComentarios(pelicula_id:string){ // Queremos pillar los comentarios de la pelicula con ese id
+    async getComentarios(pelicula_id:string){
         try{
             // Hacemos una peticion get para tomar el conjunto de comentarios
             const res = await axios.get(`${BASE_URL}/comentarios.json`);
@@ -204,30 +206,30 @@ export const PeliculaRepository = {
     },
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    // 9)
+    // 9) Para eliminar una pelicula de las de favoritos
     async deleteFavorito(userId:string, peliId:string, token:string){
-        //
+        // Peticion de delete a la url corresnpondiente introduciendo el token 
         const res = await axios.delete(`${BASE_URL}/usuarios/${userId}/favoritos/${peliId}.json?auth=${token}`);
         return res;
     },
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    // 10)
+    // 10) Para tomar la pelicula favorita a partir de su id
     async getFavoritoById (userId:string, token:string): Promise<number[]> {
         try{
-            //
+            // Hacemos la peticion de get
             const res = await axios.get(`${BASE_URL}/usuarios/${userId}/favoritos.json?auth=${token}`);
             
-            //
+            // Tomamos la data que devuelve
             const data = res.data;
             
-            //
+            // Si no devuleve nada, devolvemos vacio
             if (!data) return [];
 
-            //
+            // Convertimos el objeto a una lista (para tratar correctamente)
             const listaObjetosConFavoritos = Object.values(data);
             
-            //
+            // Vamos a mapear la lista que tengamos con los favoritos para tomar su id y pasar a formato numerico (y devolverlo)
             const idFavoritos: number[] = listaObjetosConFavoritos.map((item: any) => {
                 const id_tomado = item.pelicula_id
                 const id_numerico_tomado = Number(id_tomado);
@@ -235,34 +237,33 @@ export const PeliculaRepository = {
                 return (id_numerico_tomado);
             })
 
+            // Devolvemos todos los ids
             return idFavoritos;
 
             
         }
         catch(error){
-            //
             console.error("Error cargando tus peliculas favoritas",error);
             return [];
         }
     },
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    // 11)
+    // 11) Para la generacion del ranking de las mejores peliculas
     async getTopRanking(): Promise<Pelicula[]> {
         try{
-            //
-            const todasLasPeliculas = await this.getAll(); // Tomamos todas las pelis que existen en la actualidad
+            // Tomamos todas las pelis que existen en la actualidad
+            const todasLasPeliculas = await this.getAll();
             
-            //
+            // Nos quedamos con las que ya han salida y estan en uno de los idiomas
             const PelisFiltradas = todasLasPeliculas.filter(p => !p.proximamente && (p.es || p.en || p.eu));
             
-            //
+            // nos vamos a ordenar a partir de sus calificaciones
             const PelisFiltradasYordenadas = PelisFiltradas.sort((a,b) => b.calificacion_media - a.calificacion_media);
 
             return PelisFiltradasYordenadas;
         }
         catch(error){
-            //
             console.error("Error al rankear las peliculas",error);
             return[];
         }
@@ -333,23 +334,22 @@ export const PeliculaRepository = {
     },
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-    // 12)
+    // 13) Para tomar el conjunto de peliculas disponibles para mostrar 
     async getAvailableMovies(): Promise<Pelicula[]>{
         try{
-            //
+            // Tomamos todas las peliculas 
             const todasLasPeliculas = await this.getAll();
 
-            //
+            // filtramos quedandonos con las que soportan uno de los idiomas
             const peliculasValidas = todasLasPeliculas.filter(peli => 
                 peli && (peli.es || peli.en || peli.eu)
             );
 
-            //
+            // Devolvemos todas las pelis validas
             return peliculasValidas;
 
         }
         catch(error){
-            //
             console.log("Error al obtener las available movies", error);
             return[];
         }

@@ -1,12 +1,13 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// ARQUITECTURA HEXAGONAL: CUMPLIDA
-// TODO COMPLETADO: SI
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
 function AvisoLegal() {
 
-    // 
+    // Para tratar con los multiples idiomas
     const{t} = useTranslation();
 
     return (

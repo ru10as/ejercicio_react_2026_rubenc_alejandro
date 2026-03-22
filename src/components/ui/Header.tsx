@@ -6,42 +6,43 @@ import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HeaderProps } from '../../domain/Header';
 
-  /* interface HeaderProps{
-    onSearch: (parametro:string) => void;
-  } */
+// Tratamiento con multiples idiomas = SI
+// Arquitectura hexagonal = SI
+// Comentarios introducidos = SI
+
 
 function Header({onSearch}:HeaderProps){
-    //
+    // Para tomar el contexto actual
     const authCtx = useContext(AuthContext);
 
-    //
+    // Para llevar a cabo la nav
     const navigate = useNavigate();
 
-    //
+    // El contenido que vamos a establecer segun una cosa u otra
     let contenidoDerecha;
 
-    //
+    // Para tomar el idioma actual
     const {t,i18n} = useTranslation();
 
-    
+    // De esta forma, si estamos en pagina distinta a la principal y pasamos a buscar, enviamos a la pag principal
     const manejo_de_busqueda = (texto:string) => {
         if(location.pathname !== '/' && texto.length > 0){
             navigate('/');
         }
-        onSearch(texto);
+        onSearch(texto); // Pasamos a buscar
     }
 
 
-    //
-    const activeLenguage = (lang:string) => {                   //
-        if (i18n.language === lang){                            // 
-            return 'nav-link-custom active-lang fw-bold mx-1';  // Le metemos lo de active-lang
-        }else{                                                  //
-            return 'nav-link-custom mx-1';                      //
+    // Para indicar el formato segun el idioma (aun no se implementa)
+    const activeLenguage = (lang:string) => {                   
+        if (i18n.language === lang){                            
+            return 'nav-link-custom active-lang fw-bold mx-1';  
+        }else{                                                  
+            return 'nav-link-custom mx-1';                     
         }
     }
 
-    // 
+    // Para el caso que no este log, mostramos ciertos botones que indican lo de registro y Login
     if (!authCtx.login){
         contenidoDerecha = (
             <>
@@ -51,7 +52,7 @@ function Header({onSearch}:HeaderProps){
         )
     }
 
-    // 
+    // Si si esta log, entonces ponemos el boton de cierre de sesion
     else{
         contenidoDerecha = (
             <button
@@ -65,7 +66,7 @@ function Header({onSearch}:HeaderProps){
         )
     }
 
-    //
+    
     return (
         <>
             <Navbar className="header-nav" sticky="top" style={{ padding: "10px 0" }} expand="md">
@@ -110,15 +111,6 @@ function Header({onSearch}:HeaderProps){
                                     EU
                                 </NavDropdown.Item>
                             </NavDropdown>
-
-                            {/* <div>
-                                <button onClick={() => i18n.changeLanguage('es')} className={activeLenguage('es')} 
-                                    style={{background:'none', border:'none', color:'inherit'}}>ES</button>
-                                <button onClick={() => i18n.changeLanguage('en')} className={activeLenguage('en')} 
-                                    style={{background:'none', border:'none', color:'inherit'}}>EN</button>
-                                <button onClick={() => i18n.changeLanguage('eu')} className={activeLenguage('eu')} 
-                                    style={{background:'none', border:'none', color:'inherit'}}>EU</button>
-                            </div> */}
 
                             <Nav className='ms-2'>
                                 {contenidoDerecha}

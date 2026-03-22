@@ -17,16 +17,16 @@ import { useTranslation } from 'react-i18next';
 import { HeaderProps } from './domain/Header';
 import { HomeProps } from './domain/Home';
 
-// ARQUITECTURA HEXAGONAL: NO
-// TODO COMPLETADO: SI
-
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
 function App() {
 
+  // 
   const {t,i18n} = useTranslation();
 
-  // --------------------------------------------------------
-  // Para ver si hay alguien dentro por asi decir 
+  // Para ver si hay alguien dentro 
   const [estaLogueado, setEstaLogueado] = useState(false);
 
   // Es como la llave temporal para Firebase
@@ -40,7 +40,7 @@ function App() {
 
   // Para la busqueda que vamos a hacer en el Header
   const [busqueda, setBusqueda] = useState("");
-  // --------------------------------------------------------
+
 
 
   // ------------------------------------------------------------------------
@@ -69,18 +69,25 @@ function App() {
 
 
   // -------------------------------
-  //
+  // Esta funcion la vamos a implementar para Cerrar sesion 
   const logoutHandler = () => {
-    setEstaLogueado(false);       // Cuando le damos a logout, indicamos que ya no esta logueado
-    setToken("");                 // quitamos el token
-    setUId("");                   // quitamos el UId
-    localStorage.clear();         // Limpiamos el localStorage
+    // Cuando le damos a logout, indicamos que ya no esta logueado
+    setEstaLogueado(false);      
+
+    // quitamos el token
+    setToken("");       
+
+    // quitamos el UId
+    setUId("");   
+
+    // Limpiamos el localStorage
+    localStorage.clear();        
   }
   // -------------------------------
 
 
-  // -------------------------------
-  // De esta forma evitamos que el usario tenga que escribir el email y contraseña cada vez
+  // -----------------------------------------------------------------------
+  // Ejecutamos esto cuando se carga
   useEffect(() => {
     // Buscamos si en el localStorage tenemos el token guardado
     const tokenGuardado = localStorage.getItem('token');
@@ -88,51 +95,80 @@ function App() {
     // Buscamos si en el localStorage tenemos el userId guardado
     const idGuardado = localStorage.getItem('userId');
 
-    //
+    // Tomamos el nombre guardado el en storage local
     const nombreGuardado = localStorage.getItem('userName');
 
     // Si ambos se dan, esta logueado
     if (tokenGuardado && idGuardado){
-      setEstaLogueado(true);            // Indicamos que esta logueado
-      setToken(tokenGuardado);          // Almacenamos el token
-      setUId(idGuardado);               // Almacenamos el UId
+      // Indicamos que esta logueado
+      setEstaLogueado(true);   
+      
+      // Almacenamos el token
+      setToken(tokenGuardado);   
+      
+      // Almacenamos el UId
+      setUId(idGuardado);      
+      
+      // Si hay nombre almacenado, entonces lo vamos a guardar en la variable que hemos creado
       if(nombreGuardado) setUserName(nombreGuardado);
     }
   }, []);
-  // -------------------------------
-
-
-  /* interface HeaderProps{
-    onSearch: (parametro:string) => void;
-  } */
-
-  /* interface HomeProps{
-    textobuscado:string;
-  } */
+  // -----------------------------------------------------------------------
 
   return (
     <>
       <AuthContext.Provider value={{
-        login:estaLogueado,           // Compartimos el estado para indicar si hay alguien dentro o no
-        language:i18n.language,       // Indicamos un valor fijo con el idioma (Castellano)
-        idToken:token,                // Le pasamos el token
-        userID:uId,                   // Pasamos el ID unico del usuario
-        loginAction: loginHandler,    // Pasamos la funcion
-        logoutAction: logoutHandler,  // Pasamos la funcion (para limpiar)
+        // Compartimos el estado para indicar si hay alguien dentro o no
+        login:estaLogueado,     
+        
+        // Indicamos un valor fijo con el idioma (Castellano)
+        language:i18n.language,   
+        
+        // Le pasamos el token
+        idToken:token,     
+        
+        // Pasamos el ID unico del usuario
+        userID:uId,      
+        
+        // Pasamos la funcion
+        loginAction: loginHandler,   
+
+        // Pasamos la funcion (para limpiar)
+        logoutAction: logoutHandler, 
+
+        // Pasamos lo que es el nombre de usuario
         userName:userName
       }}>
         <div className='d-flex flex-column min-vh-100'>
+
           <Header onSearch={setBusqueda}/>
             <div className='flex-grow-1'>
               <Routes>
+                {/*Para la ruta principal*/}
                 <Route path="/" element={<Home textobuscado={busqueda}/>}/>
+
+                {/*Para el acceso a los usuarios*/}
                 <Route path="/login" element={<Login />}></Route>
+
+                {/*Para ir a registrarse*/}
                 <Route path="/registro" element={<Registro />}></Route>
+
+                {/*Para ir a la pagina de favoritos*/}
                 <Route path="/favoritos" element={<Favoritos />}/>
+
+                {/*Para ir a la pagina de contacto*/}
                 <Route path="/contacto" element={<Contacto />}/>
+
+                {/*Para ir a la pagina principal*/}
                 <Route path="/home" element={<Home textobuscado={busqueda}/>}/>
+
+                {/*Para ir a la pagina con los detalles de la peli*/}
                 <Route path='/pelicula/:id' element={<DetallePelicula />}></Route>
+
+                {/*Para la pagina del aviso legal*/}
                 <Route path='/aviso_legal' element={<AvisoLegal />}></Route>
+
+                {/*Para la pagina de top peliculas*/}
                 <Route path='/top-peliculas' element={<TopPeliculas />}></Route>
 
               </Routes>

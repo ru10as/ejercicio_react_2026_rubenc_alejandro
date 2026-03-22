@@ -12,8 +12,9 @@ import MensajeModal from '../components/ui/MensajeModal';
 import ModoCine from '../components/peliculas/view/ModoCine/ModoCine';
 import { useTranslation } from 'react-i18next';
 
-// ARQUITECTURA HEXAGONAL: CUMPLIDA
-// TODO COMPLETADO: SI
+// ESTRUCTURA HEXAGONAL = SI
+// TODO INDICADO CON MENSAJES = SI
+// IDIOMAS = SI
 
 // --- COMPONENTE PRINCIPAL ---
 function DetallePelicula() {
@@ -90,10 +91,13 @@ function DetallePelicula() {
         const resultados = await Promise.all([
             // Esta funcion lo que devuelve es los datos propios de la peli identificada por su id
             PeliculaRepository.getById(id),
+
             // Esta funcion lo que devuelve es el conjunto de comentarios que los usuarios han escrito sobre la peli con ese id
             PeliculaRepository.getComentarios(id),
+
             // Esta funcion lo que devuelve es el conjunto de puntuaciones de esta peli identificada por su id
             PeliculaRepository.getPuntuaciones(id),
+
             // Usamos el async para esperar a la llamada a la base de datos
             (async () => {
                 // Revisamos si el usuario esta logueado
@@ -105,10 +109,17 @@ function DetallePelicula() {
             })()
         ])
 
-        setPeli(resultados[0]);             // Guardamos la pelicula
-        setListaComentarios(resultados[1]); // Guardamos la lista de comentarios
-        procesarPuntuaciones(resultados[2]);// Guardamos el conjunto de puntuaciones devueltas
-        const listaIdsFavoritos = resultados[3]; // Almacenamos el conjunto de numeros de ids asociadas a las pelic favs
+        // Guardamos la pelicula
+        setPeli(resultados[0]);            
+
+        // Guardamos la lista de comentarios
+        setListaComentarios(resultados[1]); 
+
+        // Guardamos el conjunto de puntuaciones devueltas
+        procesarPuntuaciones(resultados[2]);
+
+        // Almacenamos el conjunto de numeros de ids asociadas a las pelic favs
+        const listaIdsFavoritos = resultados[3]; 
 
         // Esto de aqui para comprobar si la peli con la que estamos es una favorita para dicho usuario
         if(listaIdsFavoritos.includes(Number(id))){
@@ -138,6 +149,8 @@ function DetallePelicula() {
 
         // Hacemos el promediado
         const promedio = (suma / data.length).toFixed(1);
+
+        // 
         setMediaPeli(Number(promedio));
 
         // Si el usuario esta logueado, buscamos si este ya ha puntuado
@@ -157,21 +170,22 @@ function DetallePelicula() {
     // Aqui es donde vamos a enviar el comentario desde que lo escribe hasta la base de datos
     const enviarComentario = async () => {
         
+        // 
         if (yaHasComentado || !comentarioTexto.trim()) {
             return;
         }
 
-        const nuevoComentario = {               // Definimos el nuevo comentario que va a introducir este usuario
-            pelicula_id:peli?.id,               // Vamos a vincular el comentario a esta pelicula
-            texto:comentarioTexto,              // Almacenamos el comentario de texto
-            usuario_id:authCtx.userID,          // Almacenamos con el comentario el usuario id que esta ahora dentro
+        // Definimos el nuevo comentario que va a introducir este usuario
+        const nuevoComentario = {               
+            pelicula_id:peli?.id,               
+            texto:comentarioTexto,             
+            usuario_id:authCtx.userID,         
             nombre_usuario: authCtx.userName || "Usuario",
-            fecha:new Date().toLocaleString()   // Guardamos el momento en el que lo ha escrito 
+            fecha:new Date().toLocaleString() 
         }
 
         // Empleamos la funcion generada para guardar el comentario en Firebase (esta en la carpeta de infrastructure)
         await PeliculaRepository.saveComentario(nuevoComentario);
-        
 
         // Sacamos lo que es el aviso indicandole que se ha almacenado correctamente
         lanzamientoAviso(t('movie_detail_modal_comm_title'), t('movie_detail_modal_comm_msg'), "success");
@@ -200,9 +214,9 @@ function DetallePelicula() {
         
         // Creamos el paquete para la nueva puntuacion que se va a introducir
         const nuevaPuntuacion = {
-            pelicula_id:peli?.id,       // El id de la peli
-            nota:notaSeleccionada,      // La nota seleccionada
-            usuario_id:authCtx.userID,  // el id de dicho usuario
+            pelicula_id:peli?.id,       
+            nota:notaSeleccionada,    
+            usuario_id:authCtx.userID, 
         }
 
         // Utilizamos la funcion generada en infrastructure para guardar la puntuacion
@@ -249,14 +263,18 @@ function DetallePelicula() {
     // -----------------------------------------
     useEffect(() => {
 
+        // 
         if (!listaComentarios || !authCtx.userID) return;
 
+        // 
         const comentariosArray = Object.values(listaComentarios);
 
+        // 
         const haComentado = comentariosArray.some((comentario: any) => {
             return comentario.usuario_id === authCtx.userID;
         });
 
+        // 
         setYaHasComentado(haComentado);
 
     }, [listaComentarios, authCtx.userID]);
@@ -288,36 +306,48 @@ function DetallePelicula() {
     }
     // --------------------------------------------------------------------------------
 
-    let variantBoton = "warning";               // 
-    let textoBoton = t('movie_detail_add_fav'); // 
-    let iconoBoton = "bi-plus-lg";              // 
-    let estaBloqueado = false;                  // 
+    // Definimos un color tipico de warning
+    let variantBoton = "warning"; 
 
-    if (esFavorita){                                // 
-        variantBoton = "outline-warning";           // 
-        textoBoton = t('movie_detail_already_fav'); // 
-        iconoBoton = "bi-check-lg";                 // 
-        estaBloqueado = true;                       // 
+    // Cargamos el texto          
+    let textoBoton = t('movie_detail_add_fav'); 
+
+    // Para el incio tipico de suma
+    let iconoBoton = "bi-plus-lg";
+
+    // Si el usuario puede acceder o no al boton           
+    let estaBloqueado = false;                  
+
+    // En el caso de que sea favorita, se modifican ciertas variables (indicando principalmente que ya es favorita)
+    if (esFavorita){                                
+        variantBoton = "outline-warning";           
+        textoBoton = t('movie_detail_already_fav');  
+        iconoBoton = "bi-check-lg";                  
+        estaBloqueado = true;                        
     }
 
 
-    // --------------------------------------------------------------------------------
+    // Definimos de forma vacia para luego poner un contenido u otro 
     let botonesAccion;
+
+    // Si esta loguedao el usuario
     if (authCtx.login){
         botonesAccion = (
             <>
+                {/*Activamos el visualizador de video a pantalla completa*/}
                 <Button onClick={() => setModoCine(true)}>
                     <i className='bi bi-play-fill me-2'></i>{t('movie_detail_btn_watch')}
                 </Button>
+
+                {/*O bien Añadir o bien ya guardada*/}
                 <Button onClick={añadirAfavoritos} variant={variantBoton} disabled={estaBloqueado} className='fw-bold'>
-                    {/* <i className='bi bi-plus-lg me-2'></i>AÑADIR A MIS FAVORITOS */}
                     <i className={`bi ${iconoBoton} me-2`}></i>
                     {textoBoton}
                 </Button>
             </>
         )
     }
-    else{
+    else{ // Cuando el usuario no ha iniciado sesion, indicamos que hay que iniciar sesion para ver la peli
         botonesAccion = (
             <Badge bg='warning' text='dark'>
                 <i className='bi bi-lock-fill me-2'></i>
@@ -325,17 +355,20 @@ function DetallePelicula() {
             </Badge>
         )
     }
+
+
     // --------------------------------------------------------------------------------
-
-
+    // Definimos la seccion de puntuacion, inicialmente vacio
     let seccionPuntuacion;
+
+    // El usuario no esta logueado (le vamos a indicar que va a tener la posibilidad de puntuar)
     if(!authCtx.login){
         seccionPuntuacion = (
             <Badge bg="warning" text="dark" className="p-3">
                 {t('movie_detail_login_to_rate')}
             </Badge>
         )
-    }
+    } // Aqui en lo siguiente, cuando esta logueado y ya haya puntuado = pasarle mensaje de gracias por tu puntuacion
     else if (yaHasPuntuado){
         seccionPuntuacion = (
             <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
@@ -344,7 +377,7 @@ function DetallePelicula() {
                 <p>{t('movie_detail_your_rating_display', { nota: notaSeleccionada })}</p>
             </div>
         )
-    }
+    } // Abajo = caso de logueado pero aun no ha puntuado
     else {
         seccionPuntuacion = (
             <div className='bg-secondary bg-opacity-10 p-4 rounded shadow-sm mb-5'>
@@ -352,7 +385,7 @@ function DetallePelicula() {
 
                 <Form className='row align-items-end'>
                     <Col xs="auto">
-                        <Form.Label>Nota (1-10)</Form.Label>
+                        <Form.Label>{t('movie_detail_rate_label')}</Form.Label>
                         <Form.Select
                             value={notaSeleccionada}
                             onChange={(e) => setNotaSeleccionada(Number(e.target.value))}
@@ -364,21 +397,23 @@ function DetallePelicula() {
                     </Col>
                     <Col>
                         <Button variant='warning' onClick={enviarNota} className='fw-bold'>
-                            Puntuar
+                            {t('movie_detail_btn_rate')}
                         </Button>
                     </Col>
                 </Form>
             </div>
         )
     }
+    // --------------------------------------------------------------------------------
 
 
     // --------------------------------------------------------------------------------
-    let seccionComentarios;
+    // Para la seccion de comentariso
+    let seccionComentarios; 
     if(!authCtx.login){ // Para el caso que no este registrado, habra que indicarle que se registre para que pueda reproducir la peli
         seccionComentarios = (
             <Badge bg="warning" text="dark" className="p-3">
-                Inicia sesion para comentar que te ha parecido esta pelicula
+                {t('movie_detail_login_to_comment')}
             </Badge>
         )
     }
@@ -397,12 +432,9 @@ function DetallePelicula() {
             <div className="bg-secondary bg-opacity-10 p-4 rounded shadow-sm">
                 <h5 className="mb-3">{t('movie_detail_write_review')}</h5>
                 <Form.Control 
-                    as="textarea" 
-                    rows={3} 
-                    className="bg-dark text-white border-secondary mb-3"
+                    as="textarea" rows={3} className="bg-dark text-white border-secondary mb-3"
                     placeholder={t('movie_detail_placeholder_review')}
-                    value={comentarioTexto}
-                    onChange={(e) => setComentarioTexto(e.target.value)} 
+                    value={comentarioTexto} onChange={(e) => setComentarioTexto(e.target.value)} 
                 />
                 <Button variant="primary" onClick={enviarComentario}>{t('movie_detail_btn_send_comm')}</Button>
             </div>
@@ -413,7 +445,8 @@ function DetallePelicula() {
 
     return (
         <div className="bg-dark text-white min-vh-100"> 
-            <div style={{ // Este es uno de los estilos mas importantes que vamos a implementar
+            {/* Aqui es donde vamos a meter la imagen de la pelicula con cierto degradado */}
+            <div style={{
                 position: "relative",
                 width: "100%",
                 height: "65vh",
@@ -423,10 +456,14 @@ function DetallePelicula() {
                 display: "flex",
                 alignItems: "flex-end"
             }}>
+                {/* Contendor donde vamos a meter los principales datos (Titulo, estrellas y categoria) */}
                 <Container className="pb-4">
                     <Row>
+
+                        {/* Para lo que va a ser el encabezado */}
                         <Col>
                             <h1 className="display-4 fw-bold">{peli.titulo}</h1>
+
                             <div className='mb-4 d-flex align-items-center flex-wrap'>
                                 <span className="me-3">{renderEstrellas(mediaPeli)}</span>
                                 <Badge bg='primary' className='me-3 px-3 py-2'>{peli.categoria}</Badge>
@@ -435,6 +472,7 @@ function DetallePelicula() {
 
                             <div className="d-flex gap-3">
                             
+                            {/* Le metemos los botones de Play, favoritos...*/}
                             {botonesAccion}
 
                             </div>
@@ -446,6 +484,7 @@ function DetallePelicula() {
             {/* INFO SECTION: Sinopsis + Video + Zona de comentarios*/}
             <Container className='mt-5 pb-5'>
                 
+                {/* Para establecer el modo cine */}
                 {modoCine && (
                     <ModoCine 
                         tituloPeli={peli.titulo} 
@@ -454,9 +493,11 @@ function DetallePelicula() {
                 )}
                 
                 <Row className='gy-5'>
+
                     {/* Columna Izquierda: Sinopsis y Comentarios */}
                     <Col lg={7}>
                         <h5 className='text-uppercase text-secondary mb-3 small fw-bold tracking-wider'>{t('movie_detail_synopsis')}</h5>
+                        
                         <p className="fs-5 lh-base mb-5">
                             {peli.descripcion}
                         </p>
@@ -464,6 +505,8 @@ function DetallePelicula() {
                         <hr className="border-secondary mb-5" />
                 
                         {seccionPuntuacion}
+
+                        {/* Le metemos cierto espaciado */}
                         <br>
                         </br>
                         <br>
@@ -471,6 +514,7 @@ function DetallePelicula() {
                         {seccionComentarios}
                     </Col>
 
+                    {/*para la parte del video  */}
                     <Col lg={5}>
                         <div className='ms-lg-4'>
                             <h5 className='text-uppercase text-secondary mb-3 small fw-bold'>{t('movie_detail_official_trailer')}</h5>
@@ -482,15 +526,22 @@ function DetallePelicula() {
                                     style={{ backgroundColor: '#000', objectFit: 'cover' }}
                                 >
                                     <source src={`/${peli.video_local}`} type="video/mp4" />
-                                    Tu navegador no soporta el video.
+                                    {t('movie_detail_video_not_supported')}
                                 </video>
                             </div>
                         </div>
                     </Col>
                 </Row>
+
+                {/* */}
                 <Row className='mt-4'>
+
+                    {/* */}
                     <Col>
                         <h4 className='mb-4'>{t('movie_detail_community_comments')}</h4>
+
+                        {/* LO QUE NOS PIDEN DE LA POSIBILIDAD DE VER EL HILO DE COMENTARIOS */}
+                        {/* Vamos a comprobar si hay comentarios y los mapeamos para sacarlos junto al nombre del usuario  */}
                         {(()=> {
                             if(arrayDeComentarios && arrayDeComentarios.length > 0){
                                 return (
@@ -517,6 +568,8 @@ function DetallePelicula() {
                         })()}
                     </Col>
                 </Row>
+
+                {/* */}
                 <MensajeModal 
                     show={mostrarModal}
                     onHide={() => setMostrarModal(false)}

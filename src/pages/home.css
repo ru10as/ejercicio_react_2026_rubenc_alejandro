@@ -56,7 +56,7 @@
   gap: 4px;
 }
 
-/* Cards de película */
+/* Cards de pelicula */
 .movie-card {
   /* Fondo oscuro pero no negro del todo que queda muy fuerte */
   background-color: #1c2b29 !important;
@@ -105,7 +105,7 @@
   font-size: 0.95rem;
 }
 
-/* Botones filtro categoría */
+/* Botones filtro categoria */
 .btn-categoria {
   /* Sin fondo para que se vean los bordes */
   background-color: transparent;
@@ -139,7 +139,7 @@
   color: white;
 }
 
-/* Título sección */
+/* Titulo seccion */
 .seccion-titulo {
   /* Color verdoso que se viene empleando*/
   color: #409f9f;
@@ -242,10 +242,12 @@
 }
 
 /* --------------------- TODO LO ASOCIADO A NETFLIX ------------------ */
+/* Marca de referencia para los elementos absolutos internos */
 .netflix-col {
   position: relative;
 }
 
+/* Estetica de la pelicula antes de la interaccion */
 .netflix-card {
   position: relative;
   border-radius: 8px;
@@ -253,22 +255,24 @@
   cursor: pointer;
   background: #1c2b29;
   border: 1px solid rgba(45, 157, 157, 0.15);
-  transition:
+  transition: /**/
     transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     box-shadow 0.35s ease,
     border-color 0.35s ease;
   z-index: 1;
 }
 
+/*Para cuando el usuario pase el raton*/
 .netflix-card:hover {
   transform: scale(1.38);
   box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.9),
-    0 0 0 2px rgba(45, 157, 157, 0.55);
+    0 32px 80px rgba(0, 0, 0, 0.9),/**/
+    0 0 0 2px rgba(45, 157, 157, 0.55);/**/
   border-color: rgba(45, 157, 157, 0.55);
   z-index: 20;
 }
 
+/*Para la imagen de la pelicula*/
 .netflix-card-img {
   width: 100%;
   height: 300px;
@@ -277,36 +281,37 @@
   transition: transform 0.4s ease;
 }
 
+/* Cuando la carta crece, haremos que la imagen tambien crezca por asi decir */
 .netflix-card:hover .netflix-card-img {
   transform: scale(1.07);
 }
 
+/* Capa para la informacion que va en la parte inferior de la imagen */
 .netflix-title-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 40px 12px 12px;
-  background: linear-gradient(
-    to top,
-    rgba(10, 20, 20, 0.95) 0%,
-    transparent 100%
-  );
-  transition: opacity 0.25s ease;
+  padding: 40px 12px 12px;/**/
+  background: linear-gradient(to top,rgba(10, 20, 20, 0.95) 0%,transparent 100%);/**/
+  transition: opacity 0.25s ease;/**/
 }
 
+/* Para ocultar cuando hagamos el hover */
 .netflix-card:hover .netflix-title-bar {
   opacity: 0;
 }
 
+/* Para el titulo principal de la barra */
 .netflix-title-bar-text {
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.9rem;/**/
   font-weight: 600;
   margin: 0 0 2px;
   line-height: 1.2;
 }
 
+/* Para la info que aparece debajo del titulo */
 .netflix-title-bar-cat {
   color: #2d9d9d;
   font-size: 0.72rem;
@@ -315,13 +320,14 @@
   letter-spacing: 0.5px;
 }
 
+/* Contenedor con la descripcion y los botones cuando la tarjeta se expande */
 .netflix-hover-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
-  background: linear-gradient(
+  height: 100%;/* le metemos de esta forma para que cubra toda la tarjeta */
+  background: linear-gradient(/**/
     to top,
     rgba(10, 20, 20, 0.98) 0%,
     rgba(10, 20, 20, 0.92) 55%,
@@ -329,27 +335,30 @@
     transparent 100%
   );
   display: flex;
-  align-items: flex-end;
+  align-items: flex-end;/**/
   opacity: 0;
-  transform: translateY(8px);
-  transition:
+  transform: translateY(8px);/*8px por debajo de posicion actual*/
+  transition:/*El movimiento de subida lo vamos a hacer de forma suave*/
     opacity 0.3s ease,
     transform 0.3s ease;
 }
 
+/* Para cuando el raton entra en la tarjeta */
 .netflix-card:hover .netflix-hover-overlay {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0);/* Anulamos el desplazamiento previo */
 }
 
+/* Para organizar los elemntos (de forma vertical) */
 .netflix-overlay-content {
-  padding: 16px 14px 14px;
+  padding: 16px 14px 14px;/*Arriba, laterales y abajo*/
   display: flex;
   flex-direction: column;
   gap: 5px;
   width: 100%;
 }
 
+/* Una version del titulo */
 .netflix-overlay-title {
   color: white;
   font-size: 0.95rem;
@@ -358,55 +367,61 @@
   line-height: 1.2;
 }
 
+/* Para una categoria resaltada */
 .netflix-overlay-cat {
   color: #2d9d9d;
-  font-size: 0.72rem;
+  font-size: 0.72rem;/*Tamaño probando */
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: uppercase;/* Lo ponemos a mayus*/
   letter-spacing: 0.5px;
 }
 
+/* Para indicar como se muestra el resumen de la peli */
 .netflix-overlay-desc {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.8);/**/
+  font-size: 0.76rem;/**/
   line-height: 1.45;
   margin: 3px 0 2px;
-  display: -webkit-box;
+  /*display: -webkit-box;*/
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* Para los metadatos */
 .netflix-overlay-meta {
-  display: flex;
+  display: flex;/*Aplicamos una aplicacion horizontal*/
   gap: 12px;
   font-size: 0.73rem;
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* Para el boton de lso detalles */
 .netflix-btn-detalles {
   display: inline-block;
   margin-top: 8px;
-  padding: 6px 16px;
+  padding: 6px 16px;/* le metemos mas padding a arriba/abajo q a los lados para el formato de rectangulo*/
   background: #2d9d9d;
   color: white;
   border-radius: 6px;
-  text-decoration: none;
+  text-decoration: none;/*Quitamos lo que viene por defecto*/
   font-size: 0.8rem;
   font-weight: 600;
   transition:
-    background 0.2s,
+    background 0.2s,/*Le aplicamos un cambio de color durante 0.2 segundos */
     transform 0.15s;
   align-self: flex-start;
 }
 
+/* Que sucedera cuando se clike el boton */
 .netflix-btn-detalles:hover {
   background: #3ab5b5;
   color: white;
-  transform: translateY(-1px);
+  transform: translateY(-1px);/*Para ver comoq se levanta un poco la tarjeta*/
 }
 
-/* ── Responsive Móvil ───────────────────────────────────────── */
+/*--------- Formato responsivo para el movil -------------------------*/
 
+/**/
 @media (hover: none) and (pointer: coarse) {
   .netflix-card:hover {
     transform: none;
@@ -415,6 +430,7 @@
     z-index: 1;
   }
 
+  /**/
   .netflix-card:hover .netflix-card-img {
     transform: none;
   }
@@ -425,12 +441,12 @@
     transform: translateY(0);
   }
 
-  /* Ocultar barra de título: el overlay ya la muestra */
+  /* Ocultar barra de titulo: el overlay ya la muestra */
   .netflix-title-bar {
     display: none;
   }
 
-  /* Botón ocupa todo el ancho en móvil para ser más fácil de pulsar */
+  /* Boton ocupa todo el ancho en movil para ser mas facil de pulsar */
   .netflix-btn-detalles {
     align-self: stretch;
     text-align: center;
@@ -445,15 +461,18 @@
     height: 220px;
   }
 
+  /**/
   .netflix-overlay-desc {
     -webkit-line-clamp: 2;
     font-size: 0.78rem;
   }
 
+  /**/
   .netflix-overlay-title {
     font-size: 1rem;
   }
 
+  /**/
   .netflix-overlay-meta {
     font-size: 0.76rem;
   }
