@@ -16,6 +16,7 @@ const resources = {
       search_placeholder: "Buscar pelicula...",
       welcome: "¡Bienvenido!",
       hello: "Hola",
+      search_results_for: "Búsqueda",
 
       // Login & Registro
       login_title: "Iniciar Sesion",
