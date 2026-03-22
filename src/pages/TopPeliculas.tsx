@@ -110,8 +110,8 @@ function TopPeliculas() {
 
                                             {/* Para indicar la nota media */}
                                             <div className="top3-rating">
-                                                <span className="top3-rating-num">{peli.calificacion_media}</span>
-                                                <span className="top3-rating-max">/10</span>
+                                                <span className="top3-rating-num">{(peli.calificacion_media / 2).toFixed(1)}</span>
+                                                <span className="top3-rating-max">/5</span>
                                             </div>
 
                                             {/* Descripcion (Vamos a limitarla a 110 caracteres) */}
@@ -155,8 +155,8 @@ function TopPeliculas() {
 
                                 {/*Vista de la calificacion*/}
                                 <div className="top-lista-rating">
-                                    <span className="top-lista-rating-num">{peli.calificacion_media}</span>
-                                    <span className="top-lista-rating-max">/10</span>
+                                    <span className="top-lista-rating-num">{(peli.calificacion_media / 2).toFixed(1)}</span>
+                                    <span className="top-lista-rating-max">/5</span>
                                 </div>
 
                                 {/*Ponemos el enlace a lo que es la pelicula (su descripcion) */}

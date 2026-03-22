@@ -53,7 +53,8 @@ function CardPelicula({ peli, isFavorite }: CardPeliculaprops) {
                             {datosIntroducidos.descripcion?.substring(0, 100)}...
                         </p>
                         <div className="netflix-overlay-meta">
-                            <span>⭐ {peli.calificacion_media}/10</span>
+                            <span>⭐ {(peli.calificacion_media / 2).toFixed(1)}/5</span>
+                            <span>{peli.pais_origen}</span>
                         </div>
                         <Link to={`/pelicula/${peli.id}`} className="netflix-btn-detalles">
                             {t('view_details')} →

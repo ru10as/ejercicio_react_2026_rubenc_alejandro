@@ -153,6 +153,11 @@ function DetallePelicula() {
         // 
         setMediaPeli(Number(promedio));
 
+        // Actualizamos el campo calificacion_media en Firebase para que las tarjetas lo reflejen
+        if (id) {
+            PeliculaRepository.updateCalificacion(id, Number(promedio));
+        }
+
         // Si el usuario esta logueado, buscamos si este ya ha puntuado
         if (authCtx.userID) {
             for (let i = 0; i < data.length; i++) {

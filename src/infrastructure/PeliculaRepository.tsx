@@ -160,8 +160,14 @@ export const PeliculaRepository = {
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
     // 6) Metodo para registrar una puntuacion dada
     async savePuntuacion(nuevaPuntuacion:any){
-        // HAcemos el post guardando la nueva puntuacion 
-        return axios.post(`${BASE_URL}/puntuaciones.json`,nuevaPuntuacion); 
+        // HAcemos el post guardando la nueva puntuacion
+        return axios.post(`${BASE_URL}/puntuaciones.json`,nuevaPuntuacion);
+    },
+
+    // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+    // 6b) Metodo para actualizar la calificacion media de una pelicula
+    async updateCalificacion(id: string, media: number){
+        return axios.patch(`${BASE_URL}/peliculas/${id}.json`, { calificacion_media: media });
     },
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
