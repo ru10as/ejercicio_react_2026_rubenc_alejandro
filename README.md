@@ -11,15 +11,15 @@ Este proyecto es una aplicacion web de catalogo y reproduccion de peliculas desa
 - Modo Cine: Interfaz optimizada para la visualizacion de trailers y contenido de video local.
 
 # Stack Tecnologico
-## Frontend: React 18+ con TypeScript.
+### Frontend: React 18+ con TypeScript.
 
-## Estilos: Bootstrap y React-Bootstrap.
+### Estilos: Bootstrap y React-Bootstrap.
 
-## Gestion de Estado: Context API (AuthContext).
+### Gestion de Estado: Context API (AuthContext).
 
-## Backend / DB: Firebase (gestionado a traves de PeliculaRepository).
+### Backend / DB: Firebase (gestionado a traves de PeliculaRepository).
 
-## Traducciones: react-i18next.
+### Traducciones: react-i18next.
 
 # Estructura del Proyecto (Hexagonal)
 ```
