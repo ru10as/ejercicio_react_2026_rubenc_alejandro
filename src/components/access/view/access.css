@@ -1,0 +1,149 @@
+/* ----- Para las paginas de acceso (Login y Registro) */
+
+/*Estructura hexagonal: SI*/
+/*Comentarios introducidos: SI*/
+/*Idiomas: SI*/
+
+/**/
+.access-page {
+    background-color: #111918;
+    min-height: 100vh;  /* Para que ocupe todo la altura de la pantalla*/
+    display: flex;      /*Queremos quedarnos con todo centrado verticalmente*/
+    align-items: center;
+}
+
+/* Imagen lateral */
+.access-side-img {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 560px;
+    border: 1px solid rgba(45, 157, 157, 0.25);/*Borde en la imagen que no lo hemos puesto muy grueso*/
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+}
+
+/*COmo tratamos con esa foto dentro del marco aqui */
+.access-side-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+    transition: opacity 0.3s ease; /*Cuando pasamos el raton, la transicion no es muy brusca, cierta transicion*/
+}
+
+/* Incrementamos la opacidad cuando se pasa el raton para que se vea la imagen mas clara*/
+.access-side-img:hover img {
+    opacity: 0.9;
+}
+
+/* Card del formulario */
+.access-card {
+    background: #151f1e;
+    border: 1px solid rgba(45, 157, 157, 0.3);/* Colocamos el 0.3 de atras para cierta opacidad*/
+    border-radius: 14px;
+    padding: 40px 36px; /* Le damos bastante espacio para que no quede todo pegado */
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6); /*Le metemos cierto sombreado*/
+}
+
+/*Como son los estilos para el titulo*/
+.access-card-title {
+    color: white;
+    font-size: 1.6rem;/* Un tamaño adecuado*/
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase; /* Le metemos en mayusculas*/
+    margin-bottom: 6px;
+}
+
+/*Lo que es el divisor de abajo*/
+.access-card-divider {
+    width: 48px;
+    height: 3px;
+    background: #2d9d9d;
+    border-radius: 2px;
+    margin: 0 auto 28px;
+}
+
+/* Para las etiquetas que acompañan a lo que es las etiquetas */
+.access-label {
+    color: rgba(255, 255, 255, 0.7); /* le metemos cierta opacidad para que quede bien */
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;/* Todo a mayusculas */
+    letter-spacing: 0.6px;
+    margin-bottom: 5px;
+}
+
+/* Para lo que son los Form.Control */
+.access-input {
+    background-color: #1e2e2c !important;
+    border: 1px solid rgba(45, 157, 157, 0.25) !important;/*Borde que sea muy fino*/
+    border-radius: 8px !important;
+    color: white !important;
+    padding: 10px 14px !important;/*Cierto espaciado tanto arriba/abajo como a los lados*/
+    font-size: 0.92rem !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;/* Establecemos un cambio de 0.2 seg de trans*/
+}
+
+/*Que sucede cuando esos inputs estan vacios*/
+.access-input::placeholder {
+    color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/*Cuando el usuario pulsa en el cuadrado*/
+.access-input:focus {
+    border-color: #2d9d9d !important;
+    box-shadow: 0 0 0 3px rgba(45, 157, 157, 0.15) !important;/**/
+    background-color: #1e2e2c !important;
+    color: white !important;
+    outline: none !important;/*quitamos cosas raras que vienen dadas*/
+}
+
+/* Para el boton de entrada */
+.access-btn {
+    width: 100%; /*El boton hacemos que ocupe todo el ancho*/
+    padding: 11px;
+    background: #2d9d9d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;/*Le metemos mayusc*/
+    margin-top: 24px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;/*Cambios ciertamente suaves*/
+}
+
+/*Cuando esta el boton por encima*/
+.access-btn:hover {
+    background: #3ab5b5; /*Cambiamos el fondo*/
+    transform: translateY(-1px); /* Lo movemos un poquillo (que se vea que esta el raton por encima*/ 
+}
+
+/**/
+.access-btn:active {
+    transform: translateY(0);/*Hacemos que el boton vuelva a su posicion actual*/
+}
+
+/* Enlace inferior (Lo de = No tienes cuenta..) */
+.access-link {
+    display: block;/*para que ocupen todo el ancho de la tarjeta*/
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    cursor: pointer;/*Para que salga esa manita con el dedo */
+    transition: color 0.2s;
+}
+
+/*Para la opcion de registrate*/
+.access-link span {
+    color: #2d9d9d;
+    font-weight: 600;
+}
+
+/**/
+.access-link:hover {
+    color: rgba(255, 255, 255, 0.7);
+}

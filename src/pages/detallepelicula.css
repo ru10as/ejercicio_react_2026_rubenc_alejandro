@@ -1,0 +1,24 @@
+/* Aqui lo que definimos es el contendor principal de la lista de comentarios */
+.comentario-card {
+    background-color: rgba(45, 157, 157, 0.07);/* Metemos un fondo para diferenciar */
+    border: 1px solid rgba(45, 157, 157, 0.15);/* Lo vamos a meter todos estos comentarios en una caja (metemos el borde) */
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;/* Si hay muchos mensajes, de esta forma activamos el scroll vertical*/
+}
+
+/* Esto lo hacemos para tratar con la barra de scroll */
+.comentario-card::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Sin mas, el fondo por donde va la barra */
+.comentario-card::-webkit-scrollbar-track {
+    background: transparent;/**/
+}
+
+/**/
+.comentario-card::-webkit-scrollbar-thumb {
+    background: rgba(45, 157, 157, 0.4);
+    border-radius: 10px;
+}

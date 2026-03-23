@@ -1,0 +1,283 @@
+/* ── Top Películas Page ─────────────────────────────────── */
+
+/*Establecemos para la pantalla principal (fondo y altura)*/
+.top-page {
+    background-color: #171616;
+    min-height: 100vh;
+    color: white;
+}
+
+/* Para el titulo principal de lo que es el encabezado*/
+.top-page-title {
+    color: white;
+    font-size: 2.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/*Para el substitulo del encabezado*/
+.top-page-subtitle {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    margin-top: 8px;
+}
+
+/* Botones para hacer el filtrado que vamos a hacer */
+.btn-top-filtro {
+    background: transparent;
+    border: 1.5px solid rgba(45, 157, 157, 0.4);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    padding: 6px 22px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* Cuando pasamos por el boton*/
+.btn-top-filtro:hover,
+.btn-top-filtro.activo {
+    background: #2d9d9d;
+    border-color: #2d9d9d;
+    color: white;
+}
+
+/* ----- Para el podio de Top3 --------- */
+
+/* El contenedor del top3 */
+.top3-card {
+    background: #1c2b29;
+    border: 2px solid var(--medal-color, rgba(45, 157, 157, 0.3));
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Cuando pasemos el boton por dicha carta */
+.top3-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.75), 0 0 0 1px var(--medal-color, #2d9d9d);
+}
+
+/* Para el boton de la medalla esa*/
+.top3-rank-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 2rem;
+    z-index: 2;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7));
+}
+
+/**/
+.top3-img-wrapper {
+    overflow: hidden;
+    height: 280px;
+}
+
+/*Como vamos a establecer la imagen de la pelicula en el podio que hemos creado*/
+.top3-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+/* Efecto de zoom que vamos a introducir (REVISAR)*/
+.top3-card:hover .top3-img {
+    transform: scale(1.05);
+}
+
+/*Contenedor con la info del peli*/
+.top3-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* COmo establecemos el titulo de la pelicula que aparecee en el podio*/
+.top3-titulo {
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Para lo que es la categoria de la peli*/
+.top3-cat {
+    color: #2d9d9d;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Contenedor de la calificacion */
+.top3-rating {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    margin: 4px 0;
+}
+
+/* Para el numero de la nota */
+.top3-rating-num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--medal-color, #2d9d9d);
+    line-height: 1;
+}
+
+/*El texto ese de /10 que vamos a poner*/
+.top3-rating-max {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* Como vamos a establecer la descripcion esa corta de la peli */
+.top3-desc {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin: 2px 0 4px;
+}
+
+/* Para el boton de Ver Detalles */
+.btn-top-detalles {
+    display: inline-block;
+    padding: 7px 18px;
+    background: #2d9d9d;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    align-self: flex-start;
+    margin-top: 4px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+/* Cuando pasamos por encima */
+.btn-top-detalles:hover {
+    background: #3ab5b5;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Para lo que es la lista principal */
+.top-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* El item individual para la lista horizontal*/
+.top-lista-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #1c2b29;
+    border: 1px solid rgba(45, 157, 157, 0.12);
+    border-radius: 10px;
+    padding: 12px 18px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+/* Para el hover de la lsita */
+.top-lista-item:hover {
+    background: #1f3230;
+    border-color: rgba(45, 157, 157, 0.35);
+}
+
+/* Indicativo del numero del ranking*/
+.top-lista-rank {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.3);
+    min-width: 38px;
+    text-align: center;
+}
+
+/* Como establecemos la imagen pequeña del ranking */
+.top-lista-img {
+    width: 50px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+/* Contenedor de textos en la lista */
+.top-lista-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+/* Para lo que es el titulo */
+.top-lista-titulo {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*Categoria de la lilsta*/
+.top-lista-cat {
+    color: #2d9d9d;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/**/
+.top-lista-rating {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    min-width: 64px;
+}
+
+/**/
+.top-lista-rating-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2d9d9d;
+    line-height: 1;
+}
+
+/* Para el /10 pero de la lista*/
+.top-lista-rating-max {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+/*Boton ese pequeño para ver los detalles*/
+.btn-top-lista-detalles {
+    padding: 5px 14px;
+    border: 1.5px solid #2d9d9d;
+    color: #2d9d9d;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+
+/*Hover para el botonn de la lista*/
+.btn-top-lista-detalles:hover {
+    background: #2d9d9d;
+    color: white;
+}

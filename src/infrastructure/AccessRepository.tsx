@@ -1,0 +1,2 @@
+import { FirebaseAccessRepository } from "./FirebaseAccessRepository"; // Unicamente importamos 
+export const AccessRepository = FirebaseAccessRepository; // Para luego emplearlo (asi en un futuro podemos hacer un simple cambio)
