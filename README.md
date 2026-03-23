@@ -22,71 +22,7 @@ Este proyecto es una aplicacion web de catalogo y reproduccion de peliculas desa
 ## Traducciones: react-i18next.
 
 # Estructura del Proyecto (Hexagonal)
-src/
-└──  public
-    ├── imagen_por_peli
-    ├── imagenes_banderas
-    ├── nueva_cartelera
-    └── portadas_peliculas
-└──  src
-    ├── assets/ 
-    └──  components/ 
-        └──  access/ 
-            └──  view
-                ├── access.css
-                ├── Login.tsx
-                ├── Registro.tsx
-        └──  peliculas/
-            └── view
-                └──  CardPelicula
-                    ├── cardpelicula.css
-                    ├── CardPelicula.tsx
-                └──  ModoCine
-                    ├── ModoCine.css
-                    └──  ModoCine.tsx
-        └── ui/
-            ├── CarouselPrincipal.tsx
-            ├── footer.css
-            ├── Footer.tsx
-            ├── header.css
-            ├── MensajeModal.tsx
-            └── Header.tsx
-    └── domain/
-        ├── Busqueda.tsx
-        ├── Header.tsx
-        ├── Home.tsx
-        ├── Pelicula.tsx
-        ├── ui.tsx
-        └── Usuario.tsx
-    └── infrastructure/
-        ├── AccessRepository.tsx
-        └── PeliculaRepository.tsz
-    └── pages/
-        ├── AvisoLegal.tsx
-        ├── Contacto.tsx
-        ├── detallepelicula.css
-        ├── DetallePelicula.tsx
-        ├── Favoritos.tsx
-        ├── home.css
-        ├── Home.tsx
-        ├── ResultadoBusqueda.css
-        ├── ResultadoBusqueda.tsx
-        ├── topPeliculas.css
-        └── TopPeliculas.tsx
-    └── services/
-        └── AuthService.tsx
-    └── store/ 
-        └── AuthContext.tsx
-    └── utils/ 
-        └── uiHelpers.tsx    
-    ├── App.tsx   
-    ├── App.css 
-    ├── i18n.ts
-    └── main.tsx   
-
-
-
-
+```
 src/
 └──  public
     ├── imagen_por_peli
@@ -153,7 +89,7 @@ src/
     ├── App.css 
     ├── i18n.ts
     └── main.tsx     
-
+```
 # Instalacion
 - Clona el repositorio:
 
